@@ -1,4 +1,4 @@
-var CACHE = "ktf-2026-v2";
+var CACHE = "ktf-2026-fix3";
 var SHELL = ["./", "./index.html", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", function (e) {
@@ -24,20 +24,27 @@ self.addEventListener("message", function (e) {
 });
 
 self.addEventListener("fetch", function (e) {
-  if (e.request.method !== "GET") return;
   var u;
+  if (e.request.method !== "GET") return;
   try { u = new URL(e.request.url); } catch (x) { return; }
+
   if (u.origin !== self.location.origin) {
     e.respondWith(fetch(e.request).catch(function () { return new Response("", { status: 504 }); }));
     return;
   }
-  e.respondWith(fetch(e.request).then(function (r) {
-    if (r && r.ok) { var c = r.clone(); caches.open(CACHE).then(function (cc) { cc.put(e.request, c); }); }
+
+  e.respondWith(fetch(e.request, { cache: "no-cache" }).then(function (r) {
+    if (r && r.ok) {
+      var c = r.clone();
+      caches.open(CACHE).then(function (cc) { cc.put(e.request, c); });
+    }
     return r;
   }).catch(function () {
     return caches.match(e.request, { ignoreSearch: true }).then(function (m) {
       if (m) return m;
-      if (e.request.mode === "navigate") return caches.match("./index.html").then(function (h) { return h || new Response("", { status: 504 }); });
+      if (e.request.mode === "navigate") {
+        return caches.match("./index.html").then(function (h) { return h || new Response("", { status: 504 }); });
+      }
       return new Response("", { status: 504 });
     });
   }));
