@@ -1,23 +1,18 @@
 {
-  "id": "/2026tech/",
-  "name": "KEV TECH & FIRE — Diagnostic, Incendie & Expertise",
+  "name": "KEV TECH & FIRE",
   "short_name": "KevTechFire",
-  "description": "Diagnostic technique automobile, étude incendie par véhicule, expertise juridique, catalogue photos de pannes, recherche VIN et lecture OBD.",
+  "description": "Diagnostic technique, étude incendie, expertise juridique, photos de pannes, VIN, OBD.",
   "lang": "fr",
-  "dir": "ltr",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen"],
   "orientation": "portrait-primary",
   "background_color": "#05081a",
   "theme_color": "#05081a",
-  "categories": ["productivity", "utilities", "business"],
-  "prefer_related_applications": false,
+  "categories": ["productivity", "utilities"],
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
