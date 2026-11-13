@@ -1,44 +1,22 @@
 name: Build 2026tech
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: "0 3 1,16 * *"
-
 permissions:
   contents: write
-
-concurrency:
-  group: build-2026tech
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Generer les icones PWA
-        run: |
-          pip install pillow -q
-          python scripts/make_icon.py
-
-      - name: Rafraichir la base RappelConso
-        continue-on-error: true
-        run: python scripts/refresh_base.py
-
-      - name: Publier
-        run: |
-          git config user.name "ktf-bot"
+      - run: pip install pillow -q && python scripts/make_icon.py
+      - run: |
+          git config user.name "bot"
           git config user.email "actions@users.noreply.github.com"
-          git add icons data
-          git diff --cached --quiet || git commit -m "Build icones + base $(date -u +%F)"
-          git pull --rebase origin main || true
+          git add icons
+          git diff --cached --quiet || git commit -m "Icones"
           git push
