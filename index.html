@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="KEV TECH &amp; FIRE — diagnostic technique, étude incendie, expertise juridique, photos de pannes, VIN, OBD.">
+<meta name="description" content="KEV TECH &amp; FIRE — diagnostic technique automobile, étude incendie, expertise juridique, catalogue photos de pannes, VIN et OBD.">
 <meta name="theme-color" content="#05081a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>KEV TECH &amp; FIRE</title>
+<meta name="apple-mobile-web-app-title" content="KevTechFire">
+<title>KEV TECH &amp; FIRE — 2026tech</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -35,12 +36,12 @@ a{color:var(--acc)}
 #scene{position:fixed;top:0;left:0;z-index:-4;width:100%;height:100%}
 #wall{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-3;opacity:0;background-size:cover;background-position:center;transition:opacity .8s}
 #veil{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 85% 55% at 50% -5%,rgba(0,0,0,0) 25%,rgba(5,8,26,.45) 70%,rgba(3,5,16,.9))}
-#boot{position:fixed;top:0;left:0;right:0;bottom:0;z-index:900;background:radial-gradient(ellipse at 50% 32%,#1a1f52,#05081a 65%);display:flex;align-items:center;justify-content:center;animation:bootOut .45s ease 2.4s forwards}
+#boot{position:fixed;top:0;left:0;right:0;bottom:0;z-index:900;background:radial-gradient(ellipse at 50% 32%,#1a1f52,#05081a 65%);display:flex;align-items:center;justify-content:center;animation:bootOut .45s ease 2.2s forwards}
 #boot.off{opacity:0;visibility:hidden;pointer-events:none;animation:none}
 @keyframes bootOut{to{opacity:0;visibility:hidden;pointer-events:none}}
 .bcore{text-align:center;width:340px;max-width:86vw}
 .blogo{width:88px;height:88px;margin:0 auto 20px;border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:2.3rem;background:linear-gradient(135deg,#00e5ff,#8b5cff 45%,#ff7a18 75%,#ff2d55);box-shadow:0 0 70px rgba(0,229,255,.45)}
-.btitle{font-size:1.4rem;font-weight:900;margin:0 0 8px;color:#00e5ff}
+.btitle{font-size:1.4rem;font-weight:900;margin:0 0 8px;color:#00e5ff;letter-spacing:.5px}
 .bsub{color:#93a4d8;font-size:.8rem;margin:0 0 20px}
 .bbar{height:5px;border-radius:5px;background:rgba(140,165,255,.14);overflow:hidden}
 .bbar i{display:block;height:100%;width:36%;border-radius:5px;background:linear-gradient(90deg,#00e5ff,#00e676,#ffc400,#ff7a18);animation:run 1.1s ease-in-out infinite}
@@ -168,7 +169,7 @@ td{padding:8px 7px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:
 #err{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:950;width:640px;max-width:95vw;background:rgba(60,10,20,.97);border:1px solid #ff2d55;border-radius:14px;padding:12px;font-size:.76rem}
 #err code{display:block;margin-top:6px;font-size:.67rem;color:#ffcdd2;word-break:break-word;max-height:80px;overflow:auto;white-space:pre-wrap}
 @media(max-width:760px){header{padding:9px 12px}.brand small{display:none}.pills{order:3;width:100%}.seg button{padding:6px 10px;font-size:.69rem}main{padding:15px 12px 76px}.card{padding:17px}.grid{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}.tabs .btn{min-width:calc(50% - 3px)}.modes{grid-template-columns:1fr}table{font-size:.71rem}}
-@media print{body{background:#fff !important;color:#000 !important}header,#scene,#wall,#veil,#boot,#toasts,.noprint,.tabs,#vinCard,.modal{display:none !important}.card,.hit,.fbox{background:#fff !important;color:#000 !important;border:1px solid #999 !important;box-shadow:none !important}h2,h3{color:#000 !important}.sm,small{color:#333 !important}}
+@media print{body{background:#fff !important;color:#000 !important}header,#scene,#wall,#veil,#boot,#toasts,.noprint,.tabs,#vinCard,.modal,#err{display:none !important}.card,.hit,.fbox{background:#fff !important;color:#000 !important;border:1px solid #999 !important;box-shadow:none !important}h2,h3{color:#000 !important}.sm,small{color:#333 !important}}
 </style>
 </head>
 <body>
@@ -380,10 +381,11 @@ var norm=function(s){s=(s==null?"":String(s)).toLowerCase();
  try{s=s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");}catch(e){}
  return s.replace(/[^a-z0-9]+/g," ").replace(/^\s+|\s+$/g,"");};
 var esc=function(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");};
+var trim=function(s){return String(s==null?"":s).replace(/^\s+|\s+$/g,"");};
 var lines=function(v){var out=[],i,p;if(Object.prototype.toString.call(v)==="[object Array]"){for(i=0;i<v.length;i++)if(v[i])out.push(String(v[i]));return out;}
- if(typeof v==="string"){p=v.split(/\r?\n|;/);for(i=0;i<p.length;i++){var t=p[i].replace(/^\s+|\s+$/g,"");if(t)out.push(t);}}return out;};
+ if(typeof v==="string"){p=v.split(/\r?\n|;/);for(i=0;i<p.length;i++){var t=trim(p[i]);if(t)out.push(t);}}return out;};
 var hash=function(s){var h=2166136261,i;s=String(s);for(i=0;i<s.length;i++){h=h^s.charCodeAt(i);h=(h*16777619)>>>0;}return ("00000000"+h.toString(36)).slice(-8);};
-var sig8=function(m){var a=hash("A"+m),b=hash("B"+m+"KTF"),c=hash("C"+b+a),d=hash("D"+c+m);return a+b+c+d;};
+var sig8=function(m){return hash("A"+m)+hash("B"+m+"KTF")+hash("C"+m+"2026")+hash("D"+m);};
 var fkey=function(e){return e.id||hash([e.source,e.make,e.model,e.engine,e.title].join("|"));};
 var tc=function(s){return String(s).replace(/\b[a-z\u00e0-\u00ff]/g,function(c){return c.toUpperCase();});};
 var uid=function(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);};
@@ -422,8 +424,9 @@ function report(m){var f=D("err");if(!f)return;f.className="";D("errMsg").textCo
 function safe(f,label){try{return f();}catch(e){report(label+" → "+(e.message||e));return null;}}
 function upAct(el){while(el&&el!==document){if(el.getAttribute&&el.getAttribute("data-act"))return el;el=el.parentNode;}return null;}
 function inId(el,id){while(el&&el!==document){if(el.id===id)return true;el=el.parentNode;}return false;}
-function setCls(el,c,on){if(!el)return;if(on){if(el.className.indexOf(c)<0)el.className=(el.className+" "+c).replace(/^\s+/,"");}
- else{el.className=(" "+el.className+" ").replace(" "+c+" "," ").replace(/^\s+|\s+$/g,"");}}
+function setCls(el,c,on){if(!el)return;if(on){if((" "+el.className+" ").indexOf(" "+c+" ")<0)el.className=trim(el.className+" "+c);}
+ else{el.className=trim((" "+el.className+" ").replace(" "+c+" "," "));}}
+function fireEvent(el,name){var ev;try{ev=new Event(name,{bubbles:true});}catch(e){ev=document.createEvent("HTMLEvents");ev.initEvent(name,true,false);}el.dispatchEvent(ev);}
 
 var SEED=[
 {id:"d1",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Lubrification",dtc:[],sym:["odeur brûlé","fumée"],title:"Huile moteur sur organes chauds",meca:"Film d'huile sur surface dépassant l'auto-inflammation (300-350 °C) : collecteur 400-800 °C, turbo 600-1000 °C, FAP 600-1200 °C.",cons:["Feu de baie moteur"],ind:["Vernis brun","coulures verticales"],fire:true,chain:"Fuite d'huile → contact organe chaud → auto-inflammation → feu de baie",grav:"critique",url:"",date:"2026-01-01"},
@@ -697,7 +700,7 @@ function strip(e){var ph=S.photos[fkey(e)]||[];if(!ph.length)return "";
  for(i=0;i<Math.min(ph.length,4);i++)h+="<img class='thumb' data-act='lb' data-id='"+esc(ph[i].id)+"' src='"+esc(ph[i].url)+"' alt=''>";
  if(ph.length>4)h+="<span class='tag'>+"+(ph.length-4)+"</span>";
  return h+"<button data-act='gal' data-k='"+esc(fkey(e))+"'>🖼️ Photos ("+ph.length+")</button></div>";}
-function renderResults(){var q=D("q").value.replace(/^\s+|\s+$/g,""),box=D("results");
+function renderResults(){var q=trim(D("q").value),box=D("results");
  var f=search(q),v=q?vehicles(q):[],h="",i,j;
  if(v.length){h+="<h3>🚗 Véhicules &amp; motorisations ("+v.length+")</h3>";
   for(i=0;i<v.length;i++){var x=v[i];h+="<div class='hit'><b>🚗 "+esc(x.make)+" "+esc(x.model)+"</b><table><tr><th>Motorisation</th><th>Énergie</th><th>Cylindrée</th><th>Puissances</th></tr>";
@@ -712,15 +715,14 @@ function renderViews(){var vs=ls("views")||[],h="<button data-act='saveView'>�
  if(vs.length)h+="<button data-act='clearViews'>🗑️ Vider les vues</button>";
  D("views").innerHTML=h;}
 function fillFilters(){var ms={},ss={},i,cm=D("fMake").value,cs=D("fSys").value,h1="<option value=''>Toutes</option>",h2="<option value=''>Tous</option>";
- for(i=0;i<S.base.length;i++){var m=String(S.base[i].make||"").split("/")[0].replace(/^\s+|\s+$/g,"");if(m)ms[m]=1;if(S.base[i].sys)ss[S.base[i].sys]=1;}
+ for(i=0;i<S.base.length;i++){var m=trim(String(S.base[i].make||"").split("/")[0]);if(m)ms[m]=1;if(S.base[i].sys)ss[S.base[i].sys]=1;}
  var a=Object.keys(ms).sort(),b=Object.keys(ss).sort();
  for(i=0;i<a.length;i++)h1+="<option>"+esc(a[i])+"</option>";
  for(i=0;i<b.length;i++)h2+="<option>"+esc(b[i])+"</option>";
  D("fMake").innerHTML=h1;D("fSys").innerHTML=h2;D("fMake").value=cm;D("fSys").value=cs;}
 
-function veh(){return{make:D("vMake").value.replace(/^\s+|\s+$/g,""),model:D("vModel").value.replace(/^\s+|\s+$/g,""),
- engine:D("vEngine").value.replace(/^\s+|\s+$/g,""),power:parseInt(D("vPower").value,10)||0,
- year:parseInt(D("vYear").value,10)||0,fuel:D("vFuel").value};}
+function veh(){return{make:trim(D("vMake").value),model:trim(D("vModel").value),engine:trim(D("vEngine").value),
+ power:parseInt(D("vPower").value,10)||0,year:parseInt(D("vYear").value,10)||0,fuel:D("vFuel").value};}
 function matchV(e,v){var s=0;
  if(v.make&&norm(e.make).indexOf(norm(v.make))>=0)s+=4;else if(v.make&&e.make&&!/multi/i.test(e.make))return -1;
  if(v.model){var m=norm(e.model);if(m&&m.indexOf(norm(v.model))>=0)s+=4;else if(m&&!/tous|multi/i.test(m))s-=2;}
@@ -783,7 +785,7 @@ function quotaUse(){if(S.admin)return{ok:true};
  q.n++;ls("quota",q);return{ok:true};}
 function quotaShow(){if(S.admin){D("quota").innerHTML="🎟️ admin ∞";return;}
  var q=ls("quota")||{start:0,n:0};D("quota").innerHTML="🎟️ "+Math.max(0,5-q.n)+"/5 cette semaine";}
-function ctxRun(){var ctx=D("ctx").value.replace(/^\s+|\s+$/g,"");
+function ctxRun(){var ctx=trim(D("ctx").value);
  if(!ctx){toast("Décris la situation dans le contexte.");return;}
  var q=quotaUse();quotaShow();
  if(!q.ok){toast("🚫 Quota atteint : 5 analyses sur 7 jours. Réinitialisation le "+new Date(q.reset).toLocaleDateString("fr-FR"));return;}
@@ -819,7 +821,8 @@ function ctxRun(){var ctx=D("ctx").value.replace(/^\s+|\s+$/g,"");
  s+="</ul><p class='sm'>⚠️ Méthode : qualifier, inférer, corréler, analyser, tester, conclure. Ce compte rendu est une aide documentaire fondée sur les sources citées ; il ne remplace ni une expertise physique du véhicule ni une consultation juridique personnalisée.</p>";
  s+="<div class='noprint'><button class='btn gh' data-act='print'>🖨️ PDF</button><button class='btn gh' data-act='ctxJson'>📤 JSON</button></div></div>";
  D("ctxOut").innerHTML=s;
- S.lastReport={date:new Date().toISOString(),vehicule:v,contexte:ctx,niveau:c,origine:top?top.e:null,juridique:(function(){var o=[];for(var z=0;z<legal.length;z++)o.push(legal[z].id);return o;})()};
+ var lids=[];for(i=0;i<legal.length;i++)lids.push(legal[i].id);
+ S.lastReport={date:new Date().toISOString(),vehicule:v,contexte:ctx,niveau:c,origine:top?top.e:null,juridique:lids};
  toast("🧾 Compte rendu généré — niveau <b>"+c.lvl+"</b> ("+c.pct+" %)");}
 function studyRun(){var v=veh();if(!v.make&&!v.model){toast("Renseigne au moins la marque et le modèle.");return;}
  var syms=checkedSym(),dtcs=D("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g)||[],t=norm(D("ctx").value).split(" "),toks=[],i;
@@ -878,7 +881,7 @@ function readForm(){var g=function(i){return D(i).value;},feu=D("nFire").checked
  make:g("nMake")||"Multi-marques",model:g("nModel")||"Tous",engine:g("nEngine"),
  years:y.length?[Math.min.apply(null,y),Math.max.apply(null,y)]:null,fuel:g("nFuel")||fuelOf(g("nEngine")),
  sys:g("nSys"),dtc:(g("nDtc").toUpperCase().match(/[PCBU]\d{4}/g)||[]),sym:lines(g("nSym").replace(/,/g,"\n")),
- title:g("nTitle").replace(/^\s+|\s+$/g,""),meca:g("nMeca"),cons:lines(g("nCons")),ind:lines(g("nInd")),
+ title:trim(g("nTitle")),meca:g("nMeca"),cons:lines(g("nCons")),ind:lines(g("nInd")),
  fire:feu,chain:feu?g("nChain"):"",grav:g("nGrav"),url:g("nSrc"),powers:c.length?c:null,date:new Date().toISOString().slice(0,10)};}
 function clearForm(){var ids=["nTitle","nMake","nModel","nEngine","nPower","nYears","nSys","nDtc","nSym","nSrc","nMeca","nCons","nInd","nChain"],i;
  for(i=0;i<ids.length;i++)D(ids[i]).value="";
@@ -950,7 +953,7 @@ function gallery(f){var out=D("photoOut"),box=document.createElement("div");box.
   if(res.length){g="<div class='pgrid'>";for(i2=0;i2<res.length;i2++)g+="<figure class='pitem' data-act='lbUrl' data-u='"+esc(res[i2].thumb)+"' data-c='"+esc(res[i2].title)+"'><img src='"+esc(res[i2].thumb)+"' loading='lazy'><figcaption>"+esc(res[i2].title.slice(0,42))+(res[i2].lic?" <span class='tag ok'>"+esc(res[i2].lic)+"</span>":"")+"</figcaption></figure>";g+="</div>";}
   else g="<p class='sm'>Aucune photo libre trouvée automatiquement.</p>";
   var tmp=document.createElement("div");tmp.innerHTML=g;w.parentNode.replaceChild(tmp,w);});}
-function photoSearch(){var q=D("pq").value.replace(/^\s+|\s+$/g,"");if(!q){toast("Saisis une panne à rechercher.");return;}
+function photoSearch(){var q=trim(D("pq").value);if(!q){toast("Saisis une panne à rechercher.");return;}
  var l=search(q,4),i;D("photoOut").innerHTML=l.length?"":"<div class='empty'>Aucune panne ne correspond à cette recherche.</div>";
  for(i=0;i<l.length;i++)gallery(l[i]);}
 function findPhoto(id){var k,i,j;for(k in S.photos){if(!S.photos.hasOwnProperty(k))continue;
@@ -1012,8 +1015,8 @@ function obdSend(c,w,cb){obdBuf="";
  try{obdW.writeValue(new TextEncoder().encode(c+"\r")).then(function(){
   var t=Date.now(),iv=setInterval(function(){
    if(obdBuf.indexOf(">")>=0||Date.now()-t>w){clearInterval(iv);cb(obdBuf);}},60);
-  },function(e){cb("");});}catch(e){cb("");}}
-function decodeDTC(h){var parts=h.replace(/^\s+|\s+$/g,"").split(/\s+/),b=[],i;
+  },function(){cb("");});}catch(e){cb("");}}
+function decodeDTC(h){var parts=trim(h).split(/\s+/),b=[],i;
  for(i=0;i<parts.length;i++){var n=parseInt(parts[i],16);if(!isNaN(n))b.push(n);}
  var idx=-1;for(i=0;i<b.length;i++)if(b[i]===0x43||b[i]===0x47){idx=i;break;}
  if(idx<0)return[];var o=[];
@@ -1045,7 +1048,7 @@ function obdRead(){D("obdState").innerHTML="⏳ Lecture des défauts…";
 
 var AD={
 kvdb:{name:"kvdb.io",keys:true,
- create:function(cb){xhr("https://kvdb.io/",9000,function(e,r){if(e||!r.ok){cb(e||("HTTP "+r.status));return;}cb(null,r.text.replace(/^\s+|\s+$/g,"").split("/").pop());},"POST","")},
+ create:function(cb){xhr("https://kvdb.io/",9000,function(e,r){if(e||!r.ok){cb(e||("HTTP "+r.status));return;}cb(null,trim(r.text).split("/").pop());},"POST","")},
  read:function(c,cb){xhr("https://kvdb.io/"+c+"/ktf",9000,function(e,r){if(e){cb(e);return;}if(r.status===404){cb(null,null);return;}
   if(!r.ok){cb("HTTP "+r.status);return;}try{cb(null,r.text?JSON.parse(r.text):null);}catch(x){cb("réponse illisible");}})},
  write:function(c,o,cb){xhr("https://kvdb.io/"+c+"/ktf",12000,function(e,r){cb(e||(r.ok?null:"HTTP "+r.status));},"PUT",JSON.stringify(o),"text/plain")},
@@ -1139,7 +1142,7 @@ function renderRevs(){D("revs").innerHTML="<p class='sm'>"+S.revs.length+" code(
 function renderOutbox(){var o=ls("outbox")||[],h="",i;
  for(i=0;i<o.length;i++)h+="<div class='hit'><span class='sm'>"+new Date(o[i].at).toLocaleString("fr-FR")+"</span><p class='sm'>"+esc(o[i].t.slice(0,180))+"</p></div>";
  D("outbox").innerHTML=h||"<p class='sm'>Aucun message envoyé.</p>";}
-function sendMsg(copy){var t=D("msg").value.replace(/^\s+|\s+$/g,"");if(!t){toast("Écris ton message.");return;}
+function sendMsg(copy){var t=trim(D("msg").value);if(!t){toast("Écris ton message.");return;}
  var o=ls("outbox")||[];o.unshift({t:t,at:Date.now()});ls("outbox",o.slice(0,30));renderOutbox();
  if(copy)copyText(t);
  else location.href="mailto:"+S.mail+"?subject="+encodeURIComponent("Message KEV TECH & FIRE — "+S.name)+"&body="+encodeURIComponent(t);
@@ -1191,7 +1194,7 @@ function resize(){var d=Math.min(window.devicePixelRatio||1,1.5);W=window.innerW
  for(i=0;i<70;i++)stars.push({x:Math.random()*W,y:Math.random()*H*0.55,r:Math.random()*1.4+0.3,p:Math.random()*6});
  function mk(n,h){var a=[],j;for(j=0;j<n;j++)a.push({x:j*(W/n),w:W/n*0.7,h:h+Math.random()*h});return a;}
  b1=mk(14,H*0.16);b2=mk(20,H*0.1);}
-function accent(){try{var v=getComputedStyle(document.documentElement).getPropertyValue("--acc");return v?v.replace(/^\s+|\s+$/g,""):"#00e676";}catch(e){return "#00e676";}}
+function accent(){try{var v=getComputedStyle(document.documentElement).getPropertyValue("--acc");return v?trim(v):"#00e676";}catch(e){return "#00e676";}}
 function drawCar(x,y,s,t){cx.save();cx.translate(x,y+Math.sin(t/180)*1.6);cx.scale(s,s);
  if(S.carImg){cx.drawImage(S.carImg,-150,-78,300,90);cx.restore();return;}
  var a=accent();cx.shadowColor=a;cx.shadowBlur=18;cx.fillStyle="#0d1330";cx.strokeStyle=a;cx.lineWidth=2;
@@ -1259,9 +1262,8 @@ function suggest(inp){if(!inp||inp._sg)return;inp._sg=true;
  inp.addEventListener("focus",open);inp.addEventListener("click",open);inp.addEventListener("input",open);
  l.addEventListener("mousedown",function(ev){var t=ev.target;while(t&&t!==l&&!t.getAttribute("data-i"))t=t.parentNode;
   if(!t||t===l)return;ev.preventDefault();var it=l._i[parseInt(t.getAttribute("data-i"),10)];
-  inp.value=it.value;l.style.display="none";fireChange(inp);});
+  inp.value=it.value;l.style.display="none";fireEvent(inp,"change");});
  inp.addEventListener("blur",function(){setTimeout(function(){l.style.display="none";},180);});}
-function fireChange(el){var ev;try{ev=new Event("change",{bubbles:true});}catch(e){ev=document.createEvent("HTMLEvents");ev.initEvent("change",true,false);}el.dispatchEvent(ev);}
 function feedWords(ta,ch){ta.addEventListener("input",function(){
  var w=norm(ta.value).split(" "),last=w[w.length-1]||"";
  if(last.length<3){ch.innerHTML="";return;}
@@ -1277,7 +1279,7 @@ modeAdmin:function(){D("pwd").value="";show("s-login");D("pwd").focus();},
 modeTiers:function(){ls("mode","tiers");var a=ls("access");if(a&& !has(S.revs,a.sig)){S.name=a.name;showApp();}else gate("form");},
 login:function(){var p=D("pwd").value;D("pwd").value="";if(!p)return;
  if(p===PWD){S.admin=true;showAdmin();toast("🛡️ Mode administrateur déverrouillé.");}else toast("❌ Mot de passe incorrect.");},
-gate:function(){var p=D("gName").value.replace(/^\s+|\s+$/g,""),c=D("gCode").value.replace(/^\s+|\s+$/g,"");
+gate:function(){var p=trim(D("gName").value),c=trim(D("gCode").value);
  if(!p||!c){toast("Prénom et code d'accès requis.");return;}
  var parts=c.split("."),pl=parts[0],sg=parts[1];if(!pl||!sg){gate("refus");return;}
  var pay;try{pay=JSON.parse(unb64u(pl));}catch(e){gate("refus");return;}
@@ -1287,10 +1289,10 @@ gate:function(){var p=D("gName").value.replace(/^\s+|\s+$/g,""),c=D("gCode").val
  S.name=p;ls("name",p);ls("access",{name:p,sig:sg});gate("ok",p);},
 gateRetry:function(){gate("form");},
 enter:function(){showApp();},
-askCode:function(){var p=D("gName").value.replace(/^\s+|\s+$/g,"")||"(ton prénom)";
+askCode:function(){var p=trim(D("gName").value)||"(ton prénom)";
  location.href="mailto:"+S.mail+"?subject="+encodeURIComponent("Demande de code KEV TECH & FIRE")+"&body="+encodeURIComponent("Bonjour,\n\nPrénom : "+p+"\nJe souhaite un code d'accès à l'application.\n\nMerci !");
  toast("📧 Demande préparée dans ta messagerie.");},
-joinChan:function(){setChan(D("gChan").value.replace(/^\s+|\s+$/g,""));syncPull();toast(chan()?"✅ Canal rejoint.":"Canal effacé.");},
+joinChan:function(){setChan(trim(D("gChan").value));syncPull();toast(chan()?"✅ Canal rejoint.":"Canal effacé.");},
 quit:function(){S.admin=false;show("s-home");},
 toAdmin:function(){if(S.admin)showAdmin();},
 toApp:function(){showApp();},
@@ -1329,8 +1331,7 @@ studyRun:function(){studyRun();},
 studyJson:function(){dl("etude-cas.json",JSON.stringify({vehicule:veh(),contexte:D("ctx").value},null,1));},
 print:function(){window.print();},
 word:function(t){var ta=D(t.getAttribute("data-t"));if(!ta)return;
- ta.value=ta.value.replace(/[A-Za-z0-9\u00c0-\u00ff-]+$/,t.getAttribute("data-w"))+" ";ta.focus();
- var ev;try{ev=new Event("input",{bubbles:true});}catch(e){ev=document.createEvent("HTMLEvents");ev.initEvent("input",true,false);}ta.dispatchEvent(ev);},
+ ta.value=ta.value.replace(/[A-Za-z0-9\u00c0-\u00ff-]+$/,t.getAttribute("data-w"))+" ";ta.focus();fireEvent(ta,"input");},
 obdConnect:function(){obdConnect();},obdRead:function(){obdRead();},
 msgSend:function(){sendMsg(false);},msgCopy:function(){sendMsg(true);},
 vinRun:function(){runVin();},
@@ -1342,20 +1343,20 @@ vinFill:function(){if(!S.lastVin)return;var v=S.lastVin;
  if(v.make)D("vMake").value=tc(v.make.toLowerCase());if(v.model)D("vModel").value=v.model;if(v.year)D("vYear").value=v.year;
  if(v.fuel)D("vFuel").value=/electric/i.test(v.fuel)?"electrique":/diesel/i.test(v.fuel)?"diesel":/hybrid/i.test(v.fuel)?"hybride":"essence";
  renderEng();renderPow();renderAttrib();try{window.scrollTo(0,0);}catch(e){}toast("✅ Sélecteur véhicule pré-rempli.");},
-genCode:function(){var p=D("acName").value.replace(/^\s+|\s+$/g,"");if(!p){toast("Prénom requis.");return;}
+genCode:function(){var p=trim(D("acName").value);if(!p){toast("Prénom requis.");return;}
  var days=Math.max(1,parseInt(D("acDays").value,10)||365),pay={p:p,n:uid(),exp:Date.now()+days*86400000};
  var pl=b64u(JSON.stringify(pay)),sg=sig8(pl),code=pl+"."+sg;
  D("genOut").innerHTML=esc(code);setCls(D("genOut"),"hide",false);
  var a=codes();a.unshift({name:p,exp:pay.exp,sig:sg,code:code});ls("codes",a);renderCodes();toast("🎟️ Code généré pour "+esc(p)+".");},
-copyGen:function(){copyText(D("genOut").innerHTML.replace(/&amp;/g,"&"));},
-shareGen:function(){var t="Code d'accès KEV TECH & FIRE :\n"+D("genOut").innerHTML;
+copyGen:function(){var t=D("genOut").textContent||D("genOut").innerHTML;copyText(t);},
+shareGen:function(){var t="Code d'accès KEV TECH & FIRE :\n"+(D("genOut").textContent||"");
  if(navigator.share)navigator.share({title:"Code d'accès",text:t}).catch(function(){copyText(t);});else copyText(t);},
 copyUser:function(t){var a=codes(),x=a[parseInt(t.getAttribute("data-i"),10)];if(x)copyText(x.code);},
 revoke:function(t){var a=codes(),x=a[parseInt(t.getAttribute("data-i"),10)];if(!x)return;
  if(!has(S.revs,x.sig))S.revs.push(x.sig);ls("revs",S.revs);renderCodes();renderRevs();toast("🚫 Code révoqué — publie pour diffuser.");},
 pubRevs:function(){syncPush(true);},
 dropClick:function(){D("pFile").click();},
-urlAdd:function(){var u=D("pUrl").value.replace(/^\s+|\s+$/g,"");if(!u){toast("Saisis une URL d'image.");return;}
+urlAdd:function(){var u=trim(D("pUrl").value);if(!u){toast("Saisis une URL d'image.");return;}
  compress(u,1000,0.72,function(err,d){if(err){addPending(u,D("pCap").value||u);toast("ℹ️ URL conservée en lien direct.");}
   else addPending(d,D("pCap").value||u);D("pUrl").value="";});},
 rmPending:function(t){S.pending.splice(parseInt(t.getAttribute("data-i"),10),1);renderPending();},
@@ -1387,15 +1388,15 @@ bulkDel:function(){var ids=[],k;for(k in S.sel)if(S.sel.hasOwnProperty(k))ids.pu
  if(!ids.length){toast("Aucune panne sélectionnée.");return;}delFaults(ids);},
 opApply:function(){S.look.op=parseInt(D("op").value,10);applyLook();toast("💾 Opacité appliquée.");},
 lookReset:function(){S.look={op:55};applyLook();toast("🎨 Apparence réinitialisée.");},
-pubLook:function(){S.mail=D("mail").value.replace(/^\s+|\s+$/g,"")||S.mail;ls("mail",S.mail);syncPush(true);},
+pubLook:function(){S.mail=trim(D("mail").value)||S.mail;ls("mail",S.mail);syncPush(true);},
 syCreate:function(){toast("⏳ Création du canal…");
  AD[S.be].create(function(err,id){if(err){toast("❌ "+esc(AD[S.be].name)+" : "+esc(err)+" — essaie un autre service.");return;}
   setChan(id);D("syCh").value=id;syncPush(false,function(){toast("✅ Canal créé : <b>"+esc(id)+"</b> — partage ce code aux tiers.");});});},
-syUse:function(){setChan(D("syCh").value.replace(/^\s+|\s+$/g,""));syncPull();},
+syUse:function(){setChan(trim(D("syCh").value));syncPull();},
 syShare:function(){var c=chan();if(!c){toast("Aucun canal.");return;}
  var t="Code canal KEV TECH & FIRE : "+c+"\nÀ coller dans l'application (badge 📡 ou écran d'accès).";
  if(navigator.share)navigator.share({title:"Canal de synchronisation",text:t}).catch(function(){copyText(t);});else copyText(t);},
-syTest:function(){var c=D("syCh").value.replace(/^\s+|\s+$/g,"")||chan();if(!c){toast("Renseigne un code canal.");return;}
+syTest:function(){var c=trim(D("syCh").value)||chan();if(!c){toast("Renseigne un code canal.");return;}
  AD[S.be].read(c,function(err,st){if(err){toast("❌ "+esc(err));return;}toast(st?"✅ Canal joignable et alimenté.":"⚠️ Canal joignable mais vide.");});},
 syPub:function(){syncPush(true);},
 syPull:function(){syncPull(function(){toast("🔄 Synchronisation effectuée.");});},
@@ -1407,8 +1408,7 @@ diagClose:function(){D("mDiag").className="modal";},
 goBase:function(){if(S.admin){showAdmin();var b=D("tabsAdm").getElementsByTagName("button"),i;
   for(i=0;i<b.length;i++)if(b[i].getAttribute("data-a")==="base"){ACT.tabAdm(b[i]);break;}}
  else D("mDiag").className="modal on";},
-askChan:function(){var c=window.prompt("Code canal de synchronisation :",chan());if(c===null)return;
- setChan(c.replace(/^\s+|\s+$/g,""));syncPull();},
+askChan:function(){var c=window.prompt("Code canal de synchronisation :",chan());if(c===null)return;setChan(trim(c));syncPull();},
 hardReset:function(){try{localStorage.clear();}catch(e){}
  if(window.caches&&caches.keys)caches.keys().then(function(ks){each(ks,function(k){caches.delete(k);});}).catch(function(){});
  setTimeout(function(){location.reload();},400);},
