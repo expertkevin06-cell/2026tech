@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build 2026tech
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: deploy
+  group: build-2026tech
   cancel-in-progress: false
 
 jobs:
