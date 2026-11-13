@@ -14,6 +14,7 @@ DATA.mkdir(exist_ok=True)
 FIRE = re.compile(r"incendie|feu\b|flamme|embras|brulure|inflamm", re.I)
 API = ("https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/"
        "rappelconso-v2-gtin-espaces/records")
+WHERE = 'categorie_produit="automobiles et moyens de déplacement"'
 
 
 def fetch(url):
@@ -28,11 +29,9 @@ def fetch(url):
 
 def main():
     out, offset = [], 0
-    where = 'categorie_produit="automobiles et moyens de deplacement"'
-    where = 'categorie_produit="automobiles et moyens de déplacement"'
     while offset < 4000:
         url = API + "?" + urllib.parse.urlencode({
-            "where": where, "limit": 100, "offset": offset,
+            "where": WHERE, "limit": 100, "offset": offset,
             "order_by": "date_publication desc"})
         try:
             j = fetch(url)
