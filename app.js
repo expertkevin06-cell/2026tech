@@ -2006,7 +2006,15 @@ function boot() {
   chk("events", "ok", "contrôles liés par délégation — aucun gestionnaire manquant");
   guard(function () { each(["vMake", "vModel", "vEngine", "vPower", "q"], function (id) { suggest($(id)); }); }, "suggestions");
   guard(function () { feedWords($("ctx"), $("predCtx")); }, "rédaction prédictive");
-  guard(function () { merge(SEED); merge(S.ov.entries); rebuild(); }, "base embarquée");
+   guard(function(){
+  merge(SEED);
+  if(window.KTF_FAULTS&&window.KTF_FAULTS.length)merge(normList(window.KTF_FAULTS));
+  merge(S.ov.entries);rebuild();
+ },"base");
+ guard(function(){
+  var n=(window.KTF_FAULTS&&window.KTF_FAULTS.length)||0;
+  chk("mega",n?"ok":"warn",n?H(n," pannes documentées (méga base)"):"pannes.js absent");
+ },"méga base");
   guard(loadLocalImport, "import local sites");
   guard(fillFilters, "filtres");
   guard(renderEng, "moteurs");
