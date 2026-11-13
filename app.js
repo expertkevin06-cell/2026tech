@@ -2,13 +2,9 @@
 (function () {
 "use strict";
 
-/* ══════════ OUTILS ══════════ */
 function H() {
   var s = "", i, a;
-  for (i = 0; i < arguments.length; i++) {
-    a = arguments[i];
-    if (a !== null && a !== undefined) s += String(a);
-  }
+  for (i = 0; i < arguments.length; i++) { a = arguments[i]; if (a !== null && a !== undefined) s += String(a); }
   return s;
 }
 function $(i) { return document.getElementById(i); }
@@ -29,15 +25,11 @@ function uniq(a) { var o = [], i; for (i = 0; i < a.length; i++) if (!has(o, a[i
 function lines(v) {
   var o = [], i, p, t;
   if (isArr(v)) { for (i = 0; i < v.length; i++) if (v[i]) o.push(String(v[i])); return o; }
-  if (typeof v === "string") {
-    p = v.split(/\r?\n|;/);
-    for (i = 0; i < p.length; i++) { t = trm(p[i]); if (t) o.push(t); }
-  }
+  if (typeof v === "string") { p = v.split(/\r?\n|;/); for (i = 0; i < p.length; i++) { t = trm(p[i]); if (t) o.push(t); } }
   return o;
 }
 function hash(s) {
-  var h = 2166136261, i;
-  s = String(s);
+  var h = 2166136261, i; s = String(s);
   for (i = 0; i < s.length; i++) { h = h ^ s.charCodeAt(i); h = (h * 16777619) >>> 0; }
   return ("00000000" + h.toString(36)).slice(-8);
 }
@@ -52,15 +44,10 @@ function cls(el, c, on) {
   else { el.className = trm(cur.replace(" " + c + " ", " ")); }
 }
 function toast(m, ms, undo) {
-  var d = document.createElement("div");
-  d.className = "toast";
-  var s = document.createElement("span");
-  s.innerHTML = m;
-  d.appendChild(s);
+  var d = document.createElement("div"); d.className = "toast";
+  var s = document.createElement("span"); s.innerHTML = m; d.appendChild(s);
   if (undo) {
-    var b = document.createElement("button");
-    b.className = "btn gh sm";
-    b.innerHTML = "↩️ Annuler";
+    var b = document.createElement("button"); b.className = "btn gh sm"; b.innerHTML = "↩️ Annuler";
     b.onclick = function () { try { undo(); } catch (e) {} if (d.parentNode) d.parentNode.removeChild(d); };
     d.appendChild(b);
   }
@@ -71,33 +58,26 @@ function save(k, v) {
   try {
     if (v === undefined) { var r = localStorage.getItem("ktf:" + k); return r ? JSON.parse(r) : null; }
     if (v === null) { localStorage.removeItem("ktf:" + k); return null; }
-    localStorage.setItem("ktf:" + k, JSON.stringify(v));
-    return v;
+    localStorage.setItem("ktf:" + k, JSON.stringify(v)); return v;
   } catch (e) { return null; }
+}
+function saveBig(k, arr) {
+  var caps = [2000, 1000, 500, 200], i;
+  for (i = 0; i < caps.length; i++) { if (save(k, arr.slice(0, caps[i])) !== null) return; }
 }
 function dl(n, t) {
   try {
-    var b = new Blob([t], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(b);
-    a.download = n;
-    document.body.appendChild(a);
-    a.click();
+    var b = new Blob([t], { type: "application/json" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(b); a.download = n; document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); if (a.parentNode) a.parentNode.removeChild(a); }, 400);
-  } catch (e) { toast("Export impossible sur ce navigateur."); }
+  } catch (e) { toast("Export impossible."); }
 }
 function copy(t) {
   if (!t) { toast("Rien à copier."); return; }
   try {
-    var ta = document.createElement("textarea");
-    ta.value = t;
-    ta.style.position = "fixed";
-    ta.style.left = "-9999px";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    var ok = document.execCommand("copy");
-    document.body.removeChild(ta);
+    var ta = document.createElement("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.left = "-9999px";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = document.execCommand("copy"); document.body.removeChild(ta);
     if (ok) { toast("📋 Copié."); return; }
   } catch (e) {}
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -109,17 +89,12 @@ function copy(t) {
 function req(url, ms, cb, method, body, ctype) {
   try {
     var x = new XMLHttpRequest();
-    x.open(method || "GET", url, true);
-    x.timeout = ms || 9000;
+    x.open(method || "GET", url, true); x.timeout = ms || 9000;
     if (ctype) { try { x.setRequestHeader("Content-Type", ctype); } catch (e) {} }
     x.onload = function () {
-      cb(null, {
-        ok: x.status >= 200 && x.status < 300,
-        status: x.status,
-        text: x.responseText,
+      cb(null, { ok: x.status >= 200 && x.status < 300, status: x.status, text: x.responseText,
         loc: x.getResponseHeader ? x.getResponseHeader("Location") : "",
-        xid: x.getResponseHeader ? x.getResponseHeader("X-JsonBlob-Id") : ""
-      });
+        xid: x.getResponseHeader ? x.getResponseHeader("X-JsonBlob-Id") : "" });
     };
     x.onerror = function () { cb("réseau indisponible"); };
     x.ontimeout = function () { cb("délai dépassé"); };
@@ -127,34 +102,15 @@ function req(url, ms, cb, method, body, ctype) {
   } catch (e) { cb(e.message || "erreur réseau"); }
 }
 function jget(url, ms, cb) {
-  req(url, ms, function (e, r) {
-    if (e || !r || !r.ok) { cb(null); return; }
-    try { cb(JSON.parse(r.text)); } catch (x) { cb(null); }
-  });
+  req(url, ms, function (e, r) { if (e || !r || !r.ok) { cb(null); return; } try { cb(JSON.parse(r.text)); } catch (x) { cb(null); } });
 }
-function upAct(el) {
-  while (el && el !== document) {
-    if (el.getAttribute && el.getAttribute("data-act")) return el;
-    el = el.parentNode;
-  }
-  return null;
-}
-function inId(el, id) {
-  while (el && el !== document) { if (el.id === id) return true; el = el.parentNode; }
-  return false;
-}
-function fire(el, n) {
-  var e;
-  try { e = new Event(n, { bubbles: true }); }
-  catch (x) { e = document.createEvent("HTMLEvents"); e.initEvent(n, true, false); }
-  el.dispatchEvent(e);
-}
-function guard(f, label) {
-  try { return f(); }
-  catch (e) { window.onerror(H(label, ": ", e.message), "app.js", 0, 0, e); return null; }
-}
+function fetchText(url, ms, cb) { req(url, ms, function (e, r) { cb(e, r ? r.text : ""); }); }
+function upAct(el) { while (el && el !== document) { if (el.getAttribute && el.getAttribute("data-act")) return el; el = el.parentNode; } return null; }
+function inId(el, id) { while (el && el !== document) { if (el.id === id) return true; el = el.parentNode; } return false; }
+function fire(el, n) { var e; try { e = new Event(n, { bubbles: true }); } catch (x) { e = document.createEvent("HTMLEvents"); e.initEvent(n, true, false); } el.dispatchEvent(e); }
+function guard(f, label) { try { return f(); } catch (e) { window.onerror(H(label, ": ", e.message), "app.js", 0, 0, e); return null; } }
 
-/* ══════════ BASE EMBARQUÉE ══════════ */
+/* ══════════ DONNÉES EMBARQUÉES ══════════ */
 var SEED = [
 {id:"d1",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Lubrification",dtc:[],sym:["odeur brûlé","fumée"],title:"Huile moteur sur organes chauds",meca:"Film d'huile sur surface au-delà de l'auto-inflammation (300-350 °C) : collecteur 400-800 °C, turbo 600-1000 °C, FAP 600-1200 °C.",cons:["Feu de baie moteur"],ind:["Vernis brun","coulures verticales"],fire:true,chain:"Fuite d'huile → organe chaud → auto-inflammation → feu de baie",grav:"critique",url:"",date:"2026-01-01"},
 {id:"d2",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"GDI / Common Rail",years:[2010,2027],fuel:"",sys:"Injection",dtc:[],sym:["odeur carburant","fuite visible"],title:"Fuite carburant basse et haute pression",meca:"Rampe GDI 150-350 bar, Common Rail 1600-2500 bar. Essence : auto-inflammation vers 280 °C, vapeurs inflammables dès 1,4 %.",cons:["Flash immédiat","feu compartiment moteur"],ind:["Suintement injecteur","durite marquée"],fire:true,chain:"Fuite → aérosol et vapeurs → point chaud ou arc → flash",grav:"critique",url:"",date:"2026-01-01"},
@@ -282,6 +238,12 @@ var SYMPT = ["voyant allumé","perte de puissance","à-coups moteur","à-coups b
 var PWD = "Kevin83600";
 var ICON = { essence: "🟡", diesel: "⚫", hybride: "🟢", electrique: "🔵" };
 
+var SITES = [
+  { id: "diagauto", name: "DiagAuto Pro", url: "https://expertkevin06-cell.github.io/diagauto-pro/" },
+  { id: "autodiag", name: "Auto Diagnostic", url: "https://expertkevin06-cell.github.io/auto-diagnostic/" }
+];
+var PROBES = ["data/index.json","data/base.json","data/seed.json","data/catalogue.json","data/pannes.json","data/vehicules.json","data/db.json","data/fiches.json","data/export.json","asset-manifest.json","catalogue.json","base.json","pannes.json","vehicules.json"];
+
 /* ══════════ ÉTAT ══════════ */
 var S = {
   base: [], photos: {}, theme: "tous", admin: false,
@@ -292,7 +254,7 @@ var S = {
   pend: [], sel: {}, editId: null,
   mail: save("mail") || "contact@kev-tech-fire.fr",
   be: save("be") || "kvdb",
-  checks: {}, carImg: null, busy: false, report: null, vin: null
+  checks: {}, carImg: null, busy: false, importing: false, report: null, vin: null
 };
 
 var BRANDS = [], MODELS = {};
@@ -322,18 +284,14 @@ function merge(list) {
 }
 function rebuild() {
   S.photos = {};
-  each(S.ov.photos, function (p) {
-    if (!S.photos[p.fault]) S.photos[p.fault] = [];
-    S.photos[p.fault].push(p);
-  });
+  each(S.ov.photos, function (p) { if (!S.photos[p.fault]) S.photos[p.fault] = []; S.photos[p.fault].push(p); });
 }
 function persist() { save("ov", S.ov); rebuild(); }
 function normList(list) {
   var o = [], i, e;
   if (!list) return o;
   for (i = 0; i < list.length; i++) {
-    e = list[i];
-    if (!e) continue;
+    e = list[i]; if (!e) continue;
     o.push({
       id: e.id, themes: e.themes || ["technique"], type: e.type || "panne", source: e.source || "import",
       make: e.make || e.marque || "Multi-marques", model: e.model || e.modele || "Tous",
@@ -357,23 +315,19 @@ function stats() {
 }
 function chk(k, lv, d) { S.checks[k] = { lv: lv, d: d }; paintChk(); }
 function paintChk() {
-  var order = [["boot","Ouverture"],["events","Contrôles"],["seed","Base embarquée"],["cache","Cache local"],["repo","Base dépôt"],["sync","Canal sync"],["sw","Service Worker"],["net","Réseau"],["store","Stockage"]];
+  var order = [["boot","Ouverture"],["events","Contrôles"],["seed","Base embarquée"],["cache","Cache local"],["sites","Import 2 sites"],["repo","Base dépôt"],["sync","Canal sync"],["sw","Service Worker"],["net","Réseau"],["store","Stockage"]];
   var h = "", i, k, s, ok = 0, bad = 0, warn = 0, tot = 0, p;
   for (i = 0; i < order.length; i++) {
-    k = order[i][0];
-    if (!S.checks[k]) continue;
-    s = S.checks[k];
-    tot++;
+    k = order[i][0]; if (!S.checks[k]) continue;
+    s = S.checks[k]; tot++;
     if (s.lv === "ok") ok++; else if (s.lv === "bad") bad++; else warn++;
     h = H(h, "<div class='sc ", s.lv, "'><span>", s.lv === "ok" ? "✅" : s.lv === "warn" ? "⚠️" : "❌", "</span><div><b>", esc(order[i][1]), "</b><small>", esc(s.d), "</small></div></div>");
   }
-  $("checks").innerHTML = h;
-  $("dBox").innerHTML = h;
+  $("checks").innerHTML = h; $("dBox").innerHTML = h;
   $("pHealth").innerHTML = H("🩺 ", ok, "/", tot);
   $("pHealth").className = H("pill ", bad ? "bad" : warn ? "warn" : "ok");
   p = tot ? Math.round(ok / tot * 100) : 0;
-  $("prog").style.width = H(p, "%");
-  $("dProg").style.width = H(p, "%");
+  $("prog").style.width = H(p, "%"); $("dProg").style.width = H(p, "%");
 }
 
 /* ══════════ MOTEURS ══════════ */
@@ -412,9 +366,7 @@ function powersFor(mk, mo, mt) { var e = matchEng(mk, mo, mt); return e ? e.ch.s
 function renderEng() {
   var mk = $("vMake").value, mo = $("vModel").value, w = $("cEng"), l, h = "", i, e;
   if (!mk || !mo) { $("nEng").innerHTML = "0"; w.innerHTML = "<span class='wait'>Sélectionne marque + modèle.</span>"; return; }
-  l = enginesFor(mk, mo);
-  $("nEng").innerHTML = String(l.length);
-  w._l = l;
+  l = enginesFor(mk, mo); $("nEng").innerHTML = String(l.length); w._l = l;
   for (i = 0; i < l.length; i++) {
     e = l[i];
     h = H(h, "<button data-act='pickEng' data-e='", i, "'>", ICON[e.en] || "", " ", esc(e.m), " · ", e.en, " · ", e.ch.join("/"), " ch", e.cc ? H(" · ", e.cc, " cm³") : "", "</button>");
@@ -430,8 +382,7 @@ function renderPow() {
 function renderAttrib() {
   var mk = $("vMake").value, mo = $("vModel").value, w = $("attrib"), l, doc = 0, i, e, h;
   if (!mk || !mo) { w.innerHTML = ""; return; }
-  l = enginesFor(mk, mo);
-  if (!l.length) { w.innerHTML = ""; return; }
+  l = enginesFor(mk, mo); if (!l.length) { w.innerHTML = ""; return; }
   for (i = 0; i < l.length; i++) if (l[i].src === "documenté") doc++;
   h = H("<h3>🧾 Attribution — ", esc(mk), " ", esc(mo), "</h3><p class='sm'>", doc, "/", l.length, " motorisation(s) documentée(s)</p><table><tr><th>Motorisation</th><th>Énergie</th><th>Cylindrée</th><th>Puissances</th></tr>");
   for (i = 0; i < l.length; i++) {
@@ -443,14 +394,235 @@ function renderAttrib() {
 function autoAttr() {
   var mk = $("vMake").value, mo = $("vModel").value, mt = $("vEngine").value, en, e, ps;
   if (!mt) return;
-  en = fuelOf(mt);
-  e = matchEng(mk, mo, mt);
-  ps = e ? e.ch : [];
+  en = fuelOf(mt); e = matchEng(mk, mo, mt); ps = e ? e.ch : [];
   $("vFuel").value = en;
   if (ps.length && !has(ps, parseInt($("vPower").value, 10))) $("vPower").value = ps[0];
-  renderPow();
-  renderAttrib();
+  renderPow(); renderAttrib();
   toast(H("⚙️ ", esc(mt), " → <b>", en, "</b> · ", $("vPower").value || "?", " ch"));
+}
+
+/* ══════════ IMPORT SITES ══════════ */
+function absUrl(p, base) { try { return new URL(p, base).href; } catch (e) { return ""; } }
+function allowed(u) {
+  try { var h = new URL(u).host; return h === location.host || h === "expertkevin06-cell.github.io"; } catch (e) { return false; }
+}
+function discover(txt, base) {
+  var out = [], m, re = /(?:src|href)=["']([^"']+\.(?:js|json)[^"']*)["']/g, re2 = /["'`]([^"'`]+\.(?:js|json))["'`]/g, u;
+  while ((m = re.exec(txt))) { u = absUrl(m[1], base); if (u && allowed(u) && !has(out, u)) out.push(u); }
+  while ((m = re2.exec(txt))) { u = absUrl(m[1], base); if (u && allowed(u) && !has(out, u)) out.push(u); }
+  return out;
+}
+function scanArrays(txt, cb) {
+  var lim = Math.min(txt.length, 4000000), i, j, depth, str, escp, ch, raw, v, n = 0, nx;
+  for (i = 0; i < lim - 1; i++) {
+    if (txt[i] !== "[") continue;
+    nx = txt[i + 1];
+    if (nx !== "{" && nx !== '"' && nx !== "[") continue;
+    depth = 0; str = false; escp = false;
+    for (j = i; j < lim; j++) {
+      ch = txt[j];
+      if (str) { if (escp) escp = false; else if (ch === "\\") escp = true; else if (ch === '"') str = false; }
+      else {
+        if (ch === '"') str = true;
+        else if (ch === "[" || ch === "{") depth++;
+        else if (ch === "]" || ch === "}") {
+          depth--;
+          if (depth === 0) {
+            raw = txt.slice(i, j + 1);
+            if (raw.length > 40) { try { v = JSON.parse(raw); if (isArr(v)) { cb(v); n++; } } catch (e) {} }
+            break;
+          }
+        }
+      }
+    }
+    if (n > 400) return;
+  }
+}
+function parseYears(v) {
+  var a = [], i, m;
+  if (isArr(v)) { for (i = 0; i < v.length; i++) { var n = parseInt(v[i], 10); if (n >= 1950 && n <= 2035) a.push(n); } }
+  else if (typeof v === "string") { m = v.match(/(?:19|20)\d{2}/g) || []; for (i = 0; i < m.length; i++) a.push(parseInt(m[i], 10)); }
+  else if (typeof v === "number" && v >= 1950 && v <= 2035) a.push(v);
+  if (!a.length) return null;
+  return [Math.min.apply(null, a), Math.max.apply(null, a)];
+}
+function parsePowers(v) {
+  var a = [], i, m, n;
+  if (isArr(v)) { for (i = 0; i < v.length; i++) { n = parseInt(v[i], 10); if (n >= 20 && n <= 2000) a.push(n); } }
+  else if (typeof v === "string") { m = v.match(/\d{2,4}/g) || []; for (i = 0; i < m.length; i++) { n = parseInt(m[i], 10); if (n >= 20 && n <= 2000) a.push(n); } }
+  else if (typeof v === "number" && v >= 20 && v <= 2000) a.push(v);
+  return uniq(a);
+}
+function parseCC(v) {
+  if (typeof v === "number" && v > 0) return Math.round(v);
+  var m = String(v || "").match(/(\d[.,]\d)/);
+  if (m) return Math.round(parseFloat(m[1].replace(",", ".")) * 1000);
+  return 0;
+}
+function mapFault(o, source) {
+  var title = o.defaut || o.titre || o.title || o.panne || o.libelle || o.nom || o.summary || "";
+  var meca = o.mecanisme || o.meca || o.cause || o.description || o.summary || o.motif_rappel || "";
+  var cons = lines(o.consequences || o.cons || o.risques_encourus || []);
+  var sym = lines(o.symptomes || o.sym || o.symptoms || []);
+  var sys = o.systeme || o.sys || o.organe || o.component || "";
+  var dtc = o.dtc || o.codes || [];
+  var raw = "";
+  try { raw = JSON.stringify(o); } catch (e) {}
+  var fire = o.risque_feu === true || o.fire === true || /incendie|feu|flamme|inflamm/i.test(raw);
+  if (!title || (!meca && !cons.length && !sys && !dtc.length && !fire)) return null;
+  if (isArr(dtc)) dtc = uniq(dtc); else dtc = String(dtc).toUpperCase().match(/[PCBU]\d{4}/g) || [];
+  return {
+    id: o.id || H("imp-", hash(H(source, title, o.marque || o.make || "", o.modele || o.model || ""))),
+    themes: fire ? ["technique", "incendie"] : ["technique"],
+    type: o.type || (o.campagne || o.numero_fiche ? "rappel" : "panne"),
+    source: source, make: o.marque || o.make || o.brand || "Multi-marques",
+    model: o.modele || o.model || "Tous", engine: o.motorisation || o.engine || o.moteur || "",
+    years: parseYears(o.annees || o.years || o.annee), fuel: o.energie || o.fuel || fuelOf(o.motorisation || o.engine || ""),
+    sys: sys, dtc: dtc, sym: sym, title: String(title).slice(0, 300), meca: String(meca),
+    cons: cons, ind: lines(o.indices || o.ind || o.preuves || []), fire: fire,
+    chain: o.chaine_feu || o.chain || (fire ? "Défaut documenté → mécanisme à expertiser → risque incendie" : ""),
+    grav: o.gravite || o.grav || (fire ? "critique" : "eleve"),
+    url: o.url || o.source_url || o.lien || "", date: String(o.date || o.date_publication || "").slice(0, 10),
+    powers: parsePowers(o.puissance_ch || o.powers || o.puissance)
+  };
+}
+function mapVehicle(o) {
+  var make = o.marque || o.make || o.brand || "";
+  var model = o.modele || o.model || "";
+  var engine = o.motorisation || o.engine || o.moteur || o.version || "";
+  var powers = parsePowers(o.puissance_ch || o.powers || o.puissance || o.ch);
+  var fuel = o.energie || o.fuel || "";
+  if (!make || !model || (!engine && !powers.length && !fuel)) return null;
+  return { make: make, model: model, engine: engine, cc: parseCC(o.cylindree || o.cc || engine), fuel: fuel || fuelOf(engine), powers: powers };
+}
+function addCatalog(make, model, engine, cc, fuel, powers) {
+  var b = nrm(make), m = nrm(model), k, arr, i, found = false, name;
+  if (!b || !m) return;
+  k = H(b, "|", m);
+  if (!ENG[k]) ENG[k] = [];
+  arr = ENG[k];
+  name = engine || (powers && powers.length ? "Version" : "");
+  if (!name) return;
+  for (i = 0; i < arr.length; i++) {
+    if (nrm(arr[i][0]) === nrm(name)) {
+      found = true;
+      if (powers && powers.length) arr[i][3] = uniq(arr[i][3].concat(powers));
+      if (cc && !arr[i][1]) arr[i][1] = cc;
+      break;
+    }
+  }
+  if (!found) arr.push([name, cc || parseCC(name), fuel || fuelOf(name), powers || []]);
+  if (!MODELS[b]) MODELS[b] = [];
+  if (!has(MODELS[b], m)) MODELS[b].push(m);
+  if (!has(BRANDS, b)) BRANDS.push(b);
+}
+function absorbCatalog(rows) { each(rows, function (r) { addCatalog(r.make, r.model, r.engine, r.cc, r.fuel, r.powers); }); }
+function ingestAny(node, key, depth, acc, source) {
+  var k, f, v, allStr, i;
+  if (depth > 6 || node === null || node === undefined) return;
+  if (isArr(node)) {
+    allStr = node.length > 0;
+    for (i = 0; i < node.length; i++) if (typeof node[i] !== "string") { allStr = false; break; }
+    if (allStr) {
+      k = nrm(key);
+      if (/marque|brand|make/.test(k)) { for (i = 0; i < node.length; i++) { var b = nrm(node[i]); if (b && !has(BRANDS, b)) BRANDS.push(b); } }
+      return;
+    }
+    for (i = 0; i < node.length; i++) ingestAny(node[i], key, depth + 1, acc, source);
+    return;
+  }
+  if (typeof node !== "object") return;
+  f = mapFault(node, source); if (f) acc.faults.push(f);
+  v = mapVehicle(node); if (v) acc.rows.push(v);
+  for (k in node) {
+    if (!node.hasOwnProperty(k)) continue;
+    if (node[k] && typeof node[k] === "object") ingestAny(node[k], k, depth + 1, acc, source);
+  }
+}
+function impState(m) { var e = $("importState"); if (e) e.innerHTML = m; }
+function loadLocalImport() {
+  var f = save("siteFaults"), r = save("siteRows"), st = save("siteStats"), msg;
+  if (f && f.length) merge(normList(f));
+  if (r && r.length) absorbCatalog(r);
+  if (st) {
+    msg = "Dernier import : ";
+    each(SITES, function (s) { msg = H(msg, s.name, " ", st[s.id] && st[s.id].ok ? "✅" : "⚠️", " · "); });
+    impState(msg);
+    chk("sites", "ok", "bases importées sauvegardées en local");
+  } else chk("sites", "warn", "aucun import local — sera fait au 1er lancement en ligne");
+}
+function importSites(manual, cb) {
+  var acc = { faults: [], rows: [], stats: {} }, si = 0, before;
+  if (S.importing) { if (cb) cb(); return; }
+  S.importing = true;
+  impState("⏳ Import des 2 sites en cours…");
+  function nextSite() {
+    var site, urls, probes, pi, ai, bytes, blobs;
+    if (si >= SITES.length) { finish(); return; }
+    site = SITES[si]; si++;
+    impState(H("⏳ ", site.name, "…"));
+    fetchText(site.url, 9000, function (err, html) {
+      if (err || !html) { acc.stats[site.id] = { ok: false, error: err || "vide" }; nextSite(); return; }
+      blobs = [html];
+      urls = discover(html, site.url);
+      probes = PROBES.slice(0);
+      pi = 0; ai = 0; bytes = html.length;
+      function nextProbe() {
+        var p, u;
+        if (pi >= probes.length) { nextAsset(); return; }
+        p = probes[pi]; pi++;
+        u = absUrl(p, site.url);
+        fetchText(u, 6000, function (e2, t) {
+          if (!e2 && t && /^[\s]*[{\[]/.test(t)) blobs.push(t);
+          nextProbe();
+        });
+      }
+      function nextAsset() {
+        var u;
+        if (ai >= urls.length || ai >= 24 || bytes > 8000000) { process(); return; }
+        u = urls[ai]; ai++;
+        fetchText(u, 9000, function (e3, t) {
+          if (!e3 && t) {
+            blobs.push(t); bytes += t.length;
+            each(discover(t, u), function (m) { if (!has(urls, m) && urls.length < 60) urls.push(m); });
+          }
+          nextAsset();
+        });
+      }
+      function process() {
+        var bi = 0;
+        function nextBlob() {
+          var b, parsed;
+          if (bi >= blobs.length) { acc.stats[site.id] = { ok: true }; nextSite(); return; }
+          b = blobs[bi]; bi++;
+          parsed = null;
+          try { parsed = JSON.parse(b); } catch (e) {}
+          if (parsed) ingestAny(parsed, "", 0, acc, site.id);
+          scanArrays(b, function (arr) { ingestAny(arr, "", 0, acc, site.id); });
+          setTimeout(nextBlob, 0);
+        }
+        nextBlob();
+      }
+      nextProbe();
+    });
+  }
+  function finish() {
+    before = S.base.length;
+    merge(acc.faults);
+    absorbCatalog(acc.rows);
+    saveBig("siteFaults", acc.faults);
+    saveBig("siteRows", acc.rows);
+    save("siteDone", Date.now());
+    save("siteStats", acc.stats);
+    save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) });
+    fillFilters(); renderResults(); renderEng(); renderPow(); stats();
+    S.importing = false;
+    impState(H("✅ Import terminé : +", S.base.length - before, " fiches · ", acc.rows.length, " véhicules catalogués."));
+    chk("sites", "ok", H("+", S.base.length - before, " fiches · ", acc.rows.length, " véhicules"));
+    toast(H("🌐 Import sites : +", S.base.length - before, " fiches · ", acc.rows.length, " véhicules"));
+    if (cb) cb();
+  }
+  nextSite();
 }
 
 /* ══════════ RECHERCHE ══════════ */
@@ -492,9 +664,7 @@ function vehicles(q) {
   if (!toks.length) return o;
   for (k in ENG) {
     if (!ENG.hasOwnProperty(k)) continue;
-    p = k.split("|");
-    hh = H(p[0], " ", p[1]);
-    s = 0;
+    p = k.split("|"); hh = H(p[0], " ", p[1]); s = 0;
     for (j = 0; j < toks.length; j++) {
       if (has(p[0].split(" "), toks[j])) s += 5;
       else if (has(p[1].split(" "), toks[j])) s += 5;
@@ -545,12 +715,9 @@ function renderResults() {
   }
   h = H(h, "<h3>🔧 Pannes &amp; rappels (", f.length, ")</h3>");
   if (f.length) {
-    for (i = 0; i < f.length; i++) {
-      h = H(h, "<div>", card(f[i]), strip(f[i]), "<button class='btn gh sm' data-act='webPhotos' data-q='", esc(String(f[i].title).slice(0, 50)), "'>📷 Photos web</button></div>");
-    }
+    for (i = 0; i < f.length; i++) h = H(h, "<div>", card(f[i]), strip(f[i]), "<button class='btn gh sm' data-act='webPhotos' data-q='", esc(String(f[i].title).slice(0, 50)), "'>📷 Photos web</button></div>");
   } else h = H(h, "<div class='empty'>Aucun résultat pour cette recherche.</div>");
-  box.innerHTML = h;
-  renderViews();
+  box.innerHTML = h; renderViews();
 }
 function renderViews() {
   var vs = save("views") || [], h = "<button data-act='saveView'>💾 Mémoriser cette vue</button>", i;
@@ -559,39 +726,30 @@ function renderViews() {
   $("views").innerHTML = h;
 }
 function fillFilters() {
-  var ms = {}, ss = {}, i, m, cm = $("fMake").value, cs = $("fSys").value;
-  var a, b, h1 = "<option value=''>Toutes</option>", h2 = "<option value=''>Tous</option>";
+  var ms = {}, ss = {}, i, m, cm = $("fMake").value, cs = $("fSys").value, a, b;
+  var h1 = "<option value=''>Toutes</option>", h2 = "<option value=''>Tous</option>";
   for (i = 0; i < S.base.length; i++) {
     m = trm(String(S.base[i].make || "").split("/")[0]);
     if (m) ms[m] = 1;
     if (S.base[i].sys) ss[S.base[i].sys] = 1;
   }
-  a = Object.keys(ms).sort();
-  b = Object.keys(ss).sort();
+  a = Object.keys(ms).sort(); b = Object.keys(ss).sort();
   for (i = 0; i < a.length; i++) h1 = H(h1, "<option>", esc(a[i]), "</option>");
   for (i = 0; i < b.length; i++) h2 = H(h2, "<option>", esc(b[i]), "</option>");
-  $("fMake").innerHTML = h1;
-  $("fSys").innerHTML = h2;
-  $("fMake").value = cm;
-  $("fSys").value = cs;
+  $("fMake").innerHTML = h1; $("fSys").innerHTML = h2;
+  $("fMake").value = cm; $("fSys").value = cs;
 }
 
 /* ══════════ EXPERTISE ══════════ */
 function veh() {
-  return {
-    make: trm($("vMake").value), model: trm($("vModel").value), engine: trm($("vEngine").value),
-    power: parseInt($("vPower").value, 10) || 0, year: parseInt($("vYear").value, 10) || 0, fuel: $("vFuel").value
-  };
+  return { make: trm($("vMake").value), model: trm($("vModel").value), engine: trm($("vEngine").value),
+    power: parseInt($("vPower").value, 10) || 0, year: parseInt($("vYear").value, 10) || 0, fuel: $("vFuel").value };
 }
 function matchV(e, v) {
   var s = 0, m;
   if (v.make && nrm(e.make).indexOf(nrm(v.make)) >= 0) s += 4;
   else if (v.make && e.make && !/multi/i.test(e.make)) return -1;
-  if (v.model) {
-    m = nrm(e.model);
-    if (m && m.indexOf(nrm(v.model)) >= 0) s += 4;
-    else if (m && !/tous|multi/i.test(m)) s -= 2;
-  }
+  if (v.model) { m = nrm(e.model); if (m && m.indexOf(nrm(v.model)) >= 0) s += 4; else if (m && !/tous|multi/i.test(m)) s -= 2; }
   if (v.engine && nrm(e.engine).indexOf(nrm(v.engine).split(" ")[0]) >= 0) s += 3;
   if (v.year && e.years) s += (v.year >= e.years[0] && v.year <= e.years[1]) ? 3 : -3;
   if (v.power && e.powers && v.power >= e.powers[0] * 0.9 && v.power <= e.powers[1] * 1.1) s += 2;
@@ -608,15 +766,12 @@ function hyps(v, toks, dtcs, syms) {
   for (i = 0; i < S.base.length; i++) {
     e = S.base[i];
     if (S.theme !== "tous" && !has(e.themes || [], S.theme)) continue;
-    s = matchV(e, v);
-    if (s < 0) continue;
-    s = s * 2;
-    why = [];
+    s = matchV(e, v); if (s < 0) continue;
+    s = s * 2; why = [];
     if (s >= 8) why.push("véhicule concordant");
     for (j = 0; j < dtcs.length; j++) if (has(e.dtc || [], dtcs[j])) { s += 8; why.push(H("DTC ", dtcs[j])); }
     for (j = 0; j < syms.length; j++) {
-      y = syms[j];
-      hit = nrm(e.title).indexOf(nrm(y)) >= 0;
+      y = syms[j]; hit = nrm(e.title).indexOf(nrm(y)) >= 0;
       each(e.sym || [], function (x) { if (nrm(x).indexOf(nrm(y)) >= 0) hit = true; });
       if (hit) s += 3;
     }
@@ -663,10 +818,8 @@ function fireBox(v, h) {
 function legalMatch(c, seller) {
   var n = nrm(c), o = [], i, j, f, s, res = [];
   for (i = 0; i < LEGAL.length; i++) {
-    f = LEGAL[i];
-    if (f.pro && seller !== "professionnel") continue;
-    s = 0;
-    for (j = 0; j < f.mots.length; j++) if (n.indexOf(nrm(f.mots[j])) >= 0) s++;
+    f = LEGAL[i]; if (f.pro && seller !== "professionnel") continue;
+    s = 0; for (j = 0; j < f.mots.length; j++) if (n.indexOf(nrm(f.mots[j])) >= 0) s++;
     if (s > 0) o.push({ f: f, s: s });
   }
   o.sort(function (x, y) { return ((y.f.sec ? 1 : 0) - (x.f.sec ? 1 : 0)) || (y.s - x.s); });
@@ -693,9 +846,7 @@ function quotaUse() {
   var q = save("quota") || { start: 0, n: 0 }, now = Date.now();
   if (now - q.start >= 604800000) q = { start: now, n: 0 };
   if (q.n >= 5) return { ok: false, reset: q.start + 604800000 };
-  q.n++;
-  save("quota", q);
-  return { ok: true };
+  q.n++; save("quota", q); return { ok: true };
 }
 function quotaShow() {
   var q;
@@ -706,21 +857,15 @@ function quotaShow() {
 function ctxRun() {
   var ctx = trm($("ctx").value), q, v, seller, t, toks = [], i, j, dtcs, syms, h, top, c, feu, legal, eng, s, plan = [], ex, lids = [];
   if (!ctx) { toast("Décris la situation dans le contexte."); return; }
-  q = quotaUse();
-  quotaShow();
+  q = quotaUse(); quotaShow();
   if (!q.ok) { toast(H("🚫 Quota atteint : 5 analyses / 7 jours. Reset le ", new Date(q.reset).toLocaleDateString("fr-FR"))); return; }
-  v = veh();
-  seller = $("vSeller").value;
-  t = nrm(ctx).split(" ");
+  v = veh(); seller = $("vSeller").value; t = nrm(ctx).split(" ");
   for (i = 0; i < t.length; i++) if (t[i].length > 3) toks.push(t[i]);
   dtcs = uniq((ctx.toUpperCase().match(/[PCBU]\d{4}/g) || []).concat($("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g) || []));
-  syms = checkedSym();
-  h = hyps(v, toks, dtcs, syms);
-  top = h[0];
+  syms = checkedSym(); h = hyps(v, toks, dtcs, syms); top = h[0];
   c = top ? conf(top) : { lvl: "INDÉTERMINÉ", crit: "Aucune hypothèse concordante.", pct: 5 };
   feu = /incendie|feu|flamme|sinistre/.test(nrm(ctx)) || (top && top.e.fire);
-  legal = legalMatch(ctx, seller);
-  eng = enginesFor(v.make, v.model);
+  legal = legalMatch(ctx, seller); eng = enginesFor(v.make, v.model);
   s = H("<div class='card'><h2>🧾 Compte rendu d'expertise</h2><p class='sm'>", new Date().toLocaleString("fr-FR"), "</p>");
   s = H(s, "<h3>1. Identification du véhicule</h3><table><tr><th>Marque / Modèle</th><td><b>", esc(v.make || "—"), " ", esc(v.model), "</b></td></tr>");
   s = H(s, "<tr><th>Motorisation</th><td>", esc(v.engine || "—"), "</td></tr>");
@@ -764,29 +909,23 @@ function ctxRun() {
 function studyRun() {
   var v = veh(), syms, dtcs, t, toks = [], i, h, top, c, rap = [], pan = [], s, hi;
   if (!v.make && !v.model) { toast("Renseigne au moins la marque et le modèle."); return; }
-  syms = checkedSym();
-  dtcs = $("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g) || [];
+  syms = checkedSym(); dtcs = $("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g) || [];
   t = nrm($("ctx").value).split(" ");
   for (i = 0; i < t.length; i++) if (t[i].length > 3) toks.push(t[i]);
-  h = hyps(v, toks, dtcs, syms);
-  top = h[0];
+  h = hyps(v, toks, dtcs, syms); top = h[0];
   c = top ? conf(top) : { lvl: "INDÉTERMINÉ", pct: 5, crit: "—" };
   for (i = 0; i < h.length; i++) { if (h[i].e.type === "rappel") rap.push(h[i].e); else pan.push(h[i].e); }
   s = H("<div class='card'><h2>📋 Étude de cas — ", esc(v.make), " ", esc(v.model), " ", esc(v.engine), "</h2>");
   s = H(s, "<p class='sm'>", new Date().toLocaleString("fr-FR"), " · ", S.base.length, " fiches · thème ", S.theme, "</p>");
   s = H(s, "<h3>🎯 Origine déterminée</h3><div class='hit'><span class='tag ok'>", c.lvl, " · ", c.pct, "%</span> <b>", esc(top ? top.e.title : "Indéterminé"), "</b><p class='sm'>", esc(c.crit), "</p></div>");
   s = H(s, "<h3>1️⃣ Rappels officiels concordants (", rap.length, ")</h3>");
-  if (rap.length) for (i = 0; i < rap.length; i++) s = H(s, card(rap[i]), strip(rap[i]));
-  else s = H(s, "<p class='sm'>Aucun.</p>");
+  if (rap.length) for (i = 0; i < rap.length; i++) s = H(s, card(rap[i]), strip(rap[i])); else s = H(s, "<p class='sm'>Aucun.</p>");
   s = H(s, "<h3>2️⃣ Pannes connues (", pan.length, ")</h3>");
-  if (pan.length) for (i = 0; i < pan.length; i++) s = H(s, card(pan[i]), strip(pan[i]));
-  else s = H(s, "<p class='sm'>Aucune.</p>");
+  if (pan.length) for (i = 0; i < pan.length; i++) s = H(s, card(pan[i]), strip(pan[i])); else s = H(s, "<p class='sm'>Aucune.</p>");
   s = H(s, fireBox(v, h), "<h3>Conclusion</h3><p class='sm'>Aide documentaire fondée sur les sources ; ne remplace pas une expertise physique du véhicule.</p></div>");
   $("studyOut").innerHTML = s;
-  hi = save("histo") || [];
-  hi.unshift({ date: new Date().toLocaleString("fr-FR"), v: v, niveau: c.lvl });
-  save("histo", hi.slice(0, 20));
-  renderHisto();
+  hi = save("histo") || []; hi.unshift({ date: new Date().toLocaleString("fr-FR"), v: v, niveau: c.lvl });
+  save("histo", hi.slice(0, 20)); renderHisto();
   toast(H("✅ Étude terminée — ", rap.length, " rappel(s), ", pan.length, " panne(s)"));
 }
 function renderHisto() {
@@ -797,13 +936,11 @@ function renderHisto() {
 
 /* ══════════ PHOTOS ══════════ */
 function compress(src, mw, q, cb) {
-  mw = mw || 1000;
-  q = q || 0.72;
+  mw = mw || 1000; q = q || 0.72;
   function run(im) {
     try {
       var sc = Math.min(1, mw / im.width), c = document.createElement("canvas"), u;
-      c.width = Math.max(1, Math.round(im.width * sc));
-      c.height = Math.max(1, Math.round(im.height * sc));
+      c.width = Math.max(1, Math.round(im.width * sc)); c.height = Math.max(1, Math.round(im.height * sc));
       c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
       u = c.toDataURL("image/jpeg", q);
       while (u.length * 0.75 > 170000 && q > 0.3) { q -= 0.08; u = c.toDataURL("image/jpeg", q); }
@@ -811,21 +948,12 @@ function compress(src, mw, q, cb) {
     } catch (e) { cb(e.message || "compression impossible"); }
   }
   if (typeof src === "string") {
-    var i = new Image();
-    i.crossOrigin = "anonymous";
-    i.onload = function () { run(i); };
-    i.onerror = function () { cb("image inaccessible"); };
-    i.src = src;
+    var i = new Image(); i.crossOrigin = "anonymous";
+    i.onload = function () { run(i); }; i.onerror = function () { cb("image inaccessible"); }; i.src = src;
   } else {
     var fr = new FileReader();
-    fr.onload = function () {
-      var i2 = new Image();
-      i2.onload = function () { run(i2); };
-      i2.onerror = function () { cb("fichier image illisible"); };
-      i2.src = fr.result;
-    };
-    fr.onerror = function () { cb("lecture du fichier impossible"); };
-    fr.readAsDataURL(src);
+    fr.onload = function () { var i2 = new Image(); i2.onload = function () { run(i2); }; i2.onerror = function () { cb("fichier image illisible"); }; i2.src = fr.result; };
+    fr.onerror = function () { cb("lecture du fichier impossible"); }; fr.readAsDataURL(src);
   }
 }
 function addPend(s, c) { S.pend.push({ id: H("ph-", uid()), src: s, cap: c || "", ts: Date.now() }); renderPend(); }
@@ -836,8 +964,7 @@ function intake(files, cap) {
   for (i = 0; i < a.length; i++) {
     (function (f) {
       compress(f, 1000, 0.72, function (err, u) {
-        done++;
-        if (!err) addPend(u, cap || f.name);
+        done++; if (!err) addPend(u, cap || f.name);
         if (done === a.length) { renderPend(); toast(H("📷 ", a.length, " photo(s) prête(s) — rattache-les à une panne.")); }
       });
     })(a[i]);
@@ -845,9 +972,7 @@ function intake(files, cap) {
 }
 function renderPend() {
   var w = $("pending"), h = "", i;
-  for (i = 0; i < S.pend.length; i++) {
-    h = H(h, "<span style='position:relative;display:inline-block;margin:3px'><img class='thumb' src='", esc(S.pend[i].src), "'><button data-act='rmPend' data-i='", i, "' style='position:absolute;top:-6px;right:-6px;border:0;border-radius:50%;background:#ff2d55;color:#fff;width:18px;height:18px;cursor:pointer'>✕</button></span>");
-  }
+  for (i = 0; i < S.pend.length; i++) h = H(h, "<span style='position:relative;display:inline-block;margin:3px'><img class='thumb' src='", esc(S.pend[i].src), "'><button data-act='rmPend' data-i='", i, "' style='position:absolute;top:-6px;right:-6px;border:0;border-radius:50%;background:#ff2d55;color:#fff;width:18px;height:18px;cursor:pointer'>✕</button></span>");
   w.innerHTML = h || "<span class='wait'>Aucune photo en attente.</span>";
 }
 function faultPicker() {
@@ -856,8 +981,7 @@ function faultPicker() {
   for (i = 0; i < S.base.length && n < 80; i++) {
     e = S.base[i];
     if (q && nrm(H(e.title, " ", e.make, " ", e.model)).indexOf(q) < 0) continue;
-    h = H(h, "<option value='", esc(fkey(e)), "'>", esc(String(e.title).slice(0, 60)), " · ", esc(e.make), "</option>");
-    n++;
+    h = H(h, "<option value='", esc(fkey(e)), "'>", esc(String(e.title).slice(0, 60)), " · ", esc(e.make), "</option>"); n++;
   }
   $("fTarget").innerHTML = h;
   o = $("fTarget").options;
@@ -884,11 +1008,8 @@ function readForm() {
 function clearForm() {
   var ids = ["nTitle","nMake","nModel","nEngine","nPower","nYears","nSys","nDtc","nSym","nSrc","nMeca","nCons","nInd","nChain"], i;
   for (i = 0; i < ids.length; i++) $(ids[i]).value = "";
-  $("nFuel").value = "";
-  $("nGrav").value = "eleve";
-  $("nFire").checked = false;
-  S.editId = null;
-  $("nfTitle").innerHTML = "Nouvelle panne — caractéristiques";
+  $("nFuel").value = ""; $("nGrav").value = "eleve"; $("nFire").checked = false;
+  S.editId = null; $("nfTitle").innerHTML = "Nouvelle panne — caractéristiques";
 }
 function attach() {
   var t = $("fTarget").value, nf, keep = [], i, j, p, n;
@@ -896,26 +1017,11 @@ function attach() {
     nf = readForm();
     if (!nf.title) { toast("Renseigne le titre du défaut."); $("nTitle").focus(); return; }
     for (i = 0; i < S.ov.entries.length; i++) if (S.ov.entries[i].id !== nf.id) keep.push(S.ov.entries[i]);
-    keep.unshift(nf);
-    S.ov.entries = keep;
-    t = nf.id;
-    merge([nf]);
-    clearForm();
-    toast("💾 Panne enregistrée.");
+    keep.unshift(nf); S.ov.entries = keep; t = nf.id; merge([nf]); clearForm(); toast("💾 Panne enregistrée.");
   } else if (!S.pend.length) { toast("Ajoute au moins une photo, ou crée une nouvelle panne."); return; }
-  for (j = 0; j < S.pend.length; j++) {
-    p = S.pend[j];
-    S.ov.photos.push({ id: p.id, fault: t, url: p.src, cap: p.cap, ts: p.ts });
-  }
-  n = S.pend.length;
-  S.pend = [];
-  persist();
-  renderPend();
-  faultPicker();
-  renderResults();
-  renderFaults();
-  fillFilters();
-  stats();
+  for (j = 0; j < S.pend.length; j++) { p = S.pend[j]; S.ov.photos.push({ id: p.id, fault: t, url: p.src, cap: p.cap, ts: p.ts }); }
+  n = S.pend.length; S.pend = [];
+  persist(); renderPend(); faultPicker(); renderResults(); renderFaults(); fillFilters(); stats();
   if (n) toast(H("✅ ", n, " photo(s) rattachée(s) — publie pour diffuser aux tiers."));
   if (save("auto")) syncPush(false);
 }
@@ -923,9 +1029,7 @@ function renderFaults() {
   var own = S.ov.entries, h = "", i, j, e, k, ph;
   if (own.length) {
     for (i = 0; i < own.length; i++) {
-      e = own[i];
-      k = fkey(e);
-      ph = S.photos[k] || [];
+      e = own[i]; k = fkey(e); ph = S.photos[k] || [];
       h = H(h, "<div class='hit ", S.sel[e.id] ? "sel" : "", "'>");
       h = H(h, "<label class='sm' style='display:flex;gap:7px;align-items:center'><input type='checkbox' data-act='selOne' data-id='", esc(e.id), "' ", S.sel[e.id] ? "checked" : "", "> <b class='t' data-act='detail' data-k='", esc(k), "'>", esc(e.title), "</b></label>");
       h = H(h, "<div class='meta'>", esc(e.make), " · ", esc(e.model), " · ", esc(e.engine), " · ", ph.length, " photo(s)</div>");
@@ -947,26 +1051,12 @@ function delFaults(ids) {
   for (i = 0; i < S.ov.entries.length; i++) { if (has(ids, S.ov.entries[i].id)) re.push(S.ov.entries[i]); else ke.push(S.ov.entries[i]); }
   for (i = 0; i < S.ov.photos.length; i++) { if (has(ids, S.ov.photos[i].fault)) rp.push(S.ov.photos[i]); else kp.push(S.ov.photos[i]); }
   for (i = 0; i < S.base.length; i++) if (!has(ids, S.base[i].id)) base.push(S.base[i]);
-  S.ov.entries = ke;
-  S.ov.photos = kp;
-  S.base = base;
-  reindex();
+  S.ov.entries = ke; S.ov.photos = kp; S.base = base; reindex();
   for (i = 0; i < ids.length; i++) delete S.sel[ids[i]];
-  persist();
-  renderFaults();
-  renderResults();
-  fillFilters();
-  stats();
+  persist(); renderFaults(); renderResults(); fillFilters(); stats();
   toast(H("🗑️ ", re.length, " panne(s) supprimée(s)."), 8000, function () {
-    S.ov.entries = re.concat(S.ov.entries);
-    S.ov.photos = S.ov.photos.concat(rp);
-    persist();
-    merge(re);
-    renderFaults();
-    renderResults();
-    fillFilters();
-    stats();
-    toast("↩️ Suppression annulée.");
+    S.ov.entries = re.concat(S.ov.entries); S.ov.photos = S.ov.photos.concat(rp);
+    persist(); merge(re); renderFaults(); renderResults(); fillFilters(); stats(); toast("↩️ Suppression annulée.");
   });
 }
 function enQuery(f) {
@@ -989,8 +1079,7 @@ function commons(q, cb) {
     if (!p) { cb(o); return; }
     for (k in p) {
       if (!p.hasOwnProperty(k)) continue;
-      x = p[k];
-      i = x.imageinfo && x.imageinfo[0];
+      x = p[k]; i = x.imageinfo && x.imageinfo[0];
       if (!i || !i.thumburl) continue;
       o.push({ thumb: i.thumburl, title: String(x.title || "").replace(/^File:/, "") });
     }
@@ -999,8 +1088,7 @@ function commons(q, cb) {
 }
 function gallery(f) {
   var out = $("photoOut"), box = document.createElement("div"), ph = S.photos[fkey(f)] || [], h, i;
-  box.className = "hit";
-  out.insertBefore(box, out.firstChild);
+  box.className = "hit"; out.insertBefore(box, out.firstChild);
   h = H("<h3>🖼️ ", esc(String(f.title).slice(0, 80)), "</h3><p class='sm'>", esc(f.make), " ", esc(f.model), " ", esc(f.engine), "</p>");
   h = H(h, "<h3>📌 Photos intégrées (", ph.length, ")</h3>");
   if (ph.length) {
@@ -1019,9 +1107,7 @@ function gallery(f) {
       for (i2 = 0; i2 < res.length; i2++) g = H(g, "<figure class='pitem' data-act='lbUrl' data-u='", esc(res[i2].thumb), "' data-c='", esc(res[i2].title), "'><img src='", esc(res[i2].thumb), "' loading='lazy'><figcaption>", esc(res[i2].title.slice(0, 40)), "</figcaption></figure>");
       g = H(g, "</div>");
     } else g = "<p class='sm'>Aucune photo libre trouvée automatiquement.</p>";
-    tmp = document.createElement("div");
-    tmp.innerHTML = g;
-    w.parentNode.replaceChild(tmp, w);
+    tmp = document.createElement("div"); tmp.innerHTML = g; w.parentNode.replaceChild(tmp, w);
   });
 }
 function photoSearch() {
@@ -1040,10 +1126,8 @@ function findPhoto(id) {
   return null;
 }
 function lightbox(s, c) {
-  var m = $("mLb");
-  m.getElementsByTagName("img")[0].src = s;
-  $("lbCap").innerHTML = esc(c || "");
-  m.className = "modal on";
+  var m = $("mLb"); m.getElementsByTagName("img")[0].src = s;
+  $("lbCap").innerHTML = esc(c || ""); m.className = "modal on";
 }
 function openDetail(k) {
   var e = null, i, ph, h;
@@ -1069,8 +1153,7 @@ function openDetail(k) {
   } else h = H(h, "<p class='sm'>Aucune photo rattachée.</p>");
   h = H(h, "<button class='btn gh' data-act='gal' data-k='", esc(k), "'>📷 Ouvrir dans le catalogue</button>");
   if (S.admin && e.source === "admin") h = H(h, "<button class='btn gh' data-act='editFault' data-id='", esc(e.id), "'>✏️ Modifier</button><button class='btn rd' data-act='delFault' data-id='", esc(e.id), "'>🗑️ Supprimer</button>");
-  $("detailBody").innerHTML = h;
-  $("mDetail").className = "modal on";
+  $("detailBody").innerHTML = h; $("mDetail").className = "modal on";
 }
 
 /* ══════════ VIN ══════════ */
@@ -1083,13 +1166,11 @@ function vinCheck(v) {
   if (/[IOQ]/.test(v)) return { ok: false, why: "les lettres I, O et Q sont interdites" };
   var s = 0, i, c, n, r, cd;
   for (i = 0; i < 17; i++) {
-    c = v.charAt(i);
-    n = (c >= "0" && c <= "9") ? parseInt(c, 10) : TRC[c];
+    c = v.charAt(i); n = (c >= "0" && c <= "9") ? parseInt(c, 10) : TRC[c];
     if (n === undefined) return { ok: false, why: "caractère invalide" };
     s += n * VWT[i];
   }
-  r = s % 11;
-  cd = r === 10 ? "X" : String(r);
+  r = s % 11; cd = r === 10 ? "X" : String(r);
   return { ok: cd === v.charAt(8), why: cd === v.charAt(8) ? "chiffre de contrôle valide" : H("chiffre de contrôle attendu ", cd, ", lu ", v.charAt(8)) };
 }
 var RURL = {"peugeot":"https://www.peugeot.fr/services-et-engagements/rappels-vehicules.html","citroen":"https://www.citroen.fr/services-et-engagements/rappels-vehicules.html","renault":"https://www.renault.fr/services/rappels-vehicules.html","dacia":"https://www.dacia.fr/services/rappels-vehicules.html","volkswagen":"https://www.volkswagen.fr/fr/informations-utiles/campagnes-de-rappel.html","skoda":"https://www.skoda.fr/services/rappels/","bmw":"https://www.bmw.fr/fr/topics/offres-et-services/apres-vente/rappel-bmw.html","toyota":"https://www.toyota.fr/services/rappels","tesla":"https://www.tesla.com/vin-recall-search","ford":"https://www.ford.fr/support/rappels/"};
@@ -1097,25 +1178,17 @@ function runVin() {
   var raw = $("vin").value.replace(/\s/g, "").toUpperCase(), out = $("vinOut");
   var v, mk, yc, ref, year, make, model = "", yr, fuel = "";
   if (!raw) { toast("Saisis un numéro VIN."); return; }
-  v = vinCheck(raw);
-  mk = WMI[raw.slice(0, 3)] || WMI[raw.slice(0, 2)] || "";
-  yc = YC[raw.charAt(9)];
-  ref = new Date().getFullYear();
+  v = vinCheck(raw); mk = WMI[raw.slice(0, 3)] || WMI[raw.slice(0, 2)] || "";
+  yc = YC[raw.charAt(9)]; ref = new Date().getFullYear();
   year = yc ? (yc.length === 1 ? yc[0] : (ref >= yc[1] - 1 ? yc[1] : yc[0])) : 0;
-  make = mk;
-  yr = year;
+  make = mk; yr = year;
   $("vinState").innerHTML = v.ok ? "VIN valide" : "à vérifier";
   $("vinState").className = H("pill ", v.ok ? "ok" : "warn");
   function kv(l, x) { return H("<div><b>", esc(l), "</b>", esc(x || "—"), "</div>"); }
   out.innerHTML = H("<h3>1. Décodage local</h3><p class='sm'>", v.ok ? "✅" : "⚠️", " ", esc(v.why), "</p><div class='kv'>", kv("WMI", raw.slice(0, 3)), kv("Marque", mk), kv("Millésime", year), kv("Usine", raw.charAt(10)), "</div><p class='sm'>⏳ Interrogation des sources officielles…</p>");
   jget(H("https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/", encodeURIComponent(raw), "?format=json"), 9000, function (vp) {
     var d = vp && vp.Results && vp.Results[0];
-    if (d) {
-      make = d.Make || make;
-      model = d.Model || "";
-      yr = parseInt(d.ModelYear, 10) || yr;
-      fuel = d.FuelTypePrimary || "";
-    }
+    if (d) { make = d.Make || make; model = d.Model || ""; yr = parseInt(d.ModelYear, 10) || yr; fuel = d.FuelTypePrimary || ""; }
     function finish(us) {
       var loc = [], i, e, r, h;
       for (i = 0; i < S.base.length && loc.length < 6; i++) {
@@ -1133,10 +1206,8 @@ function runVin() {
       h = H(h, "<h3>3. Statut de ce VIN</h3><p class='sm'>Le statut traité ou non traité n'est publié que par le constructeur. Le VIN est copié dans le presse-papier.</p>");
       h = H(h, "<button class='btn' data-act='vinBrand'>🏭 Page rappels ", esc(make || "constructeur"), "</button><button class='btn gh' data-act='vinFill'>🚗 Remplir le sélecteur</button>");
       out.innerHTML = h;
-      S.vin = {
-        raw: raw, make: make, model: model, year: yr, fuel: fuel,
-        url: RURL[nrm(make).replace(/ /g, "-")] || H("https://www.google.com/search?q=", encodeURIComponent(H(make, " rappel campagne VIN officiel")))
-      };
+      S.vin = { raw: raw, make: make, model: model, year: yr, fuel: fuel,
+        url: RURL[nrm(make).replace(/ /g, "-")] || H("https://www.google.com/search?q=", encodeURIComponent(H(make, " rappel campagne VIN officiel"))) };
     }
     if (make && model && yr) jget(H("https://api.nhtsa.gov/recalls/recallsByVehicle?make=", encodeURIComponent(make), "&model=", encodeURIComponent(model), "&modelYear=", yr), 9000, function (j) { finish((j && j.results) || []); });
     else finish([]);
@@ -1161,9 +1232,7 @@ function decodeDTC(h) {
   for (i = 0; i < b.length; i++) if (b[i] === 0x43 || b[i] === 0x47) { idx = i; break; }
   if (idx < 0) return [];
   for (i = idx + 1; i + 1 < b.length; i += 2) {
-    a = b[i];
-    c = b[i + 1];
-    if (!a && !c) continue;
+    a = b[i]; c = b[i + 1]; if (!a && !c) continue;
     o.push(H("PCBU".charAt((a >> 6) & 3), String((a >> 4) & 3), (a & 15).toString(16).toUpperCase(), (c >> 4).toString(16).toUpperCase(), (c & 15).toString(16).toUpperCase()));
   }
   return o;
@@ -1207,9 +1276,7 @@ function obdRead() {
       }
       $("obdOut").innerHTML = h || "<p class='sm'>Aucun code défaut stocké ou en attente.</p>";
       if (codes.length) {
-        $("dtcOn").checked = true;
-        cls($("dtc"), "hide", false);
-        $("dtc").value = codes.join(", ");
+        $("dtcOn").checked = true; cls($("dtc"), "hide", false); $("dtc").value = codes.join(", ");
         toast(H("✅ ", codes.length, " code(s) injecté(s) dans l'étude de cas."));
       }
     });
@@ -1242,8 +1309,7 @@ function setChan(c) {
 function syncPush(manual, cb) {
   var c = chan(), A, embed = {}, meta = [], list, i = 0;
   if (!c) { if (manual) toast("❌ Crée d'abord un canal dans l'onglet 📡 Sync."); if (cb) cb(false); return; }
-  A = AD[S.be];
-  list = S.ov.photos;
+  A = AD[S.be]; list = S.ov.photos;
   function step() {
     var p;
     if (i >= list.length) {
@@ -1256,20 +1322,10 @@ function syncPush(manual, cb) {
       });
       return;
     }
-    p = list[i];
-    i++;
-    if (A.keys && p.url.indexOf("data:") === 0) {
-      A.putPh(c, p.id, p.url, function () { meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "key" }); step(); });
-      return;
-    }
-    if (p.url.indexOf("data:") === 0) {
-      if (Object.keys(embed).length < 4) embed[p.id] = p.url;
-      meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "embed" });
-      step();
-      return;
-    }
-    meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "url", url: p.url });
-    step();
+    p = list[i]; i++;
+    if (A.keys && p.url.indexOf("data:") === 0) { A.putPh(c, p.id, p.url, function () { meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "key" }); step(); }); return; }
+    if (p.url.indexOf("data:") === 0) { if (Object.keys(embed).length < 4) embed[p.id] = p.url; meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "embed" }); step(); return; }
+    meta.push({ id: p.id, fault: p.fault, cap: p.cap, ts: p.ts, ref: "url", url: p.url }); step();
   }
   step();
 }
@@ -1287,51 +1343,23 @@ function syncPull(cb) {
       var m, ex = false, a, j, ca, url;
       if (i >= meta.length) {
         if (st.look) { S.look = st.look; applyLook(); }
-        if (st.revs && st.revs.length) {
-          each(st.revs, function (s) { if (!has(S.revs, s)) S.revs.push(s); });
-          save("revs", S.revs);
-          checkRev();
-        }
+        if (st.revs && st.revs.length) { each(st.revs, function (s) { if (!has(S.revs, s)) S.revs.push(s); }); save("revs", S.revs); checkRev(); }
         if (st.mail) S.mail = st.mail;
         chk("sync", "ok", H(A.name, " · reçu ", new Date(st.ts || Date.now()).toLocaleTimeString("fr-FR")));
-        fillFilters();
-        renderResults();
-        stats();
-        if (cb) cb();
-        return;
+        fillFilters(); renderResults(); stats(); if (cb) cb(); return;
       }
-      m = meta[i];
-      i++;
+      m = meta[i]; i++;
       a = S.photos[m.fault] || [];
       for (j = 0; j < a.length; j++) if (a[j].id === m.id) ex = true;
       if (ex) { step(); return; }
       if (m.ref === "key") {
         ca = save(H("ph:", m.id));
-        if (ca) {
-          if (!S.photos[m.fault]) S.photos[m.fault] = [];
-          S.photos[m.fault].push({ id: m.id, url: ca, cap: m.cap, ts: m.ts });
-          step();
-          return;
-        }
-        if (A.getPh) {
-          A.getPh(c, m.id, function (du) {
-            if (du) {
-              save(H("ph:", m.id), du);
-              if (!S.photos[m.fault]) S.photos[m.fault] = [];
-              S.photos[m.fault].push({ id: m.id, url: du, cap: m.cap, ts: m.ts });
-            }
-            step();
-          });
-          return;
-        }
-        step();
-        return;
+        if (ca) { if (!S.photos[m.fault]) S.photos[m.fault] = []; S.photos[m.fault].push({ id: m.id, url: ca, cap: m.cap, ts: m.ts }); step(); return; }
+        if (A.getPh) { A.getPh(c, m.id, function (du) { if (du) { save(H("ph:", m.id), du); if (!S.photos[m.fault]) S.photos[m.fault] = []; S.photos[m.fault].push({ id: m.id, url: du, cap: m.cap, ts: m.ts }); } step(); }); return; }
+        step(); return;
       }
       url = m.ref === "embed" ? ((st.embedded || {})[m.id] || "") : (m.url || "");
-      if (url) {
-        if (!S.photos[m.fault]) S.photos[m.fault] = [];
-        S.photos[m.fault].push({ id: m.id, url: url, cap: m.cap, ts: m.ts });
-      }
+      if (url) { if (!S.photos[m.fault]) S.photos[m.fault] = []; S.photos[m.fault].push({ id: m.id, url: url, cap: m.cap, ts: m.ts }); }
       step();
     }
     step();
@@ -1340,17 +1368,11 @@ function syncPull(cb) {
 function applyLook() {
   var op = (S.look.op === undefined || S.look.op === null) ? 55 : S.look.op, i;
   $("wall").style.backgroundImage = S.look.bg ? H("url(", S.look.bg, ")") : "";
-  $("wall").style.opacity = op / 100;
-  $("op").value = op;
-  $("opVal").innerHTML = H(op, "%");
-  if (S.look.car) { i = new Image(); i.onload = function () { S.carImg = i; }; i.src = S.look.car; }
-  else S.carImg = null;
+  $("wall").style.opacity = op / 100; $("op").value = op; $("opVal").innerHTML = H(op, "%");
+  if (S.look.car) { i = new Image(); i.onload = function () { S.carImg = i; }; i.src = S.look.car; } else S.carImg = null;
   save("look", S.look);
 }
-function checkRev() {
-  var a = save("access");
-  if (a && has(S.revs, a.sig)) { save("access", null); if (!S.admin) gate("revoque"); }
-}
+function checkRev() { var a = save("access"); if (a && has(S.revs, a.sig)) { save("access", null); if (!S.admin) gate("revoque"); } }
 
 /* ══════════ ACCÈS ══════════ */
 function b64u(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
@@ -1365,37 +1387,18 @@ function gate(st, n) {
   show("s-gate");
   each(["gForm", "gOk", "gKo"], function (i) { cls($(i), "hide", true); });
   if (st === "ok") { cls($("gOk"), "hide", false); $("gHello").innerHTML = esc(n || S.name); }
-  else if (st === "refus" || st === "revoque") {
-    cls($("gKo"), "hide", false);
-    $("gWhy").innerHTML = st === "revoque" ? "🔒 Ce code a été révoqué par l'administrateur." : "❌ Code invalide ou expiré.";
-  } else cls($("gForm"), "hide", false);
+  else if (st === "refus" || st === "revoque") { cls($("gKo"), "hide", false); $("gWhy").innerHTML = st === "revoque" ? "🔒 Ce code a été révoqué par l'administrateur." : "❌ Code invalide ou expiré."; }
+  else cls($("gForm"), "hide", false);
 }
-function showApp() {
-  show("s-app");
-  cls($("bToAdmin"), "hide", !S.admin);
-  renderHisto();
-  quotaShow();
-  renderOutbox();
-  renderResults();
-}
-function showAdmin() {
-  show("s-admin");
-  renderCodes();
-  renderRevs();
-  faultPicker();
-  renderPend();
-  renderFaults();
-  paintChk();
-}
+function showApp() { show("s-app"); cls($("bToAdmin"), "hide", !S.admin); renderHisto(); quotaShow(); renderOutbox(); renderResults(); }
+function showAdmin() { show("s-admin"); renderCodes(); renderRevs(); faultPicker(); renderPend(); renderFaults(); paintChk(); }
 function codes() { return save("codes") || []; }
 function renderCodes() {
   var a = codes(), h = "", i, x, rv, ex;
   if (a.length) {
     h = "<table><tr><th>Prénom</th><th>Expire</th><th>État</th><th></th></tr>";
     for (i = 0; i < a.length; i++) {
-      x = a[i];
-      rv = has(S.revs, x.sig);
-      ex = x.exp < Date.now();
+      x = a[i]; rv = has(S.revs, x.sig); ex = x.exp < Date.now();
       h = H(h, "<tr><td>", esc(x.name), "</td><td class='sm'>", new Date(x.exp).toLocaleDateString("fr-FR"), "</td><td><span class='tag ", rv ? "crit" : ex ? "" : "ok", "'>", rv ? "révoqué" : ex ? "expiré" : "actif", "</span></td>");
       h = H(h, "<td><button class='btn gh sm' data-act='copyUser' data-i='", i, "'>📋</button><button class='btn rd sm' data-act='revoke' data-i='", i, "' ", rv ? "disabled" : "", ">🚫</button></td></tr>");
     }
@@ -1412,10 +1415,7 @@ function renderOutbox() {
 function sendMsg(cp) {
   var t = trm($("msg").value), o;
   if (!t) { toast("Écris ton message."); return; }
-  o = save("outbox") || [];
-  o.unshift({ t: t, at: Date.now() });
-  save("outbox", o.slice(0, 30));
-  renderOutbox();
+  o = save("outbox") || []; o.unshift({ t: t, at: Date.now() }); save("outbox", o.slice(0, 30)); renderOutbox();
   if (cp) copy(t);
   else location.href = H("mailto:", S.mail, "?subject=", encodeURIComponent(H("Message KEV TECH & FIRE — ", S.name)), "&body=", encodeURIComponent(t));
   $("msg").value = "";
@@ -1434,20 +1434,12 @@ function checkUpd(force, cb) {
       var f;
       if (i >= files.length) {
         if (all.length) {
-          merge(normList(all));
-          save("ver", idx.version || "");
-          save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) });
-          fillFilters();
-          renderResults();
-          stats();
-          chk("repo", "ok", H("MAJ appliquée : ", all.length, " fiches"));
-          toast("⬆️ Base mise à jour.");
+          merge(normList(all)); save("ver", idx.version || ""); save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) });
+          fillFilters(); renderResults(); stats(); chk("repo", "ok", H("MAJ appliquée : ", all.length, " fiches")); toast("⬆️ Base mise à jour.");
         }
-        if (cb) cb();
-        return;
+        if (cb) cb(); return;
       }
-      f = files[i];
-      i++;
+      f = files[i]; i++;
       jget(H("data/", f), 9000, function (c) { if (c && c.length) all = all.concat(c); step(); });
     }
     step();
@@ -1456,21 +1448,14 @@ function checkUpd(force, cb) {
 function harvest(cb) {
   var base, off = 0, out = [];
   if (S.busy) { if (cb) cb(); return; }
-  S.busy = true;
-  toast("🛰️ Interrogation de RappelConso…");
+  S.busy = true; toast("🛰️ Interrogation de RappelConso…");
   base = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/rappelconso-v2-gtin-espaces/records";
   function fin() {
     if (out.length) {
-      merge(out);
-      save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) });
-      save("rcTs", Date.now());
-      fillFilters();
-      renderResults();
-      stats();
-      toast(H("🛰️ <b>", out.length, "</b> rappels officiels intégrés à la base."));
+      merge(out); save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) }); save("rcTs", Date.now());
+      fillFilters(); renderResults(); stats(); toast(H("🛰️ <b>", out.length, "</b> rappels officiels intégrés à la base."));
     } else toast("⚠️ RappelConso injoignable — la base locale reste disponible.");
-    S.busy = false;
-    if (cb) cb();
+    S.busy = false; if (cb) cb();
   }
   function step() {
     var u;
@@ -1502,114 +1487,72 @@ function harvest(cb) {
   step();
 }
 
-/* ══════════ CANVAS ══════════ */
+/* ══════════ FOND ANIMÉ ══════════ */
 var cv = $("scene"), cx = cv.getContext("2d"), W = 0, Ht = 0, stars = [], b1 = [], b2 = [], dash = 0, raf = 0, vis = true;
 function resize() {
   var d = Math.min(window.devicePixelRatio || 1, 1.5), i;
-  W = window.innerWidth;
-  Ht = window.innerHeight;
-  cv.width = Math.max(1, Math.round(W * d));
-  cv.height = Math.max(1, Math.round(Ht * d));
+  W = window.innerWidth; Ht = window.innerHeight;
+  cv.width = Math.max(1, Math.round(W * d)); cv.height = Math.max(1, Math.round(Ht * d));
   cx.setTransform(d, 0, 0, d, 0, 0);
   stars = [];
-  for (i = 0; i < 60; i++) stars.push({ x: Math.random() * W, y: Math.random() * Ht * 0.55, r: Math.random() * 1.4 + 0.3, p: Math.random() * 6 });
+  for (i = 0; i < 70; i++) stars.push({ x: Math.random() * W, y: Math.random() * Ht * 0.55, r: Math.random() * 1.4 + 0.3, p: Math.random() * 6 });
   function mk(n, h) { var a = [], j; for (j = 0; j < n; j++) a.push({ x: j * (W / n), w: W / n * 0.7, h: h + Math.random() * h }); return a; }
-  b1 = mk(14, Ht * 0.16);
-  b2 = mk(20, Ht * 0.1);
+  b1 = mk(14, Ht * 0.16); b2 = mk(20, Ht * 0.1);
 }
-function accent() {
-  try { return trm(getComputedStyle(document.documentElement).getPropertyValue("--acc")) || "#00e676"; }
-  catch (e) { return "#00e676"; }
+function accent() { try { return trm(getComputedStyle(document.documentElement).getPropertyValue("--acc")) || "#00e676"; } catch (e) { return "#00e676"; } }
+function drawAurora(t) {
+  var i, bx, by, rg;
+  for (i = 0; i < 3; i++) {
+    bx = W * (0.2 + 0.3 * i) + Math.sin(t / 5000 + i * 2) * W * 0.15;
+    by = Ht * 0.25 + Math.cos(t / 6000 + i) * Ht * 0.08;
+    rg = cx.createRadialGradient(bx, by, 0, bx, by, W * 0.4);
+    rg.addColorStop(0, i === 0 ? "rgba(0,229,255,.16)" : i === 1 ? "rgba(139,92,255,.16)" : "rgba(255,122,24,.12)");
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    cx.fillStyle = rg; cx.fillRect(0, 0, W, Ht);
+  }
 }
 function drawCar(x, y, s, t) {
   var a = accent(), wh = [-88, 92], w, k;
-  cx.save();
-  cx.translate(x, y + Math.sin(t / 180) * 1.6);
-  cx.scale(s, s);
+  cx.save(); cx.translate(x, y + Math.sin(t / 180) * 1.6); cx.scale(s, s);
   if (S.carImg) { cx.drawImage(S.carImg, -150, -78, 300, 90); cx.restore(); return; }
-  cx.shadowColor = a;
-  cx.shadowBlur = 16;
-  cx.fillStyle = "#0d1330";
-  cx.strokeStyle = a;
-  cx.lineWidth = 2;
-  cx.beginPath();
-  cx.moveTo(-140, 0);
-  cx.quadraticCurveTo(-130, -30, -80, -36);
-  cx.lineTo(-45, -58);
-  cx.quadraticCurveTo(0, -72, 55, -56);
-  cx.lineTo(95, -36);
-  cx.quadraticCurveTo(140, -30, 146, -8);
-  cx.lineTo(146, 0);
-  cx.closePath();
-  cx.fill();
-  cx.stroke();
-  cx.shadowBlur = 0;
-  cx.fillStyle = "rgba(144,202,249,.85)";
-  cx.beginPath();
-  cx.moveTo(-40, -54);
-  cx.lineTo(48, -52);
-  cx.lineTo(78, -38);
-  cx.lineTo(-62, -38);
-  cx.closePath();
-  cx.fill();
+  cx.shadowColor = a; cx.shadowBlur = 16; cx.fillStyle = "#0d1330"; cx.strokeStyle = a; cx.lineWidth = 2;
+  cx.beginPath(); cx.moveTo(-140, 0); cx.quadraticCurveTo(-130, -30, -80, -36); cx.lineTo(-45, -58);
+  cx.quadraticCurveTo(0, -72, 55, -56); cx.lineTo(95, -36); cx.quadraticCurveTo(140, -30, 146, -8);
+  cx.lineTo(146, 0); cx.closePath(); cx.fill(); cx.stroke();
+  cx.shadowBlur = 0; cx.fillStyle = "rgba(144,202,249,.85)";
+  cx.beginPath(); cx.moveTo(-40, -54); cx.lineTo(48, -52); cx.lineTo(78, -38); cx.lineTo(-62, -38); cx.closePath(); cx.fill();
   for (w = 0; w < 2; w++) {
-    cx.fillStyle = "#05070f";
-    cx.beginPath();
-    cx.arc(wh[w], 2, 20, 0, 6.2832);
-    cx.fill();
-    cx.strokeStyle = a;
-    cx.lineWidth = 2;
-    cx.stroke();
-    cx.save();
-    cx.translate(wh[w], 2);
-    cx.rotate(t / 90);
-    cx.strokeStyle = "rgba(255,255,255,.5)";
+    cx.fillStyle = "#05070f"; cx.beginPath(); cx.arc(wh[w], 2, 20, 0, 6.2832); cx.fill();
+    cx.strokeStyle = a; cx.lineWidth = 2; cx.stroke();
+    cx.save(); cx.translate(wh[w], 2); cx.rotate(t / 90); cx.strokeStyle = "rgba(255,255,255,.5)";
     for (k = 0; k < 4; k++) { cx.rotate(Math.PI / 2); cx.beginPath(); cx.moveTo(0, 0); cx.lineTo(0, -14); cx.stroke(); }
     cx.restore();
   }
-  cx.fillStyle = "rgba(255,241,118,.9)";
-  cx.fillRect(140, -14, 60, 12);
-  cx.fillStyle = "#ff2d55";
-  cx.fillRect(-146, -16, 6, 8);
+  cx.fillStyle = "rgba(255,241,118,.9)"; cx.fillRect(140, -14, 60, 12);
+  cx.fillStyle = "#ff2d55"; cx.fillRect(-146, -16, 6, 8);
   cx.restore();
 }
 function frame(t) {
   var a = accent(), road = Ht * 0.8, i, x, s, g;
   if (!vis) { raf = 0; return; }
   g = cx.createLinearGradient(0, 0, 0, Ht);
-  g.addColorStop(0, "#05081a");
-  g.addColorStop(0.55, "#141034");
-  g.addColorStop(1, "#05081a");
-  cx.fillStyle = g;
-  cx.fillRect(0, 0, W, Ht);
+  g.addColorStop(0, "#05081a"); g.addColorStop(0.55, "#141034"); g.addColorStop(1, "#05081a");
+  cx.fillStyle = g; cx.fillRect(0, 0, W, Ht);
+  drawAurora(t);
   cx.fillStyle = "#fff";
-  for (i = 0; i < stars.length; i++) {
-    s = stars[i];
-    cx.globalAlpha = 0.3 + 0.5 * Math.abs(Math.sin(t / 900 + s.p));
-    cx.fillRect(s.x, s.y, s.r, s.r);
-  }
-  cx.globalAlpha = 1;
-  cx.fillStyle = "rgba(10,14,36,.9)";
+  for (i = 0; i < stars.length; i++) { s = stars[i]; cx.globalAlpha = 0.3 + 0.5 * Math.abs(Math.sin(t / 900 + s.p)); cx.fillRect(s.x, s.y, s.r, s.r); }
+  cx.globalAlpha = 1; cx.fillStyle = "rgba(10,14,36,.9)";
   for (i = 0; i < b1.length; i++) { x = (b1[i].x - t * 0.008) % W; cx.fillRect(x < 0 ? x + W : x, road - b1[i].h, b1[i].w, b1[i].h); }
   cx.fillStyle = "rgba(16,20,52,.95)";
   for (i = 0; i < b2.length; i++) { x = (b2[i].x - t * 0.02) % W; cx.fillRect(x < 0 ? x + W : x, road - b2[i].h, b2[i].w, b2[i].h); }
-  cx.fillStyle = a;
-  cx.globalAlpha = 0.5;
-  cx.fillRect(0, road, W, 2);
-  cx.globalAlpha = 1;
-  cx.fillStyle = "#0a0d1c";
-  cx.fillRect(0, road, W, Ht - road);
-  dash = (dash + 6) % 160;
-  cx.fillStyle = "rgba(255,215,64,.8)";
+  cx.fillStyle = a; cx.globalAlpha = 0.5; cx.fillRect(0, road, W, 2); cx.globalAlpha = 1;
+  cx.fillStyle = "#0a0d1c"; cx.fillRect(0, road, W, Ht - road);
+  dash = (dash + 6) % 160; cx.fillStyle = "rgba(255,215,64,.8)";
   for (x = -dash; x < W; x += 160) cx.fillRect(x, road + (Ht - road) * 0.5, 70, 5);
   drawCar(W * 0.34, road - 2, Math.min(1, W / 700), t);
   raf = window.requestAnimationFrame(frame);
 }
-function startLoop() {
-  if (raf) { window.cancelAnimationFrame(raf); raf = 0; }
-  vis = true;
-  if (window.requestAnimationFrame) raf = window.requestAnimationFrame(frame);
-}
+function startLoop() { if (raf) { window.cancelAnimationFrame(raf); raf = 0; } vis = true; if (window.requestAnimationFrame) raf = window.requestAnimationFrame(frame); }
 function net() {
   var c = navigator.connection || {}, t = c.type === "wifi" ? "WiFi" : String(c.effectiveType || "").toUpperCase();
   $("pNet").innerHTML = navigator.onLine ? H("📶 ", t || "en ligne") : "📴 hors ligne";
@@ -1635,8 +1578,7 @@ function prov(kind) {
   if (kind === "engine") return function () {
     var l = enginesFor($("vMake").value, $("vModel").value), c = nrm($("vEngine").value), o = [], i, e;
     for (i = 0; i < l.length; i++) {
-      e = l[i];
-      if (c && nrm(e.m).indexOf(c) < 0) continue;
+      e = l[i]; if (c && nrm(e.m).indexOf(c) < 0) continue;
       o.push({ value: e.m, label: H(ICON[e.en] || "", " ", e.m, " · ", e.en, " · ", e.ch.join("/"), " ch", e.cc ? H(" · ", e.cc, " cm³") : ""), hint: e.src });
     }
     return o;
@@ -1651,11 +1593,7 @@ function prov(kind) {
     if (c.length < 2) return [];
     for (i = 0; i < BRANDS.length; i++) s[tc(BRANDS[i])] = 1;
     for (k in MODELS) { if (!MODELS.hasOwnProperty(k)) continue; for (i = 0; i < MODELS[k].length; i++) s[tc(MODELS[k][i])] = 1; }
-    for (i = 0; i < Math.min(S.base.length, 800); i++) {
-      e = S.base[i];
-      each(e.dtc || [], function (d) { s[d] = 1; });
-      if (e.sys) s[e.sys] = 1;
-    }
+    for (i = 0; i < Math.min(S.base.length, 800); i++) { e = S.base[i]; each(e.dtc || [], function (d) { s[d] = 1; }); if (e.sys) s[e.sys] = 1; }
     for (k in s) { if (!s.hasOwnProperty(k)) continue; if (nrm(k).indexOf(c) >= 0) o.push({ value: k, label: k, hint: "" }); }
     return o.slice(0, 10);
   };
@@ -1663,36 +1601,25 @@ function prov(kind) {
 function suggest(inp) {
   var p, w, l;
   if (!inp || inp._sg) return;
-  inp._sg = true;
-  p = prov(inp.getAttribute("data-sg"));
-  w = document.createElement("div");
-  w.className = "sgw";
-  inp.parentNode.insertBefore(w, inp);
-  w.appendChild(inp);
-  l = document.createElement("div");
-  l.className = "sgl";
-  l.style.display = "none";
-  w.appendChild(l);
+  inp._sg = true; p = prov(inp.getAttribute("data-sg"));
+  w = document.createElement("div"); w.className = "sgw";
+  inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+  l = document.createElement("div"); l.className = "sgl"; l.style.display = "none"; w.appendChild(l);
   function open() {
     var it = [], h = "", i;
     try { it = p().slice(0, 12); } catch (e) { it = []; }
     if (!it.length) { l.style.display = "none"; return; }
     for (i = 0; i < it.length; i++) h = H(h, "<div data-i='", i, "'>", esc(it[i].label), it[i].hint ? H(" <span style='color:#93a4d8;font-size:.65rem'>", esc(it[i].hint), "</span>") : "", "</div>");
-    l.innerHTML = h;
-    l._i = it;
-    l.style.display = "block";
+    l.innerHTML = h; l._i = it; l.style.display = "block";
   }
-  inp.addEventListener("focus", open);
-  inp.addEventListener("click", open);
-  inp.addEventListener("input", open);
+  inp.addEventListener("focus", open); inp.addEventListener("click", open); inp.addEventListener("input", open);
   l.addEventListener("mousedown", function (ev) {
     var t = ev.target;
     while (t && t !== l && !t.getAttribute("data-i")) t = t.parentNode;
     if (!t || t === l) return;
     ev.preventDefault();
     inp.value = l._i[parseInt(t.getAttribute("data-i"), 10)].value;
-    l.style.display = "none";
-    fire(inp, "change");
+    l.style.display = "none"; fire(inp, "change");
   });
   inp.addEventListener("blur", function () { setTimeout(function () { l.style.display = "none"; }, 180); });
 }
@@ -1714,34 +1641,18 @@ var ACT = {
 noop: function () {},
 home: function () { save("mode", null); show("s-home"); },
 modeAdmin: function () { $("pwd").value = ""; show("s-login"); $("pwd").focus(); },
-modeTiers: function () {
-  var a;
-  save("mode", "tiers");
-  a = save("access");
-  if (a && !has(S.revs, a.sig)) { S.name = a.name; showApp(); } else gate("form");
-},
-login: function () {
-  var p = $("pwd").value;
-  $("pwd").value = "";
-  if (!p) return;
-  if (p === PWD) { S.admin = true; showAdmin(); toast("🛡️ Mode administrateur déverrouillé."); }
-  else toast("❌ Mot de passe incorrect.");
-},
+modeTiers: function () { var a; save("mode", "tiers"); a = save("access"); if (a && !has(S.revs, a.sig)) { S.name = a.name; showApp(); } else gate("form"); },
+login: function () { var p = $("pwd").value; $("pwd").value = ""; if (!p) return; if (p === PWD) { S.admin = true; showAdmin(); toast("🛡️ Mode administrateur déverrouillé."); } else toast("❌ Mot de passe incorrect."); },
 gate: function () {
   var p = trm($("gName").value), c = trm($("gCode").value), parts, pl, sg, pay;
   if (!p || !c) { toast("Prénom et code d'accès requis."); return; }
-  parts = c.split(".");
-  pl = parts[0];
-  sg = parts[1];
+  parts = c.split("."); pl = parts[0]; sg = parts[1];
   if (!pl || !sg) { gate("refus"); return; }
   try { pay = JSON.parse(unb64u(pl)); } catch (e) { gate("refus"); return; }
   if (sig(pl) !== sg) { gate("refus"); return; }
   if (pay.exp && Date.now() > pay.exp) { gate("refus"); return; }
   if (has(S.revs, sg)) { gate("revoque"); return; }
-  S.name = p;
-  save("name", p);
-  save("access", { name: p, sig: sg });
-  gate("ok", p);
+  S.name = p; save("name", p); save("access", { name: p, sig: sg }); gate("ok", p);
 },
 gateRetry: function () { gate("form"); },
 enter: function () { showApp(); },
@@ -1756,8 +1667,7 @@ toAdmin: function () { if (S.admin) showAdmin(); },
 toApp: function () { showApp(); },
 theme: function (t) {
   var b = $("seg").getElementsByTagName("button"), i;
-  S.theme = t.getAttribute("data-t");
-  document.documentElement.setAttribute("data-theme", S.theme);
+  S.theme = t.getAttribute("data-t"); document.documentElement.setAttribute("data-theme", S.theme);
   for (i = 0; i < b.length; i++) cls(b[i], "on", b[i] === t);
   renderResults();
 },
@@ -1775,21 +1685,12 @@ tabAdm: function (t) {
   if (a === "faults") { faultPicker(); renderFaults(); }
   if (a === "base") paintChk();
 },
-pickEng: function (t) {
-  var l = $("cEng")._l || [], e = l[parseInt(t.getAttribute("data-e"), 10)];
-  if (!e) return;
-  $("vEngine").value = e.m;
-  autoAttr();
-},
+pickEng: function (t) { var l = $("cEng")._l || [], e = l[parseInt(t.getAttribute("data-e"), 10)]; if (!e) return; $("vEngine").value = e.m; autoAttr(); },
 pickPow: function (t) { $("vPower").value = t.getAttribute("data-p"); },
 useVeh: function (t) {
-  $("vMake").value = t.getAttribute("data-m");
-  $("vModel").value = t.getAttribute("data-o");
-  $("vEngine").value = "";
-  $("vPower").value = "";
-  renderEng();
-  renderPow();
-  renderAttrib();
+  $("vMake").value = t.getAttribute("data-m"); $("vModel").value = t.getAttribute("data-o");
+  $("vEngine").value = ""; $("vPower").value = "";
+  renderEng(); renderPow(); renderAttrib();
   try { window.scrollTo(0, 0); } catch (e) {}
   toast("✅ Véhicule chargé dans le sélecteur.");
 },
@@ -1801,55 +1702,37 @@ lbClose: function () { $("mLb").className = "modal"; },
 gal: function (t) {
   var k = t.getAttribute("data-k"), f = null, i, b;
   for (i = 0; i < S.base.length; i++) if (fkey(S.base[i]) === k) f = S.base[i];
-  $("mDetail").className = "modal";
-  showApp();
+  $("mDetail").className = "modal"; showApp();
   b = $("tabsApp").getElementsByTagName("button");
   for (i = 0; i < b.length; i++) if (b[i].getAttribute("data-v") === "photos") { ACT.tabApp(b[i]); break; }
-  $("photoOut").innerHTML = "";
-  if (f) gallery(f);
+  $("photoOut").innerHTML = ""; if (f) gallery(f);
 },
 webPhotos: function (t) {
-  var b, i;
-  showApp();
+  var b, i; showApp();
   b = $("tabsApp").getElementsByTagName("button");
   for (i = 0; i < b.length; i++) if (b[i].getAttribute("data-v") === "photos") { ACT.tabApp(b[i]); break; }
-  $("pq").value = t.getAttribute("data-q");
-  photoSearch();
+  $("pq").value = t.getAttribute("data-q"); photoSearch();
 },
 photoSearch: function () { photoSearch(); },
 ctxRun: function () { ctxRun(); },
 ctxJson: function () { dl("expertise.json", JSON.stringify(S.report || { vehicule: veh(), contexte: $("ctx").value }, null, 1)); },
 studyRun: function () { studyRun(); },
 print: function () { window.print(); },
-word: function (t) {
-  var ta = $(t.getAttribute("data-t"));
-  if (!ta) return;
-  ta.value = H(ta.value.replace(/[A-Za-z0-9-]+$/, t.getAttribute("data-w")), " ");
-  ta.focus();
-  fire(ta, "input");
-},
+word: function (t) { var ta = $(t.getAttribute("data-t")); if (!ta) return; ta.value = H(ta.value.replace(/[A-Za-z0-9-]+$/, t.getAttribute("data-w")), " "); ta.focus(); fire(ta, "input"); },
 obdConnect: function () { obdConnect(); },
 obdRead: function () { obdRead(); },
 msgSend: function () { sendMsg(false); },
 msgCopy: function () { sendMsg(true); },
 vinRun: function () { runVin(); },
-vinPaste: function () {
-  if (navigator.clipboard && navigator.clipboard.readText) {
-    navigator.clipboard.readText().then(function (t) { $("vin").value = t.replace(/\s/g, "").slice(0, 17); runVin(); }, function () { toast("Colle le VIN manuellement."); });
-  } else toast("Colle le VIN manuellement dans le champ.");
-},
+vinPaste: function () { if (navigator.clipboard && navigator.clipboard.readText) navigator.clipboard.readText().then(function (t) { $("vin").value = t.replace(/\s/g, "").slice(0, 17); runVin(); }, function () { toast("Colle le VIN manuellement."); }); else toast("Colle le VIN manuellement dans le champ."); },
 vinBrand: function () { if (!S.vin) return; copy(S.vin.raw); window.open(S.vin.url, "_blank", "noopener"); },
 vinFill: function () {
-  var v;
-  if (!S.vin) return;
-  v = S.vin;
+  var v; if (!S.vin) return; v = S.vin;
   if (v.make) $("vMake").value = tc(v.make.toLowerCase());
   if (v.model) $("vModel").value = v.model;
   if (v.year) $("vYear").value = v.year;
   if (v.fuel) $("vFuel").value = /electric/i.test(v.fuel) ? "electrique" : /diesel/i.test(v.fuel) ? "diesel" : /hybrid/i.test(v.fuel) ? "hybride" : "essence";
-  renderEng();
-  renderPow();
-  renderAttrib();
+  renderEng(); renderPow(); renderAttrib();
   try { window.scrollTo(0, 0); } catch (e) {}
   toast("✅ Sélecteur véhicule pré-rempli depuis le VIN.");
 },
@@ -1858,44 +1741,18 @@ genCode: function () {
   if (!p) { toast("Prénom requis."); return; }
   days = Math.max(1, parseInt($("acDays").value, 10) || 365);
   pay = { p: p, n: uid(), exp: Date.now() + days * 86400000 };
-  pl = b64u(JSON.stringify(pay));
-  sg = sig(pl);
-  code = H(pl, ".", sg);
-  $("genOut").innerHTML = esc(code);
-  cls($("genOut"), "hide", false);
-  a = codes();
-  a.unshift({ name: p, exp: pay.exp, sig: sg, code: code });
-  save("codes", a);
-  renderCodes();
-  toast(H("🎟️ Code généré pour ", esc(p), "."));
+  pl = b64u(JSON.stringify(pay)); sg = sig(pl); code = H(pl, ".", sg);
+  $("genOut").innerHTML = esc(code); cls($("genOut"), "hide", false);
+  a = codes(); a.unshift({ name: p, exp: pay.exp, sig: sg, code: code }); save("codes", a);
+  renderCodes(); toast(H("🎟️ Code généré pour ", esc(p), "."));
 },
 copyGen: function () { copy($("genOut").textContent); },
-shareGen: function () {
-  var t = H("Code d'accès KEV TECH & FIRE :\n", $("genOut").textContent);
-  if (navigator.share) navigator.share({ title: "Code d'accès", text: t }).catch(function () { copy(t); });
-  else copy(t);
-},
+shareGen: function () { var t = H("Code d'accès KEV TECH & FIRE :\n", $("genOut").textContent); if (navigator.share) navigator.share({ title: "Code d'accès", text: t }).catch(function () { copy(t); }); else copy(t); },
 copyUser: function (t) { var a = codes(), x = a[parseInt(t.getAttribute("data-i"), 10)]; if (x) copy(x.code); },
-revoke: function (t) {
-  var a = codes(), x = a[parseInt(t.getAttribute("data-i"), 10)];
-  if (!x) return;
-  if (!has(S.revs, x.sig)) S.revs.push(x.sig);
-  save("revs", S.revs);
-  renderCodes();
-  renderRevs();
-  toast("🚫 Code révoqué — publie pour diffuser.");
-},
+revoke: function (t) { var a = codes(), x = a[parseInt(t.getAttribute("data-i"), 10)]; if (!x) return; if (!has(S.revs, x.sig)) S.revs.push(x.sig); save("revs", S.revs); renderCodes(); renderRevs(); toast("🚫 Code révoqué — publie pour diffuser."); },
 pubRevs: function () { syncPush(true); },
 dropClick: function () { $("pFile").click(); },
-urlAdd: function () {
-  var u = trm($("pUrl").value);
-  if (!u) { toast("Saisis une URL d'image."); return; }
-  compress(u, 1000, 0.72, function (e, d) {
-    if (e) { addPend(u, $("pCap").value || u); toast("ℹ️ URL conservée en lien direct."); }
-    else addPend(d, $("pCap").value || u);
-    $("pUrl").value = "";
-  });
-},
+urlAdd: function () { var u = trm($("pUrl").value); if (!u) { toast("Saisis une URL d'image."); return; } compress(u, 1000, 0.72, function (e, d) { if (e) { addPend(u, $("pCap").value || u); toast("ℹ️ URL conservée en lien direct."); } else addPend(d, $("pCap").value || u); $("pUrl").value = ""; }); },
 rmPend: function (t) { S.pend.splice(parseInt(t.getAttribute("data-i"), 10), 1); renderPend(); },
 attach: function () { attach(); },
 cancelEdit: function () { clearForm(); $("fTarget").value = "__new__"; cls($("newForm"), "hide", false); toast("Édition annulée."); },
@@ -1905,62 +1762,27 @@ editFault: function (t) {
   var id = t.getAttribute("data-id"), e = null, i, b;
   for (i = 0; i < S.ov.entries.length; i++) if (S.ov.entries[i].id === id) e = S.ov.entries[i];
   if (!e) { toast("Panne introuvable."); return; }
-  S.editId = e.id;
-  $("mDetail").className = "modal";
-  showAdmin();
+  S.editId = e.id; $("mDetail").className = "modal"; showAdmin();
   b = $("tabsAdm").getElementsByTagName("button");
   for (i = 0; i < b.length; i++) if (b[i].getAttribute("data-a") === "faults") { ACT.tabAdm(b[i]); break; }
-  $("fTarget").value = "__new__";
-  cls($("newForm"), "hide", false);
+  $("fTarget").value = "__new__"; cls($("newForm"), "hide", false);
   $("nfTitle").innerHTML = H("Modifier la panne — ", esc(e.title));
-  $("nTitle").value = e.title || "";
-  $("nMake").value = e.make || "";
-  $("nModel").value = e.model || "";
-  $("nEngine").value = e.engine || "";
-  $("nPower").value = (e.powers || []).join(",");
-  $("nYears").value = e.years ? e.years.join("-") : "";
-  $("nFuel").value = e.fuel || "";
-  $("nSys").value = e.sys || "";
-  $("nDtc").value = (e.dtc || []).join(",");
-  $("nSym").value = (e.sym || []).join(", ");
-  $("nGrav").value = e.grav || "eleve";
-  $("nSrc").value = e.url || "";
-  $("nMeca").value = e.meca || "";
-  $("nCons").value = (e.cons || []).join("\n");
-  $("nInd").value = (e.ind || []).join("\n");
-  $("nFire").checked = !!e.fire;
-  $("nChain").value = e.chain || "";
+  $("nTitle").value = e.title || ""; $("nMake").value = e.make || ""; $("nModel").value = e.model || "";
+  $("nEngine").value = e.engine || ""; $("nPower").value = (e.powers || []).join(",");
+  $("nYears").value = e.years ? e.years.join("-") : ""; $("nFuel").value = e.fuel || "";
+  $("nSys").value = e.sys || ""; $("nDtc").value = (e.dtc || []).join(",");
+  $("nSym").value = (e.sym || []).join(", "); $("nGrav").value = e.grav || "eleve";
+  $("nSrc").value = e.url || ""; $("nMeca").value = e.meca || "";
+  $("nCons").value = (e.cons || []).join("\n"); $("nInd").value = (e.ind || []).join("\n");
+  $("nFire").checked = !!e.fire; $("nChain").value = e.chain || "";
 },
 delFault: function (t) { delFaults([t.getAttribute("data-id")]); },
-moveUp: function (t) {
-  var i = parseInt(t.getAttribute("data-i"), 10), a = S.ov.entries, x;
-  if (i < 1) return;
-  x = a.splice(i, 1)[0];
-  a.splice(i - 1, 0, x);
-  persist();
-  renderFaults();
-},
-moveDown: function (t) {
-  var i = parseInt(t.getAttribute("data-i"), 10), a = S.ov.entries, x;
-  if (i >= a.length - 1) return;
-  x = a.splice(i, 1)[0];
-  a.splice(i + 1, 0, x);
-  persist();
-  renderFaults();
-},
-selOne: function (t) {
-  var id = t.getAttribute("data-id");
-  if (t.checked) S.sel[id] = 1; else delete S.sel[id];
-  renderFaults();
-},
+moveUp: function (t) { var i = parseInt(t.getAttribute("data-i"), 10), a = S.ov.entries, x; if (i < 1) return; x = a.splice(i, 1)[0]; a.splice(i - 1, 0, x); persist(); renderFaults(); },
+moveDown: function (t) { var i = parseInt(t.getAttribute("data-i"), 10), a = S.ov.entries, x; if (i >= a.length - 1) return; x = a.splice(i, 1)[0]; a.splice(i + 1, 0, x); persist(); renderFaults(); },
+selOne: function (t) { var id = t.getAttribute("data-id"); if (t.checked) S.sel[id] = 1; else delete S.sel[id]; renderFaults(); },
 selAll: function () { each(S.ov.entries, function (e) { S.sel[e.id] = 1; }); renderFaults(); },
 selNone: function () { S.sel = {}; renderFaults(); },
-bulkDel: function () {
-  var ids = [], k;
-  for (k in S.sel) if (S.sel.hasOwnProperty(k)) ids.push(k);
-  if (!ids.length) { toast("Aucune panne sélectionnée."); return; }
-  delFaults(ids);
-},
+bulkDel: function () { var ids = [], k; for (k in S.sel) if (S.sel.hasOwnProperty(k)) ids.push(k); if (!ids.length) { toast("Aucune panne sélectionnée."); return; } delFaults(ids); },
 opApply: function () { S.look.op = parseInt($("op").value, 10); applyLook(); toast("💾 Opacité appliquée."); },
 lookReset: function () { S.look = { op: 55 }; applyLook(); toast("🎨 Apparence réinitialisée."); },
 pubLook: function () { S.mail = trm($("mail").value) || S.mail; save("mail", S.mail); syncPush(true); },
@@ -1968,127 +1790,66 @@ syCreate: function () {
   toast("⏳ Création du canal…");
   AD[S.be].create(function (e, id) {
     if (e) { toast(H("❌ ", esc(AD[S.be].name), " : ", esc(e), " — essaie un autre service.")); return; }
-    setChan(id);
-    $("syCh").value = id;
+    setChan(id); $("syCh").value = id;
     syncPush(false, function () { toast(H("✅ Canal créé : <b>", esc(id), "</b> — partage ce code aux tiers.")); });
   });
 },
 syUse: function () { setChan(trm($("syCh").value)); syncPull(); },
-syShare: function () {
-  var c = chan(), t;
-  if (!c) { toast("Aucun canal."); return; }
-  t = H("Code canal KEV TECH & FIRE : ", c, "\nÀ coller dans l'application (badge 📡 ou écran d'accès).");
-  if (navigator.share) navigator.share({ title: "Canal de synchronisation", text: t }).catch(function () { copy(t); });
-  else copy(t);
-},
-syTest: function () {
-  var c = trm($("syCh").value) || chan();
-  if (!c) { toast("Renseigne un code canal."); return; }
-  AD[S.be].read(c, function (e, st) {
-    if (e) { toast(H("❌ ", esc(e))); return; }
-    toast(st ? "✅ Canal joignable et alimenté." : "⚠️ Canal joignable mais vide.");
-  });
-},
+syShare: function () { var c = chan(), t; if (!c) { toast("Aucun canal."); return; } t = H("Code canal KEV TECH & FIRE : ", c, "\nÀ coller dans l'application (badge 📡 ou écran d'accès)."); if (navigator.share) navigator.share({ title: "Canal de synchronisation", text: t }).catch(function () { copy(t); }); else copy(t); },
+syTest: function () { var c = trm($("syCh").value) || chan(); if (!c) { toast("Renseigne un code canal."); return; } AD[S.be].read(c, function (e, st) { if (e) { toast(H("❌ ", esc(e))); return; } toast(st ? "✅ Canal joignable et alimenté." : "⚠️ Canal joignable mais vide."); }); },
 syPub: function () { syncPush(true); },
 syPull: function () { syncPull(function () { toast("🔄 Synchronisation effectuée."); }); },
 reload: function () { background(true, function () { toast("✅ Base rechargée."); }); },
+importSites: function () { importSites(true); },
 harvest: function () { harvest(); },
 diag: function () { $("mDiag").className = "modal on"; paintChk(); },
 diagClose: function () { $("mDiag").className = "modal"; },
 goBase: function () {
   var b, i;
-  if (S.admin) {
-    showAdmin();
-    b = $("tabsAdm").getElementsByTagName("button");
-    for (i = 0; i < b.length; i++) if (b[i].getAttribute("data-a") === "base") { ACT.tabAdm(b[i]); break; }
-  } else $("mDiag").className = "modal on";
+  if (S.admin) { showAdmin(); b = $("tabsAdm").getElementsByTagName("button"); for (i = 0; i < b.length; i++) if (b[i].getAttribute("data-a") === "base") { ACT.tabAdm(b[i]); break; } }
+  else $("mDiag").className = "modal on";
 },
-askChan: function () {
-  var c = window.prompt("Code canal de synchronisation :", chan());
-  if (c === null) return;
-  setChan(trm(c));
-  syncPull();
-},
-hardReset: function () {
-  try { localStorage.clear(); } catch (e) {}
-  if (window.caches && caches.keys) caches.keys().then(function (ks) { each(ks, function (k) { caches.delete(k); }); }).catch(function () {});
-  setTimeout(function () { location.reload(); }, 400);
-},
+askChan: function () { var c = window.prompt("Code canal de synchronisation :", chan()); if (c === null) return; setChan(trm(c)); syncPull(); },
+hardReset: function () { try { localStorage.clear(); } catch (e) {} if (window.caches && caches.keys) caches.keys().then(function (ks) { each(ks, function (k) { caches.delete(k); }); }).catch(function () {}); setTimeout(function () { location.reload(); }, 400); },
 errClose: function () { cls($("err"), "hide", true); },
 expAll: function () { dl("base-complete.json", JSON.stringify({ version: new Date().toISOString(), entries: S.base, photos: S.ov.photos }, null, 1)); },
-saveView: function () {
-  var n = window.prompt("Nom de cette vue :", $("q").value || "Vue"), vs;
-  if (!n) return;
-  vs = save("views") || [];
-  vs.push({ name: n, q: $("q").value, make: $("fMake").value, sys: $("fSys").value, grav: $("fGrav").value, sort: $("fSort").value, theme: S.theme });
-  save("views", vs.slice(-8));
-  renderViews();
-  toast("💾 Vue mémorisée.");
-},
+saveView: function () { var n = window.prompt("Nom de cette vue :", $("q").value || "Vue"), vs; if (!n) return; vs = save("views") || []; vs.push({ name: n, q: $("q").value, make: $("fMake").value, sys: $("fSys").value, grav: $("fGrav").value, sort: $("fSort").value, theme: S.theme }); save("views", vs.slice(-8)); renderViews(); toast("💾 Vue mémorisée."); },
 loadView: function (t) {
   var vs = save("views") || [], v = vs[parseInt(t.getAttribute("data-i"), 10)], b, i;
   if (!v) return;
-  $("q").value = v.q || "";
-  fillFilters();
-  $("fMake").value = v.make || "";
-  $("fSys").value = v.sys || "";
-  $("fGrav").value = v.grav || "";
-  $("fSort").value = v.sort || "score";
-  S.theme = v.theme || "tous";
-  document.documentElement.setAttribute("data-theme", S.theme);
+  $("q").value = v.q || ""; fillFilters();
+  $("fMake").value = v.make || ""; $("fSys").value = v.sys || ""; $("fGrav").value = v.grav || ""; $("fSort").value = v.sort || "score";
+  S.theme = v.theme || "tous"; document.documentElement.setAttribute("data-theme", S.theme);
   b = $("seg").getElementsByTagName("button");
   for (i = 0; i < b.length; i++) cls(b[i], "on", b[i].getAttribute("data-t") === S.theme);
-  renderResults();
-  toast(H("📁 Vue « ", esc(v.name), " » chargée."));
+  renderResults(); toast(H("📁 Vue « ", esc(v.name), " » chargée."));
 },
 clearViews: function () { save("views", []); renderViews(); toast("🗑️ Vues effacées."); }
 };
 
-/* ══════════ IMPORT ══════════ */
+/* ══════════ IMPORT FICHIER ══════════ */
 function doImport(inp) {
   var files = [], i, idx = 0, count = 0;
   if (!S.admin) { toast("Import réservé à l'administrateur."); inp.value = ""; return; }
   for (i = 0; i < inp.files.length; i++) files.push(inp.files[i]);
   function step() {
     var f, fr;
-    if (idx >= files.length) {
-      persist();
-      fillFilters();
-      renderResults();
-      renderFaults();
-      stats();
-      inp.value = "";
-      toast(H("📥 Import terminé : ", count, " élément(s) fusionné(s)."));
-      return;
-    }
-    f = files[idx];
-    idx++;
-    fr = new FileReader();
+    if (idx >= files.length) { persist(); fillFilters(); renderResults(); renderFaults(); stats(); inp.value = ""; toast(H("📥 Import terminé : ", count, " élément(s) fusionné(s).")); return; }
+    f = files[idx]; idx++; fr = new FileReader();
     fr.onload = function () {
       var txt = String(fr.result || ""), j, a, nn, blocks;
       try {
         if (/\.json$/i.test(f.name)) {
-          j = JSON.parse(txt);
-          a = isArr(j) ? j : (j.entries || []);
-          nn = normList(a);
-          each(nn, function (e) { S.ov.entries.push(e); });
-          merge(nn);
-          count += nn.length;
+          j = JSON.parse(txt); a = isArr(j) ? j : (j.entries || []); nn = normList(a);
+          each(nn, function (e) { S.ov.entries.push(e); }); merge(nn); count += nn.length;
           if (j.photos) each(j.photos, function (p) { S.ov.photos.push(p); count++; });
         } else {
           blocks = txt.split(/\n\s*\n/);
           each(blocks, function (x) {
             var e;
             if (x.replace(/\s/g, "").length < 40) return;
-            e = {
-              id: H("doc-", uid()), themes: ["technique"], type: "document", source: "import",
-              make: "Multi-marques", model: "Tous", title: H(f.name, " — extrait ", count + 1),
-              meca: x.slice(0, 1800), cons: [], dtc: x.toUpperCase().match(/[PCBU]\d{4}/g) || [],
-              fire: /incendie|feu/i.test(x), grav: "modere", date: new Date().toISOString().slice(0, 10)
-            };
-            S.ov.entries.push(e);
-            merge([e]);
-            count++;
+            e = { id: H("doc-", uid()), themes: ["technique"], type: "document", source: "import", make: "Multi-marques", model: "Tous", title: H(f.name, " — extrait ", count + 1), meca: x.slice(0, 1800), cons: [], dtc: x.toUpperCase().match(/[PCBU]\d{4}/g) || [], fire: /incendie|feu/i.test(x), grav: "modere", date: new Date().toISOString().slice(0, 10) };
+            S.ov.entries.push(e); merge([e]); count++;
           });
         }
       } catch (e) { toast(H("❌ ", esc(f.name), " : fichier illisible.")); }
@@ -2105,9 +1866,7 @@ function bindEvents() {
   document.addEventListener("click", function (ev) {
     var t = upAct(ev.target), n, f;
     if (!t) return;
-    n = t.getAttribute("data-act");
-    f = ACT[n];
-    if (!f) return;
+    n = t.getAttribute("data-act"); f = ACT[n]; if (!f) return;
     if (t.tagName === "A" || n === "dropClick") ev.preventDefault();
     try { f(t, ev); } catch (e) { window.onerror(H(n, ": ", e.message), "app.js", 0, 0, e); }
   }, false);
@@ -2120,18 +1879,15 @@ function bindEvents() {
       else if (i.id === "fFilter") faultPicker();
       else if (i.id === "op") { $("opVal").innerHTML = H(i.value, "%"); $("wall").style.opacity = i.value / 100; }
       else if (i.id === "ctx") {
-        n = nrm(i.value);
-        bx = $("qcm").getElementsByTagName("input");
+        n = nrm(i.value); bx = $("qcm").getElementsByTagName("input");
         for (j = 0; j < bx.length; j++) {
           if (n.indexOf(nrm(bx[j].value).split(" ")[0]) >= 0 && !bx[j].checked) { bx[j].checked = true; cls(bx[j].parentNode, "on", true); }
         }
         dtc = i.value.toUpperCase().match(/[PCBU]\d{4}/g) || [];
         if (dtc.length && !$("dtc").value) { $("dtc").value = uniq(dtc).join(", "); $("dtcOn").checked = true; cls($("dtc"), "hide", false); }
-        toks = [];
-        w = n.split(" ");
+        toks = []; w = n.split(" ");
         for (j = 0; j < w.length; j++) if (w[j].length > 3) toks.push(w[j]);
-        h = hyps(veh(), toks, dtc, checkedSym()).slice(0, 3);
-        o = "";
+        h = hyps(veh(), toks, dtc, checkedSym()).slice(0, 3); o = "";
         for (j = 0; j < h.length; j++) o = H(o, "<span class='tag ", h[j].e.fire ? "fire" : "", "'>", esc(String(h[j].e.title).slice(0, 44)), " · ", h[j].s, "</span>");
         $("live").innerHTML = o ? H("<b style='color:#ffc400'>🔎 Corrélations détectées :</b> ", o) : "";
       }
@@ -2147,8 +1903,7 @@ function bindEvents() {
         l = enginesFor($("vMake").value, $("vModel").value);
         for (j = 0; j < l.length; j++) if (nrm(l[j].m) === nrm($("vEngine").value)) ok = true;
         if ($("vEngine").value && !ok) { $("vEngine").value = ""; $("vPower").value = ""; }
-        renderPow();
-        renderAttrib();
+        renderPow(); renderAttrib();
       }
       else if (i.id === "vEngine") autoAttr();
       else if (i.id === "fMake" || i.id === "fSys" || i.id === "fGrav" || i.id === "fSort") renderResults();
@@ -2176,28 +1931,18 @@ function bindEvents() {
   document.addEventListener("paste", function (ev) {
     var files = [], i, it, f;
     if (!S.admin || !ev.clipboardData || !ev.clipboardData.items) return;
-    for (i = 0; i < ev.clipboardData.items.length; i++) {
-      it = ev.clipboardData.items[i];
-      if (/^image\//.test(it.type)) { f = it.getAsFile(); if (f) files.push(f); }
-    }
+    for (i = 0; i < ev.clipboardData.items.length; i++) { it = ev.clipboardData.items[i]; if (/^image\//.test(it.type)) { f = it.getAsFile(); if (f) files.push(f); } }
     if (!files.length) return;
-    ev.preventDefault();
-    intake(files, "photo collée");
+    ev.preventDefault(); intake(files, "photo collée");
   }, false);
 
   var dz = $("drop");
   dz.addEventListener("dragenter", function (e) { e.preventDefault(); cls(dz, "on", true); });
   dz.addEventListener("dragover", function (e) { e.preventDefault(); cls(dz, "on", true); });
   dz.addEventListener("dragleave", function (e) { e.preventDefault(); cls(dz, "on", false); });
-  dz.addEventListener("drop", function (e) {
-    e.preventDefault();
-    cls(dz, "on", false);
-    if (e.dataTransfer && e.dataTransfer.files.length) intake(e.dataTransfer.files, $("pCap").value);
-  });
+  dz.addEventListener("drop", function (e) { e.preventDefault(); cls(dz, "on", false); if (e.dataTransfer && e.dataTransfer.files.length) intake(e.dataTransfer.files, $("pCap").value); });
 
-  each(["mLb", "mDiag", "mDetail"], function (id) {
-    $(id).addEventListener("click", function (e) { if (e.target === $(id)) $(id).className = "modal"; });
-  });
+  each(["mLb", "mDiag", "mDetail"], function (id) { $(id).addEventListener("click", function (e) { if (e.target === $(id)) $(id).className = "modal"; }); });
 
   window.addEventListener("resize", function () { guard(resize, "redimensionnement"); });
   window.addEventListener("online", function () { net(); syncPull(); });
@@ -2213,9 +1958,7 @@ function background(force, cb) {
   var c = save("cache");
   if (c && c.entries && c.entries.length) { merge(c.entries); chk("cache", "ok", H(c.entries.length, " fiches restaurées du cache")); }
   else chk("cache", "warn", "cache vide — premier lancement");
-  fillFilters();
-  renderResults();
-  stats();
+  fillFilters(); renderResults(); stats();
   jget("data/seed.json", 5000, function (s) {
     if (s && s.length) merge(normList(s));
     jget("data/manual.json", 5000, function (man) {
@@ -2231,15 +1974,17 @@ function background(force, cb) {
             if (!found) { if (!S.photos[p.fault]) S.photos[p.fault] = []; S.photos[p.fault].push(p); }
           });
         }
-        fillFilters();
-        renderResults();
-        stats();
+        fillFilters(); renderResults(); stats();
         save("cache", { ts: Date.now(), entries: S.base.slice(0, 2000) });
         checkUpd(!!force, function () {
           syncPull(function () {
             var rc = save("rcTs") || 0;
-            if (navigator.onLine && (force || S.base.length < 100 || Date.now() - rc > 604800000)) harvest(function () { paintChk(); if (cb) cb(); });
-            else { paintChk(); if (cb) cb(); }
+            function afterHarvest() {
+              if (!save("siteDone") && navigator.onLine) importSites(false, function () { paintChk(); if (cb) cb(); });
+              else { paintChk(); if (cb) cb(); }
+            }
+            if (navigator.onLine && (force || S.base.length < 100 || Date.now() - rc > 604800000)) harvest(afterHarvest);
+            else afterHarvest();
           });
         });
       });
@@ -2254,12 +1999,7 @@ function boot() {
     for (i = 0; i < SYMPT.length; i++) h = H(h, "<label><input type='checkbox' value='", esc(SYMPT[i]), "'>", esc(SYMPT[i]), "</label>");
     $("qcm").innerHTML = h;
   }, "constatations");
-  guard(function () {
-    $("mail").value = S.mail;
-    $("syBe").value = S.be;
-    $("syCh").value = chan();
-    $("syAuto").checked = !!save("auto");
-  }, "champs admin");
+  guard(function () { $("mail").value = S.mail; $("syBe").value = S.be; $("syCh").value = chan(); $("syAuto").checked = !!save("auto"); }, "champs admin");
   guard(resize, "canvas");
   guard(applyLook, "apparence");
   guard(bindEvents, "événements");
@@ -2267,6 +2007,7 @@ function boot() {
   guard(function () { each(["vMake", "vModel", "vEngine", "vPower", "q"], function (id) { suggest($(id)); }); }, "suggestions");
   guard(function () { feedWords($("ctx"), $("predCtx")); }, "rédaction prédictive");
   guard(function () { merge(SEED); merge(S.ov.entries); rebuild(); }, "base embarquée");
+  guard(loadLocalImport, "import local sites");
   guard(fillFilters, "filtres");
   guard(renderEng, "moteurs");
   guard(renderPow, "puissances");
@@ -2285,8 +2026,7 @@ function boot() {
   guard(startLoop, "animation");
   cls($("boot"), "off", true);
   var mode = save("mode"), acc = save("access");
-  if (mode === "tiers" && acc && !has(S.revs, acc.sig)) { S.name = acc.name; showApp(); }
-  else show("s-home");
+  if (mode === "tiers" && acc && !has(S.revs, acc.sig)) { S.name = acc.name; showApp(); } else show("s-home");
   if (navigator.serviceWorker) navigator.serviceWorker.register("sw.js").then(function () { chk("sw", "ok", "enregistré — mode hors ligne actif"); }, function (e) { chk("sw", "warn", e.message || "enregistrement refusé"); });
   else chk("sw", "warn", "non supporté par ce navigateur");
   paintChk();
@@ -2295,8 +2035,7 @@ function boot() {
   window.__APP_OK = true;
 }
 
-window.KTF = { state: S, actions: ACT, syncPush: syncPush, syncPull: syncPull, harvest: harvest, enginesFor: enginesFor };
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-else boot();
+window.KTF = { state: S, actions: ACT, syncPush: syncPush, syncPull: syncPull, harvest: harvest, importSites: importSites, enginesFor: enginesFor };
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 
 })();
