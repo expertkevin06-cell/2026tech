@@ -1,5 +1,5 @@
-var CACHE = "ktf-2026-import1";
-var SHELL = ["./", "./index.html", "./app.js", "./manifest.webmanifest", "./icon.svg"];
+var CACHE = "ktf-2026-kdb1";
+var SHELL = ["./","./index.html","./db-core.js","./db-faults.js","./kdb.js","./app.js","./manifest.webmanifest","./icon.svg"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) {
