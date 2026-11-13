@@ -363,20 +363,23 @@ window.addEventListener("unhandledrejection", function(e){
 });
 </script>
 
+<script src="db-core.js"></script>
+<script src="db-faults.js"></script>
+<script src="kdb.js"></script>
 <script src="app.js"></script>
 
 <script>
 setTimeout(function(){
-  var b = document.getElementById("boot"); if(b) b.className = "off";
+  var b=document.getElementById("boot"); if(b) b.className="off";
   if(!window.__APP_OK){
-    var e = document.getElementById("err"), m = document.getElementById("errMsg");
-    if(e && m && !window.__ERRS.length){
-      e.className = "";
-      m.textContent = "app.js ne s'est pas exécuté correctement.\nVérifie que app.js est à la racine du dépôt 2026tech.";
+    var e=document.getElementById("err"),m=document.getElementById("errMsg");
+    if(e&&m&&!window.__ERRS.length){
+      e.className="";
+      m.textContent="db-core.js / db-faults.js / kdb.js / app.js ne s'est pas exécuté.\nVérifie que les 4 fichiers sont à la racine du dépôt 2026tech.";
     }
-    var h = document.getElementById("s-home"); if(h) h.className = "card mid";
+    var h=document.getElementById("s-home"); if(h) h.className="card mid";
   }
-}, 2500);
+},2500);
 </script>
 </body>
 </html>
