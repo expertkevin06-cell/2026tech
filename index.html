@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#05081a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>KEV TECH &amp; FIRE</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -23,15 +24,19 @@ a{color:var(--acc)}
 *::-webkit-scrollbar-track{background:rgba(140,165,255,.07)}
 *::-webkit-scrollbar-thumb{background:var(--acc);border-radius:10px;border:2px solid #05081a}
 #scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3}
-#wall{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;opacity:0;background-size:cover;background-position:center}
-#veil{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(0,0,0,0) 30%,rgba(5,8,26,.75))}
+#wall{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;opacity:0;background-size:cover;background-position:center;transition:opacity .8s}
+#veil{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;
+background:radial-gradient(ellipse at 50% 0%,rgba(0,0,0,0) 30%,rgba(5,8,26,.72));
+animation:veilMove 16s ease-in-out infinite alternate}
+@keyframes veilMove{0%{opacity:.85;transform:translateY(0)}100%{opacity:1;transform:translateY(-14px)}}
 #boot{position:fixed;top:0;left:0;width:100%;height:100%;z-index:900;background:#05081a;display:flex;align-items:center;justify-content:center;text-align:center;animation:bo .4s ease 2s forwards}
 #boot.off{display:none}
 @keyframes bo{to{opacity:0;visibility:hidden}}
-.bl{width:80px;height:80px;margin:0 auto 16px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,#00e5ff,#8b5cff,#ff7a18)}
+.bl{width:80px;height:80px;margin:0 auto 16px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,#00e5ff,#8b5cff,#ff7a18);animation:spin 5s linear infinite}
+@keyframes spin{to{filter:hue-rotate(360deg)}}
 #err{position:fixed;top:0;left:0;width:100%;z-index:999;background:#4a0d1a;border-bottom:2px solid #ff2d55;padding:12px;font-size:.75rem;max-height:45vh;overflow:auto}
 #err pre{white-space:pre-wrap;word-break:break-word;color:#ffcdd2;font-size:.7rem;margin:6px 0}
-header{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:rgba(5,8,26,.95);border-bottom:1px solid var(--edge)}
+header{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:rgba(5,8,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge)}
 .mark{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#00e5ff,#8b5cff,#ff7a18)}
 h1{margin:0;font-size:1rem;color:var(--acc)}
 header small{display:block;color:#66759f;font-size:.58rem;text-transform:uppercase}
@@ -50,14 +55,15 @@ header small{display:block;color:#66759f;font-size:.58rem;text-transform:upperca
 .btn.rd{background:linear-gradient(100deg,#ff2d55,#ff7a18);color:#fff}
 .btn.sm{padding:6px 11px;font-size:.74rem}
 main{width:1100px;max-width:100%;margin:0 auto;padding:16px 14px 80px}
-.card{background:rgba(14,20,48,.88);border:1px solid var(--edge);border-radius:18px;padding:18px;margin-bottom:14px}
+.card{background:rgba(14,20,48,.86);border:1px solid var(--edge);border-radius:18px;padding:18px;margin-bottom:14px;backdrop-filter:blur(12px)}
 .card.mid{text-align:center;padding:32px 20px}
 .hide{display:none!important}
 h2{margin:0 0 12px;font-size:1rem;color:var(--acc);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 h3{margin:14px 0 6px;font-size:.88rem}
 p{line-height:1.6;margin:7px 0}
 .sm,small{font-size:.73rem;color:var(--dim);line-height:1.5}
-.hero{font-size:3.2rem}
+.hero{font-size:3.2rem;animation:float 3.4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld>label{font-size:.65rem;font-weight:800;color:var(--dim);text-transform:uppercase}
 input,select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--edge);background:rgba(5,8,26,.9);font-size:.88rem}
@@ -305,6 +311,7 @@ td{padding:7px 6px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:
 <div id="faultList"></div></div>
 
 <div id="a-look" class="card hide"><h2>🎨 Fond &amp; contact</h2>
+<p class="sm">Le fond animé (aurores + route néon + voiture) tourne par défaut. Tu peux superposer ta propre image.</p>
 <div class="fld"><label>Fond d'écran</label><input type="file" id="bgFile" accept="image/*"></div>
 <div class="fld" style="margin-top:10px"><label>Opacité <b id="opVal">55%</b></label><input type="range" id="op" min="0" max="100" value="55"><button class="btn sm" data-act="opApply">💾 Appliquer</button></div>
 <div class="fld" style="margin-top:10px"><label>Voiture PNG</label><input type="file" id="carFile" accept="image/*"></div>
@@ -320,21 +327,24 @@ td{padding:7px 6px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:
 
 <div id="a-base" class="card hide"><h2>🗄️ Base &amp; diagnostic</h2>
 <div id="stats" class="sm">…</div>
-<button class="btn" data-act="reload">🔄 Recharger</button><button class="btn gh" data-act="harvest">🛰️ RappelConso</button><button class="btn gh" data-act="diag">🩺 Diagnostic</button>
+<button class="btn" data-act="reload">🔄 Recharger</button>
+<button class="btn" data-act="importSites">🌐 Importer les 2 sites</button>
+<button class="btn gh" data-act="harvest">🛰️ RappelConso</button>
+<button class="btn gh" data-act="diag">🩺 Diagnostic</button>
+<div id="importState" class="sm" style="margin-top:8px">Import automatique au premier lancement.</div>
 <div class="prog"><i id="prog"></i></div><div id="checks"></div>
-<div class="hr"></div><h3>📥 Import</h3><input type="file" id="imp" accept=".json,.txt,.md,.csv" multiple>
+<div class="hr"></div><h3>📥 Import fichier</h3><input type="file" id="imp" accept=".json,.txt,.md,.csv" multiple>
 <button class="btn gh" data-act="expAll">📤 Exporter base</button><button class="btn rd" data-act="quit">🚪 Déconnexion</button></div>
 </section>
 </main>
 
 <div class="modal" id="mDiag"><div class="mcard"><h2>🩺 Diagnostic</h2><div class="prog"><i id="dProg"></i></div><div id="dBox"></div>
-<div style="margin-top:12px"><button class="btn" data-act="reload">🔄 Relancer</button><button class="btn rd" data-act="hardReset">🧹 Vider cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
+<div style="margin-top:12px"><button class="btn" data-act="reload">🔄 Relancer</button><button class="btn" data-act="importSites">🌐 Importer les 2 sites</button><button class="btn rd" data-act="hardReset">🧹 Vider cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
 <div class="modal" id="mDetail"><div class="mcard"><div id="detailBody"></div><button class="btn gh" data-act="detailClose">✕ Fermer</button></div></div>
 <div class="modal" id="mLb"><div class="mcard" style="text-align:center"><img alt=""><p class="sm" id="lbCap"></p><button class="btn gh sm" data-act="lbClose">✕ Fermer</button></div></div>
 <div id="toasts"></div>
 
 <script>
-/* CAPTEUR GLOBAL — s'exécute AVANT tout, capture même les erreurs de syntaxe */
 window.__ERRS = [];
 window.onerror = function(msg, url, line, col, err){
   var t = "ERREUR: " + msg + "\nLigne: " + line + ":" + col + (url ? "\nFichier: " + url : "");
@@ -356,16 +366,13 @@ window.addEventListener("unhandledrejection", function(e){
 <script src="app.js"></script>
 
 <script>
-/* FILET DE SÉCURITÉ — s'exécute même si app.js échoue totally */
 setTimeout(function(){
   var b = document.getElementById("boot"); if(b) b.className = "off";
   if(!window.__APP_OK){
     var e = document.getElementById("err"), m = document.getElementById("errMsg");
     if(e && m && !window.__ERRS.length){
       e.className = "";
-      m.textContent = "app.js ne s'est pas exécuté correctement.\n" +
-        "Vérifie que le fichier app.js est bien à la racine du dépôt 2026tech.\n" +
-        "URL attendue: " + location.href.replace(/[^\/]*$/, "app.js");
+      m.textContent = "app.js ne s'est pas exécuté correctement.\nVérifie que app.js est à la racine du dépôt 2026tech.";
     }
     var h = document.getElementById("s-home"); if(h) h.className = "card mid";
   }
