@@ -1,4 +1,4 @@
-var CACHE = "ktf-2026-fix3";
+var CACHE = "ktf-2026-import1";
 var SHELL = ["./", "./index.html", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", function (e) {
