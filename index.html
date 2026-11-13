@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="tous">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="KEV TECH &amp; FIRE — diagnostic technique, étude incendie, expertise juridique, photos de pannes, VIN, OBD.">
+<meta name="theme-color" content="#05081a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>KEV TECH &amp; FIRE</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{
+--ink:#05081a;--ink2:#0a0f28;--surf:rgba(14,20,48,.86);--surf2:rgba(24,32,72,.62);
+--edge:rgba(140,165,255,.18);--edge2:rgba(140,165,255,.34);
+--txt:#eaf0ff;--dim:#93a4d8;--dim2:#66759f;
+--cyan:#00e5ff;--violet:#8b5cff;--fire:#ff7a18;--red:#ff2d55;--acid:#00e676;--amber:#ffc400;--steel:#4a6fa5;
+--acc:#00e676;--acc2:#00e5ff;
+--r:20px;--r2:13px;--r3:9px;--sh:0 20px 60px rgba(0,0,0,.5);color-scheme:dark}
+html[data-theme=technique]{--acc:#00e5ff;--acc2:#8b5cff}
+html[data-theme=incendie]{--acc:#ff7a18;--acc2:#ff2d55}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:#05081a;color:#eaf0ff;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+img,svg,canvas{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--acc)}
+*{scrollbar-width:thin;scrollbar-color:#00e676 rgba(140,165,255,.08)}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-track{background:rgba(140,165,255,.07);border-radius:11px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--acc),var(--acc2));border-radius:11px;border:2px solid #05081a}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#ffc400,#ff7a18)}
+#scene{position:fixed;top:0;left:0;z-index:-4;width:100%;height:100%}
+#wall{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-3;opacity:0;background-size:cover;background-position:center;transition:opacity .8s}
+#veil{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 85% 55% at 50% -5%,rgba(0,0,0,0) 25%,rgba(5,8,26,.45) 70%,rgba(3,5,16,.9))}
+#boot{position:fixed;top:0;left:0;right:0;bottom:0;z-index:900;background:radial-gradient(ellipse at 50% 32%,#1a1f52,#05081a 65%);display:flex;align-items:center;justify-content:center;animation:bootOut .45s ease 2.4s forwards}
+#boot.off{opacity:0;visibility:hidden;pointer-events:none;animation:none}
+@keyframes bootOut{to{opacity:0;visibility:hidden;pointer-events:none}}
+.bcore{text-align:center;width:340px;max-width:86vw}
+.blogo{width:88px;height:88px;margin:0 auto 20px;border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:2.3rem;background:linear-gradient(135deg,#00e5ff,#8b5cff 45%,#ff7a18 75%,#ff2d55);box-shadow:0 0 70px rgba(0,229,255,.45)}
+.btitle{font-size:1.4rem;font-weight:900;margin:0 0 8px;color:#00e5ff}
+.bsub{color:#93a4d8;font-size:.8rem;margin:0 0 20px}
+.bbar{height:5px;border-radius:5px;background:rgba(140,165,255,.14);overflow:hidden}
+.bbar i{display:block;height:100%;width:36%;border-radius:5px;background:linear-gradient(90deg,#00e5ff,#00e676,#ffc400,#ff7a18);animation:run 1.1s ease-in-out infinite}
+@keyframes run{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
+header{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 16px;background:linear-gradient(180deg,rgba(5,8,26,.97),rgba(5,8,26,.84));backdrop-filter:blur(18px);border-bottom:1px solid var(--edge)}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:linear-gradient(135deg,#00e5ff,#8b5cff 55%,#ff7a18);box-shadow:0 0 24px rgba(0,229,255,.3)}
+header h1{margin:0;font-size:1.05rem;font-weight:900;white-space:nowrap;color:var(--acc)}
+.brand small{display:block;color:#66759f;font-size:.6rem;letter-spacing:.6px;text-transform:uppercase}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:.67rem;font-weight:800;padding:5px 11px;border-radius:20px;background:rgba(140,165,255,.08);border:1px solid var(--edge);color:#93a4d8;white-space:nowrap;cursor:pointer}
+.pill:hover{border-color:var(--edge2);color:#eaf0ff}
+.pill.ok{color:#00e676;border-color:rgba(0,230,118,.35);background:rgba(0,230,118,.09)}
+.pill.warn{color:#ffc400;border-color:rgba(255,196,0,.35);background:rgba(255,196,0,.09)}
+.pill.bad{color:#ff2d55;border-color:rgba(255,45,85,.4);background:rgba(255,45,85,.1)}
+.seg{display:flex;gap:2px;padding:3px;margin-left:auto;background:rgba(140,165,255,.08);border:1px solid var(--edge);border-radius:22px}
+.seg button{border:0;background:transparent;color:#93a4d8;cursor:pointer;padding:6px 14px;border-radius:19px;font-size:.73rem;font-weight:800}
+.seg button.on{background:linear-gradient(95deg,var(--acc),var(--acc2));color:#04102a}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:13px;cursor:pointer;padding:11px 17px;margin:4px 5px 0 0;font-size:.85rem;font-weight:800;color:#04102a;background:linear-gradient(100deg,var(--acc),var(--acc2));box-shadow:0 5px 20px rgba(0,230,118,.22);transition:transform .16s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.btn.gh{background:rgba(140,165,255,.09);color:#eaf0ff;border:1px solid var(--edge2);box-shadow:none}
+.btn.gh:hover{background:rgba(140,165,255,.17)}
+.btn.rd{background:linear-gradient(100deg,#ff2d55,#ff7a18);color:#fff}
+.btn.gr{background:linear-gradient(100deg,#00e676,#00e5ff)}
+.btn.am{background:linear-gradient(100deg,#ffc400,#ff7a18);color:#2a1500}
+.btn.sm{padding:7px 12px;font-size:.75rem;border-radius:9px}
+main{width:1120px;max-width:100%;margin:0 auto;padding:20px 16px 90px}
+.card{position:relative;background:var(--surf);border:1px solid var(--edge);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:var(--sh);backdrop-filter:blur(16px);animation:pop .45s ease both}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,rgba(0,0,0,0),var(--acc),#8b5cff,#ff7a18,rgba(0,0,0,0));opacity:.85}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card.mid{text-align:center;padding:38px 24px}
+.hide{display:none !important}
+h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 15px;font-size:1.04rem;font-weight:900;color:var(--acc)}
+h3{margin:18px 0 8px;font-size:.9rem;font-weight:800}
+p{line-height:1.62;margin:8px 0}
+.sm,small{font-size:.74rem;color:#93a4d8;line-height:1.55}
+.hero{font-size:3.6rem;animation:float 3.6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld>label{font-size:.67rem;font-weight:800;letter-spacing:.6px;color:#93a4d8;text-transform:uppercase}
+input,select,textarea{width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--edge2);background:rgba(5,8,26,.92);font-size:.9rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,230,118,.18)}
+textarea{min-height:104px;resize:vertical;line-height:1.55}
+input[type=checkbox]{width:auto;accent-color:#00e676;cursor:pointer}
+input[type=range]{padding:0;height:26px;background:transparent;border:0;accent-color:#00e676}
+input[type=file]{padding:9px;cursor:pointer;font-size:.76rem;color:#93a4d8;border-style:dashed}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.grid.w{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.rng{display:flex;align-items:center;gap:12px}.rng input{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.chips button{border:1px solid rgba(0,230,118,.45);background:rgba(5,8,26,.85);color:var(--acc);border-radius:17px;padding:6px 12px;font-size:.74rem;font-weight:800;cursor:pointer}
+.chips button:hover{background:rgba(0,230,118,.16)}
+.chips label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--edge2);border-radius:17px;padding:6px 12px;font-size:.75rem;background:rgba(5,8,26,.8)}
+.chips label.on{border-color:var(--acc);background:rgba(0,230,118,.15);color:var(--acc)}
+.wait{color:#66759f;font-size:.75rem;font-style:italic}
+.tag{display:inline-block;font-size:.64rem;font-weight:800;padding:3px 9px;border-radius:11px;margin:2px 4px 2px 0;background:rgba(140,165,255,.12);color:#93a4d8}
+.tag.fire{background:rgba(255,122,24,.2);color:#ffb066}
+.tag.crit{background:rgba(255,45,85,.2);color:#ff8fa8}
+.tag.ok{background:rgba(0,230,118,.15);color:#6ee7a8}
+.tag.info{background:rgba(0,229,255,.15);color:#7fe9ff}
+.sgw{position:relative}
+.sgl{position:absolute;top:100%;left:0;right:0;z-index:90;max-height:250px;overflow:auto;background:rgba(8,12,34,.99);border:1px solid var(--acc);border-radius:13px;box-shadow:0 20px 55px rgba(0,0,0,.7)}
+.sgl div{padding:9px 13px;cursor:pointer;font-size:.79rem;border-bottom:1px solid rgba(140,165,255,.09)}
+.sgl div:hover{background:rgba(0,230,118,.14);color:var(--acc)}
+.hit{border-left:4px solid var(--acc);border-radius:13px;background:rgba(5,8,26,.86);padding:14px;margin:10px 0}
+.hit.fire{border-left-color:#ff7a18;background:linear-gradient(90deg,rgba(255,122,24,.09),rgba(5,8,26,.86) 45%)}
+.hit.sel{outline:2px solid var(--acc);outline-offset:2px}
+.hit b.t{font-size:.93rem;cursor:pointer;display:inline-block}
+.hit b.t:hover{color:var(--acc)}
+.hit .meta{font-size:.7rem;color:#93a4d8;margin:5px 0 7px}
+.hit ul{margin:6px 0;padding-left:20px}
+.hit summary{cursor:pointer;color:var(--acc);font-weight:800;font-size:.77rem}
+.fbox{border:1px solid rgba(255,122,24,.4);border-radius:20px;padding:17px;margin:15px 0;background:linear-gradient(150deg,rgba(52,20,4,.7),rgba(24,10,32,.6))}
+.fbox h3{color:#ffb066;margin-top:0}
+.lvl{display:inline-block;font-weight:900;font-size:.76rem;padding:5px 13px;border-radius:11px}
+.lvl.h{background:linear-gradient(95deg,#ff2d55,#ff7a18);color:#fff}
+.lvl.m{background:linear-gradient(95deg,#ff7a18,#ffc400);color:#2a1500}
+.lvl.l{background:linear-gradient(95deg,#00e676,#00e5ff);color:#04102a}
+table{width:100%;border-collapse:collapse;font-size:.77rem;margin:9px 0}
+th{text-align:left;font-size:.66rem;text-transform:uppercase;color:#93a4d8;padding:8px 7px;border-bottom:1px solid var(--edge2)}
+td{padding:8px 7px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:top}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px;padding:6px;border-radius:20px;background:rgba(140,165,255,.05);border:1px solid var(--edge)}
+.tabs .btn{flex:1;min-width:100px;margin:0;background:transparent;color:#eaf0ff;border:1px solid transparent;box-shadow:none}
+.tabs .btn.on{background:linear-gradient(100deg,var(--acc),var(--acc2));color:#04102a}
+.modes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:24px 0}
+.mode{width:100%;margin:0;padding:26px 18px;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:9px;min-height:172px;justify-content:center}
+.mode .ic{font-size:2.6rem}
+.mode.ad{background:linear-gradient(140deg,#8b5cff,#00e5ff);color:#04102a}
+.mode.ti{background:rgba(140,165,255,.08);border:1px solid var(--edge2);color:#eaf0ff}
+.trust{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.trust span{font-size:.68rem;font-weight:800;padding:6px 13px;border-radius:17px;background:rgba(140,165,255,.07);border:1px solid var(--edge);color:#93a4d8}
+.trust b{color:var(--acc)}
+.stic{font-size:3rem;margin-bottom:12px}
+#gForm input{max-width:340px;margin:0 auto 10px;text-align:center}
+.pgrid{display:grid;gap:11px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin:11px 0}
+.pitem{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--edge);background:rgba(8,12,34,.8);cursor:zoom-in}
+.pitem:hover{border-color:var(--acc)}
+.pitem img{width:100%;height:114px;object-fit:cover}
+.pitem figcaption{font-size:.65rem;color:#93a4d8;padding:7px}
+.thumb{width:72px;height:54px;object-fit:cover;border-radius:9px;border:1px solid rgba(0,229,255,.45);cursor:zoom-in}
+#drop{border:2px dashed rgba(0,229,255,.45);border-radius:14px;padding:20px;text-align:center;color:#93a4d8;cursor:pointer;background:rgba(0,229,255,.04)}
+#drop.on{border-color:#00e676;background:rgba(0,230,118,.1);color:#eaf0ff}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;word-break:break-all;background:rgba(0,230,118,.08);border:1px dashed rgba(0,230,118,.4);border-radius:10px;padding:11px;margin:10px 0;color:#6ee7a8}
+.vinbox{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:2px;text-transform:uppercase}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:9px;margin:11px 0}
+.kv>div{background:rgba(140,165,255,.06);border:1px solid var(--edge);border-radius:10px;padding:9px 11px}
+.kv b{display:block;font-size:.62rem;color:#93a4d8;text-transform:uppercase;margin-bottom:2px}
+.sc{display:flex;gap:10px;padding:10px 12px;border-radius:11px;margin:6px 0;border:1px solid var(--edge);background:rgba(140,165,255,.04)}
+.sc.ok{border-color:rgba(0,230,118,.3)}
+.sc.warn{border-color:rgba(255,196,0,.35);background:rgba(255,196,0,.06)}
+.sc.bad{border-color:rgba(255,45,85,.4);background:rgba(255,45,85,.07)}
+.sc b{font-size:.79rem}.sc small{display:block;color:#93a4d8;font-size:.69rem}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:700;display:none;background:rgba(3,5,16,.88);padding:16px;overflow:auto}
+.modal.on{display:flex;align-items:center;justify-content:center}
+.mcard{width:820px;max-width:96vw;max-height:90vh;overflow:auto;background:linear-gradient(160deg,rgba(10,15,40,.99),rgba(24,14,52,.99));border:1px solid var(--edge2);border-radius:22px;padding:20px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.prog{height:7px;border-radius:7px;background:rgba(140,165,255,.12);overflow:hidden;margin:9px 0}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#00e676,#ffc400);transition:width .35s}
+#toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:800;width:520px;max-width:94vw;pointer-events:none}
+.toast{pointer-events:auto;display:flex;gap:10px;align-items:center;justify-content:space-between;background:rgba(8,12,34,.98);border:1px solid var(--acc);border-radius:13px;padding:13px 16px;margin-top:9px;font-size:.82rem;box-shadow:0 16px 46px rgba(0,0,0,.65)}
+.hr{height:1px;margin:17px 0;background:linear-gradient(90deg,rgba(0,0,0,0),var(--edge2),rgba(0,0,0,0))}
+.empty{text-align:center;padding:28px 14px;color:#66759f;font-size:.81rem}
+#mLb img{max-height:74vh;max-width:100%;border-radius:14px;margin:0 auto}
+#err{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:950;width:640px;max-width:95vw;background:rgba(60,10,20,.97);border:1px solid #ff2d55;border-radius:14px;padding:12px;font-size:.76rem}
+#err code{display:block;margin-top:6px;font-size:.67rem;color:#ffcdd2;word-break:break-word;max-height:80px;overflow:auto;white-space:pre-wrap}
+@media(max-width:760px){header{padding:9px 12px}.brand small{display:none}.pills{order:3;width:100%}.seg button{padding:6px 10px;font-size:.69rem}main{padding:15px 12px 76px}.card{padding:17px}.grid{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}.tabs .btn{min-width:calc(50% - 3px)}.modes{grid-template-columns:1fr}table{font-size:.71rem}}
+@media print{body{background:#fff !important;color:#000 !important}header,#scene,#wall,#veil,#boot,#toasts,.noprint,.tabs,#vinCard,.modal{display:none !important}.card,.hit,.fbox{background:#fff !important;color:#000 !important;border:1px solid #999 !important;box-shadow:none !important}h2,h3{color:#000 !important}.sm,small{color:#333 !important}}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas><div id="wall"></div><div id="veil"></div>
+<div id="boot"><div class="bcore"><div class="blogo">⚡</div><p class="btitle">KEV TECH &amp; FIRE</p><p class="bsub">Démarrage de l'application…</p><div class="bbar"><i></i></div></div></div>
+<div id="err" class="hide"><b>⚠️ Incident technique détecté</b><code id="errMsg"></code>
+<button class="btn rd sm" data-act="hardReset">🧹 Réinitialiser</button><button class="btn gh sm" data-act="errClose">Masquer</button></div>
+
+<header>
+<div class="brand"><div class="mark">⚡</div><div><h1>KEV TECH &amp; FIRE</h1><small>Diagnostic · Incendie · Expertise</small></div></div>
+<div class="pills">
+<span class="pill ok" id="pNet">📶 réseau</span>
+<span class="pill" id="pBase" data-act="goBase">🗄️ base</span>
+<span class="pill" id="pSync" data-act="askChan">📡 sync</span>
+<span class="pill" id="pHealth" data-act="diag">🩺 diagnostic</span>
+</div>
+<div class="seg" id="seg">
+<button data-act="theme" data-t="tous" class="on">Tous</button>
+<button data-act="theme" data-t="technique">🔧 Technique</button>
+<button data-act="theme" data-t="incendie">🔥 Incendie</button>
+</div>
+<button class="btn gh sm hide" id="bQuit" data-act="quit">🚪 Quitter</button>
+</header>
+
+<main>
+<section id="s-home" class="card mid">
+<div class="hero">🏎️</div><h2 style="justify-content:center">KEV TECH &amp; FIRE</h2>
+<p class="sm">Diagnostic technique par véhicule · étude incendie · expertise juridique · catalogue photos · VIN · OBD</p>
+<div class="modes">
+<button class="btn mode ad" data-act="modeAdmin"><span class="ic">🛡️</span><b>MODE ADMIN</b><small>Mot de passe à chaque ouverture</small></button>
+<button class="btn mode ti" data-act="modeTiers"><span class="ic">👤</span><b>MODE TIERS</b><small>Code d'accès fourni par l'admin</small></button>
+</div>
+<div class="trust"><span>🇫🇷 <b>RappelConso</b></span><span>🇪🇺 <b>Safety Gate</b></span><span>🇺🇸 <b>NHTSA</b></span><span>📷 <b>Photos réelles</b></span><span>⚖️ <b>Expertise</b></span></div>
+</section>
+
+<section id="s-login" class="card mid hide">
+<div class="stic">🛡️</div><h2 style="justify-content:center">Connexion administrateur</h2>
+<input id="pwd" type="password" autocomplete="new-password" placeholder="Mot de passe" style="max-width:330px;margin:0 auto 12px;text-align:center">
+<div><button class="btn" data-act="login">🔑 Entrer</button><button class="btn gh" data-act="home">← Retour</button></div>
+</section>
+
+<section id="s-gate" class="card mid hide">
+<div id="gForm"><div class="stic">👤</div><h2 style="justify-content:center">Accès tiers</h2>
+<p class="sm">Prénom + code d'accès remis par l'administrateur.</p>
+<input id="gName" maxlength="40" placeholder="Ton prénom" autocomplete="given-name">
+<input id="gCode" placeholder="Code d'accès" autocomplete="off" style="font-family:ui-monospace,Menlo,monospace">
+<button class="btn" data-act="gate">🔓 Valider</button>
+<p class="sm"><button class="btn gh sm" data-act="askCode">📧 Demander un code</button></p>
+<details style="margin-top:14px"><summary class="sm" style="cursor:pointer;color:#00e676">📡 Canal de synchronisation</summary>
+<input id="gChan" placeholder="Code canal" style="margin-top:9px"><button class="btn gh sm" data-act="joinChan">Rejoindre</button></details></div>
+<div id="gOk" class="hide"><div class="stic">✅</div><h2 style="justify-content:center">Accès autorisé</h2><p>Bienvenue <b id="gHello"></b> !</p><button class="btn gr" data-act="enter">🚗 Entrer</button></div>
+<div id="gKo" class="hide"><div class="stic">🔒</div><h2 style="justify-content:center">Accès refusé</h2><p id="gWhy"></p><button class="btn am" data-act="gateRetry">🔁 Réessayer</button></div>
+<div class="hr"></div><button class="btn gh sm" data-act="home">← Changer de mode</button>
+</section>
+
+<section id="s-app" class="hide">
+<div class="card" id="vinCard">
+<h2>🔎 Campagnes de rappel par VIN <span class="pill" id="vinState">prêt</span></h2>
+<div class="grid w"><div class="fld"><label>VIN — 17 caractères (case E)</label><input id="vin" class="vinbox" maxlength="17" placeholder="VF3xxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"></div>
+<div class="fld"><label>&nbsp;</label><div><button class="btn" data-act="vinRun">⚙️ Analyser</button><button class="btn gh" data-act="vinPaste">📋 Coller</button></div></div></div>
+<div id="vinOut"></div></div>
+
+<div class="card">
+<h2><span>🧠 Véhicule &amp; analyse du contexte</span><span class="pill" id="quota">🎟️ quota</span></h2>
+<div class="grid">
+<div class="fld"><label>Marque</label><input id="vMake" data-sg="make" placeholder="Peugeot" autocomplete="off"></div>
+<div class="fld"><label>Modèle</label><input id="vModel" data-sg="model" placeholder="3008" autocomplete="off"></div>
+<div class="fld"><label>Motorisation</label><input id="vEngine" data-sg="engine" placeholder="Choisis dans la liste…" autocomplete="off"></div>
+<div class="fld"><label>Puissance (ch)</label><input id="vPower" data-sg="power" type="number" min="0" max="2000" placeholder="130"></div>
+<div class="fld"><label>Année</label><input id="vYear" type="number" min="1980" max="2030" placeholder="2018"></div>
+<div class="fld"><label>Énergie</label><select id="vFuel"><option value="">—</option><option value="essence">Essence</option><option value="diesel">Diesel</option><option value="hybride">Hybride</option><option value="electrique">Électrique</option></select></div>
+</div>
+<div class="fld" style="margin-top:12px"><label>Motorisations réelles du modèle <span class="pill" id="nEng">0</span></label><div class="chips" id="cEng"></div></div>
+<div class="fld" style="margin-top:10px"><label>Puissances du moteur choisi <span class="pill" id="nPow">0</span></label><div class="chips" id="cPow"></div></div>
+<div id="attrib" class="sm" style="margin-top:10px"></div>
+<div class="fld" style="margin-top:14px"><label>Vendeur (volet juridique)</label><select id="vSeller"><option value="inconnu">Inconnu</option><option value="professionnel">Professionnel</option><option value="particulier">Particulier</option></select></div>
+<div class="fld" style="margin-top:12px"><label>Contexte libre</label><textarea id="ctx" maxlength="1600" placeholder="Symptômes, date d'achat, prix, vendeur, panne, incendie, litige, travaux effectués…"></textarea></div>
+<div class="chips" id="predCtx"></div><div id="live" class="sm"></div>
+<div class="noprint"><button class="btn" data-act="ctxRun">⚖️ Compte rendu d'expertise</button><button class="btn gh" data-act="print">🖨️ PDF</button><button class="btn gh" data-act="ctxJson">📤 JSON</button></div>
+<div id="ctxOut"></div></div>
+
+<div class="tabs noprint" id="tabsApp">
+<button class="btn on" data-act="tabApp" data-v="search">🔎 Recherche</button>
+<button class="btn" data-act="tabApp" data-v="study">🧠 Étude</button>
+<button class="btn" data-act="tabApp" data-v="photos">📷 Photos</button>
+<button class="btn" data-act="tabApp" data-v="obd">🔵 OBD</button>
+<button class="btn" data-act="tabApp" data-v="msg">✉️ Message</button>
+<button class="btn hide" id="bToAdmin" data-act="toAdmin">🛡️ Admin</button></div>
+
+<div id="v-search" class="card"><h2>🔎 Recherche prédictive unifiée</h2>
+<div class="sgw"><input id="q" data-sg="query" placeholder="Skoda Elroq, courroie, P0016, AdBlue, incendie…" autocomplete="off"></div>
+<div class="grid" style="margin-top:12px">
+<div class="fld"><label>Marque</label><select id="fMake"><option value="">Toutes</option></select></div>
+<div class="fld"><label>Système</label><select id="fSys"><option value="">Tous</option></select></div>
+<div class="fld"><label>Gravité</label><select id="fGrav"><option value="">Toutes</option><option value="critique">Critique</option><option value="eleve">Élevée</option><option value="modere">Modérée</option></select></div>
+<div class="fld"><label>Tri</label><select id="fSort"><option value="score">Pertinence</option><option value="grav">Gravité</option><option value="date">Récent</option><option value="az">A→Z</option></select></div></div>
+<div class="chips" id="views"></div>
+<div id="results"><div class="empty">Initialisation…</div></div></div>
+
+<div id="v-study" class="card hide"><h2>🧠 Étude de cas + 🔥 chaîne incendie</h2>
+<p class="sm">Véhicule = sélecteur ci-dessus. Coche les constatations relevées.</p>
+<div class="chips" id="qcm"></div>
+<div class="fld" style="margin-top:12px"><label style="text-transform:none;font-size:.79rem"><input type="checkbox" id="dtcOn"> Codes défauts (DTC) lus sur le véhicule</label><input id="dtc" class="hide" placeholder="P0016, P0521, P0AA6…"></div>
+<div class="noprint" style="margin-top:12px"><button class="btn" data-act="studyRun">⚙️ Lancer l'étude</button><button class="btn gh" data-act="print">🖨️ PDF</button><button class="btn gh" data-act="studyJson">📤 JSON</button></div>
+<div id="studyOut"></div><div class="hr noprint"></div><h3 class="noprint">🕘 Historique</h3><div id="histo" class="noprint"></div></div>
+
+<div id="v-photos" class="card hide"><h2>📷 Catalogue photos par panne</h2>
+<p class="sm">Photos intégrées par l'admin en priorité, puis photothèque libre (Wikimedia Commons).</p>
+<div class="fld"><label>Panne recherchée</label><input id="pq" placeholder="courroie délaminée, AdBlue cristallisation, batterie HT…"></div>
+<button class="btn" data-act="photoSearch">📷 Rechercher</button><div id="photoOut"></div></div>
+
+<div id="v-obd" class="card hide"><h2>🔵 OBD Bluetooth — ELM327 BLE</h2>
+<p class="sm">Adaptateurs BLE (Vgate iCar Pro BLE, OBDLink MX+…). Contact mis, moteur à l'arrêt. Nécessite Chrome Android.</p>
+<button class="btn" data-act="obdConnect">🔗 Connecter</button><button class="btn gh" id="bObdRead" data-act="obdRead" disabled>📥 Lire les défauts</button>
+<p id="obdState" class="sm">Non connecté.</p><div id="obdOut"></div></div>
+
+<div id="v-msg" class="card hide"><h2>✉️ Message à l'administrateur</h2>
+<div class="fld"><label>Message</label><textarea id="msg" maxlength="2000" placeholder="Question, demande, retour d'expérience…"></textarea></div>
+<div class="chips" id="predMsg"></div>
+<button class="btn" data-act="msgSend">📧 Envoyer</button><button class="btn gh" data-act="msgCopy">📋 Copier</button>
+<h3>📤 Boîte d'envoi locale</h3><div id="outbox"></div></div>
+</section>
+
+<section id="s-admin" class="hide">
+<div class="tabs noprint" id="tabsAdm">
+<button class="btn on" data-act="tabAdm" data-a="access">🔑 Accès</button>
+<button class="btn" data-act="tabAdm" data-a="faults">🖼️ Pannes &amp; photos</button>
+<button class="btn" data-act="tabAdm" data-a="look">🎨 Apparence</button>
+<button class="btn" data-act="tabAdm" data-a="sync">📡 Sync</button>
+<button class="btn" data-act="tabAdm" data-a="base">🗄️ Base</button>
+<button class="btn" data-act="toApp">🚗 Application</button></div>
+
+<div id="a-access" class="card"><h2>🔑 Codes d'accès tiers</h2>
+<div class="grid"><div class="fld"><label>Prénom</label><input id="acName" placeholder="Kevin"></div><div class="fld"><label>Validité (jours)</label><input id="acDays" type="number" value="365" min="1"></div></div>
+<button class="btn gr" data-act="genCode">🎟️ Générer le code</button>
+<div class="code hide" id="genOut"></div>
+<button class="btn gh sm" data-act="copyGen">📋 Copier</button><button class="btn gh sm" data-act="shareGen">📤 Partager</button>
+<div class="hr"></div><h3>Codes émis</h3><div id="codes"></div>
+<h3>🚫 Révocations</h3><div id="revs"></div><button class="btn rd" data-act="pubRevs">📡 Publier les révocations</button></div>
+
+<div id="a-faults" class="card hide"><h2>🖼️ Pannes &amp; photos réelles</h2>
+<div id="drop" data-act="dropClick">📷 <b>Colle (Ctrl+V) · glisse · clique</b><input type="file" id="pFile" accept="image/*" multiple style="display:none"></div>
+<div class="grid" style="margin-top:11px"><div class="fld"><label>Ou URL d'image</label><input id="pUrl" placeholder="https://…"></div><div class="fld"><label>Légende</label><input id="pCap" placeholder="courroie délaminée 1.2 PureTech"></div></div>
+<button class="btn gh" data-act="urlAdd">➕ Ajouter l'URL</button>
+<div id="pending" class="chips" style="margin-top:11px"></div>
+<div class="hr"></div>
+<div class="grid w"><div class="fld"><label>Filtrer les pannes</label><input id="fFilter" placeholder="courroie, P0016…"></div><div class="fld"><label>Panne cible</label><select id="fTarget"></select></div></div>
+<div id="newForm" class="hide"><h3 id="nfTitle">Nouvelle panne — caractéristiques</h3>
+<div class="grid w">
+<div class="fld"><label>Défaut / titre</label><input id="nTitle"></div>
+<div class="fld"><label>Marque(s)</label><input id="nMake" placeholder="Peugeot / Citroën"></div>
+<div class="fld"><label>Modèle(s)</label><input id="nModel" placeholder="3008 / C4"></div>
+<div class="fld"><label>Motorisation</label><input id="nEngine" placeholder="1.2 PureTech"></div>
+<div class="fld"><label>Puissances (ch)</label><input id="nPower" placeholder="110,130"></div>
+<div class="fld"><label>Années</label><input id="nYears" placeholder="2013-2023"></div>
+<div class="fld"><label>Énergie</label><select id="nFuel"><option value="">—</option><option value="essence">Essence</option><option value="diesel">Diesel</option><option value="hybride">Hybride</option><option value="electrique">Électrique</option></select></div>
+<div class="fld"><label>Système</label><input id="nSys" placeholder="Distribution"></div>
+<div class="fld"><label>DTC</label><input id="nDtc" placeholder="P0016,P0521"></div>
+<div class="fld"><label>Symptômes</label><input id="nSym" placeholder="claquement, voyant huile"></div>
+<div class="fld"><label>Gravité</label><select id="nGrav"><option value="eleve">Élevée</option><option value="critique">Critique</option><option value="modere">Modérée</option></select></div>
+<div class="fld"><label>Source (URL)</label><input id="nSrc"></div></div>
+<div class="fld" style="margin-top:11px"><label>Mécanisme / causes</label><textarea id="nMeca"></textarea></div>
+<div class="fld" style="margin-top:11px"><label>Conséquences (une par ligne)</label><textarea id="nCons"></textarea></div>
+<div class="fld" style="margin-top:11px"><label>Indices visuels (un par ligne)</label><textarea id="nInd"></textarea></div>
+<label class="sm" style="display:flex;gap:8px;margin:11px 0"><input type="checkbox" id="nFire"> Risque d'incendie associé</label>
+<div class="fld"><label>Chaîne incendie</label><input id="nChain" placeholder="Débris → crépine → fuite huile → feu"></div>
+<button class="btn gh sm" data-act="cancelEdit">✕ Annuler l'édition</button></div>
+<div style="margin-top:13px"><button class="btn gr" data-act="attach">🔗 Enregistrer &amp; rattacher</button><button class="btn" data-act="pubFaults">📡 Publier aux tiers</button><button class="btn gh" data-act="expFaults">📥 Exporter</button></div>
+<div class="hr"></div>
+<h3>Pannes admin — sélection multiple</h3>
+<div class="chips"><button data-act="selAll">☑️ Tout sélectionner</button><button data-act="selNone">☐ Désélectionner</button><button data-act="bulkDel">🗑️ Supprimer la sélection</button></div>
+<div id="faultList"></div></div>
+
+<div id="a-look" class="card hide"><h2>🎨 Apparence &amp; contact</h2>
+<div class="fld"><label>Fond d'écran</label><input type="file" id="bgFile" accept="image/*"></div>
+<div class="fld" style="margin-top:12px"><label>Opacité : <b id="opVal">55%</b></label><div class="rng"><input type="range" id="op" min="0" max="100" value="55"><button class="btn sm" data-act="opApply">💾 Appliquer</button></div></div>
+<div class="fld" style="margin-top:12px"><label>Véhicule animé (PNG détouré)</label><input type="file" id="carFile" accept="image/*"></div>
+<div class="fld" style="margin-top:12px"><label>Email de contact admin</label><input id="mail" type="email" placeholder="ton@email.fr"></div>
+<button class="btn gr" data-act="pubLook">📡 Publier aux tiers</button><button class="btn rd sm" data-act="lookReset">🗑️ Réinitialiser</button></div>
+
+<div id="a-sync" class="card hide"><h2>📡 Synchronisation temps réel — sans token</h2>
+<p class="sm">Un canal anonyme transporte pannes, photos, fond et révocations vers tous les tiers. Aucune clé, aucun compte.</p>
+<div class="grid w"><div class="fld"><label>Service</label><select id="syBe"><option value="kvdb">kvdb.io (recommandé)</option><option value="restful">restful-api.dev</option><option value="jsonblob">jsonblob.com</option></select></div><div class="fld"><label>Code canal</label><input id="syCh"></div></div>
+<div style="margin-top:11px"><button class="btn gr" data-act="syCreate">✨ Créer un canal</button><button class="btn" data-act="syUse">💾 Utiliser</button><button class="btn gh" data-act="syShare">📤 Partager</button><button class="btn gh" data-act="syTest">🔎 Tester</button></div>
+<label class="sm" style="display:flex;gap:8px;margin:13px 0"><input type="checkbox" id="syAuto"> Publication automatique</label>
+<button class="btn am" data-act="syPub">📡 Publier maintenant</button><button class="btn gh" data-act="syPull">🔄 Recevoir</button><span class="pill" id="syState">—</span></div>
+
+<div id="a-base" class="card hide"><h2>🗄️ Base technique &amp; autovérification</h2>
+<div id="stats" class="sm">…</div>
+<button class="btn" data-act="reload">🔄 Recharger</button><button class="btn gh" data-act="upd">⬆️ Vérifier les MAJ</button><button class="btn gh" data-act="harvest">🛰️ RappelConso</button><button class="btn gh" data-act="diag">🩺 Diagnostic</button>
+<div class="prog"><i id="prog"></i></div><div id="checks"></div>
+<div class="hr"></div><h3>📥 Import de fichiers</h3><input type="file" id="imp" accept=".json,.txt,.md,.csv" multiple>
+<button class="btn gh" data-act="expAll">📤 Exporter toute la base</button><button class="btn rd" data-act="quit">🚪 Déconnexion</button></div>
+</section>
+</main>
+
+<div class="modal" id="mDiag"><div class="mcard"><h2>🩺 Autovérification de l'application</h2><div class="prog"><i id="dProg"></i></div><div id="dBox"></div>
+<div style="margin-top:14px"><button class="btn" data-act="reload">🔄 Relancer</button><button class="btn am" data-act="upd">⬆️ Forcer la MAJ</button><button class="btn rd" data-act="hardReset">🧹 Vider le cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
+<div class="modal" id="mDetail"><div class="mcard"><div id="detailBody"></div><button class="btn gh" data-act="detailClose">✕ Fermer</button></div></div>
+<div class="modal" id="mLb"><div class="mcard" style="text-align:center"><img alt=""><p class="sm" id="lbCap" style="margin-top:11px"></p><button class="btn gh sm" data-act="lbClose">✕ Fermer</button></div></div>
+<div id="toasts"></div>
+
+<script>
+(function(){
+"use strict";
+var D=function(i){return document.getElementById(i);};
+var each=function(a,f){var i;if(!a)return;for(i=0;i<a.length;i++)f(a[i],i);};
+var norm=function(s){s=(s==null?"":String(s)).toLowerCase();
+ try{s=s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");}catch(e){}
+ return s.replace(/[^a-z0-9]+/g," ").replace(/^\s+|\s+$/g,"");};
+var esc=function(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");};
+var lines=function(v){var out=[],i,p;if(Object.prototype.toString.call(v)==="[object Array]"){for(i=0;i<v.length;i++)if(v[i])out.push(String(v[i]));return out;}
+ if(typeof v==="string"){p=v.split(/\r?\n|;/);for(i=0;i<p.length;i++){var t=p[i].replace(/^\s+|\s+$/g,"");if(t)out.push(t);}}return out;};
+var hash=function(s){var h=2166136261,i;s=String(s);for(i=0;i<s.length;i++){h=h^s.charCodeAt(i);h=(h*16777619)>>>0;}return ("00000000"+h.toString(36)).slice(-8);};
+var sig8=function(m){var a=hash("A"+m),b=hash("B"+m+"KTF"),c=hash("C"+b+a),d=hash("D"+c+m);return a+b+c+d;};
+var fkey=function(e){return e.id||hash([e.source,e.make,e.model,e.engine,e.title].join("|"));};
+var tc=function(s){return String(s).replace(/\b[a-z\u00e0-\u00ff]/g,function(c){return c.toUpperCase();});};
+var uid=function(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);};
+var has=function(a,v){return a.indexOf(v)>=0;};
+var uniq=function(a){var o=[],i;for(i=0;i<a.length;i++)if(!has(o,a[i]))o.push(a[i]);return o;};
+function toast(m,ms,undo){var d=document.createElement("div");d.className="toast";
+ var s=document.createElement("span");s.innerHTML=m;d.appendChild(s);
+ if(undo){var b=document.createElement("button");b.className="btn gh sm";b.innerHTML="↩️ Annuler";
+  b.onclick=function(){try{undo();}catch(e){}if(d.parentNode)d.parentNode.removeChild(d);};d.appendChild(b);}
+ D("toasts").appendChild(d);setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},ms||4200);}
+function dl(n,t){try{var b=new Blob([t],{type:"application/json"});var a=document.createElement("a");
+ a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();
+ setTimeout(function(){URL.revokeObjectURL(a.href);if(a.parentNode)a.parentNode.removeChild(a);},500);}catch(e){toast("Export impossible sur ce navigateur.");}}
+function ls(k,v){try{
+ if(v===undefined){var r=localStorage.getItem("ktf:"+k);return r?JSON.parse(r):null;}
+ if(v===null){localStorage.removeItem("ktf:"+k);return null;}
+ localStorage.setItem("ktf:"+k,JSON.stringify(v));return v;}catch(e){return null;}}
+function copyText(t){if(!t){toast("Rien à copier.");return;}
+ try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.left="-9999px";
+  document.body.appendChild(ta);ta.focus();ta.select();var ok=document.execCommand("copy");
+  document.body.removeChild(ta);if(ok){toast("📋 Copié dans le presse-papier.");return;}}catch(e){}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast("📋 Copié.");},function(){toast("Copie refusée — sélectionne le texte manuellement.");});return;}
+ toast("Copie indisponible — sélectionne le texte manuellement.");}
+function xhr(url,ms,cb,method,body,ctype){
+ try{var x=new XMLHttpRequest();x.open(method||"GET",url,true);x.timeout=ms||9000;
+  if(ctype){try{x.setRequestHeader("Content-Type",ctype);}catch(e){}}
+  x.onload=function(){cb(null,{ok:x.status>=200&&x.status<300,status:x.status,text:x.responseText,
+   loc:x.getResponseHeader?x.getResponseHeader("Location"):"",xid:x.getResponseHeader?x.getResponseHeader("X-JsonBlob-Id"):""});};
+  x.onerror=function(){cb("réseau indisponible");};
+  x.ontimeout=function(){cb("délai dépassé");};
+  x.onabort=function(){cb("requête annulée");};
+  x.send(body||null);}catch(e){cb(e.message||"erreur réseau");}}
+function jget(url,ms,cb){xhr(url,ms,function(err,r){if(err||!r||!r.ok){cb(null);return;}
+ try{cb(JSON.parse(r.text));}catch(e){cb(null);}});}
+function report(m){var f=D("err");if(!f)return;f.className="";D("errMsg").textContent=m;}
+function safe(f,label){try{return f();}catch(e){report(label+" → "+(e.message||e));return null;}}
+function upAct(el){while(el&&el!==document){if(el.getAttribute&&el.getAttribute("data-act"))return el;el=el.parentNode;}return null;}
+function inId(el,id){while(el&&el!==document){if(el.id===id)return true;el=el.parentNode;}return false;}
+function setCls(el,c,on){if(!el)return;if(on){if(el.className.indexOf(c)<0)el.className=(el.className+" "+c).replace(/^\s+/,"");}
+ else{el.className=(" "+el.className+" ").replace(" "+c+" "," ").replace(/^\s+|\s+$/g,"");}}
+
+var SEED=[
+{id:"d1",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Lubrification",dtc:[],sym:["odeur brûlé","fumée"],title:"Huile moteur sur organes chauds",meca:"Film d'huile sur surface dépassant l'auto-inflammation (300-350 °C) : collecteur 400-800 °C, turbo 600-1000 °C, FAP 600-1200 °C.",cons:["Feu de baie moteur"],ind:["Vernis brun","coulures verticales"],fire:true,chain:"Fuite d'huile → contact organe chaud → auto-inflammation → feu de baie",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d2",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"GDI / Common Rail",years:[2010,2027],fuel:"",sys:"Injection",dtc:[],sym:["odeur carburant","fuite visible"],title:"Fuite carburant basse et haute pression",meca:"Rampe GDI 150-350 bar, Common Rail 1600-2500 bar, raccords rapides. Essence : auto-inflammation vers 280 °C, vapeurs inflammables dès 1,4 %.",cons:["Flash immédiat","feu compartiment moteur"],ind:["Suintement en couronne d'injecteur","durite marquée"],fire:true,chain:"Fuite → aérosol et vapeurs → point chaud ou arc → flash → feu généralisé",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d3",themes:["technique","incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Faisceau électrique",dtc:[],sym:["voyant allumé","odeur brûlé"],title:"Faisceau : frottement, rongeurs, accessoires",meca:"B+ permanent 100-250 A, gaines, passe-cloison, épissures d'accessoires. Arc franc supérieur à 2000 °C au point de défaut.",cons:["Feu baie moteur ou habitacle"],ind:["Gaine percée","perles de cuivre"],fire:true,chain:"Usure de gaine → court-circuit B+ → arc → inflammation des gaines → feu",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d4",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Diesels",engine:"FAP",years:[2010,2027],fuel:"diesel",sys:"FAP / catalyseur",dtc:["P2463"],sym:["odeur brûlé","fumée"],title:"Échappement et FAP : inflammation externe",meca:"Régénération FAP 600-1200 °C, catalyseur 500-900 °C. Végétation sèche : auto-inflammation 250-300 °C.",cons:["Feu sous caisse","propagation habitacle"],ind:["FAP coloré","écran thermique déformé","végétation carbonisée"],fire:true,chain:"Régénération → rayonnement sous caisse → inflammation végétation → feu",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d5",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Freins",dtc:[],sym:["odeur brûlé"],title:"Freins surchauffés et pneumatique",meca:"Disques 600-900 °C en descente prolongée, étrier grippé. Graisses et poussières au-delà de leur point d'auto-inflammation.",cons:["Feu de roue","propagation"],ind:["Disque bleui","graisse carbonisée"],fire:true,chain:"Étrier grippé → disque très chaud → inflammation graisses et pneu → feu de roue",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d6",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Habitacle",dtc:[],sym:["odeur brûlé","fumée"],title:"Mégot, chargeur, siège chauffant, mousse PU",meca:"Mousses polyuréthane premier combustible, prises 12V et USB, résistance de siège. Pyrolyse puis flamme rapide, CO et HCN.",cons:["Feu habitacle","intoxication par fumées"],ind:["Foyer siège ou console"],fire:true,chain:"Source faible → pyrolyse mousse PU → flamme rapide → feu habitacle",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d7",themes:["technique","incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Batterie 12V",dtc:["P0562"],sym:["démarrage difficile"],title:"Batterie 12V : hydrogène, cosses, faisceau de hayon",meca:"Dégagement d'hydrogène en charge (LIE 4 %), cosses, faisceau de hayon en flexion répétée.",cons:["Explosion du boîtier","feu arrière"],ind:["Cosse fondue","sulfate blanc"],fire:true,chain:"Charge → hydrogène confiné et étincelle de cosse → explosion → feu zone réservoir",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d8",themes:["technique","incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Alternateur / B+",dtc:["P0562"],sym:["voyant allumé","odeur brûlé"],title:"Alternateur et B+ : effet Joule, arc",meca:"P = R × I². 1 mΩ sous 200 A vaut 40 W continus, soit une fusion locale. Méga-fusible 300-500 A, boîte à fusibles exposée à l'eau.",cons:["Feu de baie moteur"],ind:["Pistes fondues","cosse bleutie"],fire:true,chain:"Résistance de contact → effet Joule → fusion → arc B+ → feu",grav:"critique",url:"",date:"2026-01-01"},
+{id:"d9",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Après intervention",dtc:[],sym:["après entretien"],title:"Erreur de service : huile, fusible, faisceau pincé",meca:"Huile renversée lors d'une vidange, fusible sur-calibré, faisceau pincé à la repose d'une garniture.",cons:["Feu après intervention"],ind:["Trace diffuse non orientée","fusible sur-calibré"],fire:true,chain:"Intervention → huile résiduelle ou faisceau pincé → première chauffe → feu",grav:"critique",url:"",date:"2026-01-01"},
+{id:"e1",themes:["technique","incendie"],type:"panne",source:"doctrine",make:"Multi-marques VE",model:"Tous VE",engine:"Pack haute tension",years:[2015,2027],fuel:"electrique",sys:"Pack HT",dtc:["P0AA6"],sym:["incendie","après choc"],title:"Court-circuit interne de cellule puis emballement thermique",meca:"SEI 90-120 °C, anode et électrolyte 120-180 °C, séparateur 130-170 °C, cathode NMC 180-250 °C avec oxygène auto-comburant, jet-fire 800-1400 °C.",cons:["Propagation aux modules","gaz HF et CO"],ind:["Point chaud de module","gonflement"],fire:true,chain:"Défaut interne → emballement → jet-fire auto-comburant → propagation pack",grav:"critique",url:"",date:"2026-01-01"},
+{id:"e2",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques VE",model:"Tous VE",engine:"Pack HT",years:[2015,2027],fuel:"electrique",sys:"Pack HT",dtc:[],sym:["après choc","après immersion"],title:"Choc ou immersion : court-circuit différé",meca:"Déformation du séparateur ou corrosion et dendrites après immersion, court interne immédiat ou différé de plusieurs jours.",cons:["Emballement différé"],ind:["Coque déformée","traces d'immersion","corrosion connecteurs HT"],fire:true,chain:"Choc ou immersion → dégradation cellule → court interne différé → emballement",grav:"critique",url:"",date:"2026-01-01"},
+{id:"e3",themes:["technique","incendie"],type:"panne",source:"doctrine",make:"Multi-marques VE",model:"Tous VE",engine:"OBC / ICCU",years:[2018,2027],fuel:"electrique",sys:"Charge",dtc:[],sym:["voyant allumé","odeur brûlé"],title:"Connecteur, OBC, ICCU : arc et échauffement",meca:"Arc DC supérieur à 1000 °C répété à chaque session, carbonisation des broches, flamme trappe ou baie.",cons:["Feu de zone de charge"],ind:["Broche carbonisée","trappe fondue"],fire:true,chain:"Résistance de contact → arc DC répété → carbonisation → flamme",grav:"critique",url:"",date:"2026-01-01"},
+{id:"e4",themes:["incendie"],type:"panne",source:"doctrine",make:"Multi-marques VE",model:"Tous VE",engine:"Pack HT",years:[2015,2027],fuel:"electrique",sys:"Post-sinistre",dtc:[],sym:["incendie"],title:"Énergie piégée : ré-ignition et stockage",meca:"Cellules endommagées encore chargées, réactions internes résiduelles, ré-ignition 24 à 72 h, cas documentés jusqu'à trois semaines.",cons:["Ré-ignition en stockage"],ind:["Stockage post-sinistre sans quarantaine"],fire:true,chain:"Cellules chargées endommagées → réactions résiduelles → ré-ignition",grav:"critique",url:"",date:"2026-01-01"},
+{id:"p1",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Peugeot / Citroën / DS / Opel",model:"208 / 2008 / 308 / 3008 / 5008 / C3 / C4",engine:"1.2 PureTech",years:[2013,2023],fuel:"essence",sys:"Distribution",dtc:["P0016","P0521"],sym:["claquement","voyant allumé","perte de puissance"],title:"Courroie de distribution humide — délamination",meca:"Courroie immergée dans l'huile, délamination sous contraintes thermiques et chimiques, débris, colmatage de la crépine, chute de pression d'huile.",cons:["Casse moteur","serrage","fuite d'huile sur parties chaudes"],ind:["Courroie effilochée ou gonflée","crépine colmatée","copeaux dans le carter"],fire:true,chain:"Débris de courroie → crépine colmatée → pression d'huile → serrage et fuite → huile sur échappement → départ de feu possible",grav:"critique",url:"https://rappel.conso.gouv.fr/",date:"2026-01-01",powers:[75,131]},
+{id:"p2",themes:["technique"],type:"panne",source:"base-kevin",make:"Peugeot / Citroën",model:"3008 / 5008 / C4 / C5 Aircross",engine:"1.5 BlueHDi",years:[2017,2024],fuel:"diesel",sys:"AdBlue / SCR",dtc:["P20EE","P204F"],sym:["voyant allumé","perte de puissance","démarrage difficile"],title:"AdBlue : cristallisation du réservoir et de l'injecteur",meca:"Cristallisation de l'urée sur cycles courts, obstruction de l'injecteur et de la pompe, défaut de dosage NOx.",cons:["Mode dégradé","démarrage interdit après compte à rebours","remplacement réservoir et pompe"],ind:["Cristaux blancs","dépôts autour de l'injecteur","codes SCR permanents"],fire:false,chain:"",grav:"eleve",url:"https://rappel.conso.gouv.fr/",date:"2026-01-01",powers:[100,130]},
+{id:"p3",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Peugeot / Citroën",model:"308 / 3008 / C4",engine:"1.6 BlueHDi",years:[2014,2021],fuel:"diesel",sys:"EGR",dtc:["P0400"],sym:["fumée","odeur brûlé","perte de puissance"],title:"Refroidisseur EGR — fuite de glycol et couvaison",meca:"Fuite interne de liquide de refroidissement et suies, dépôts incandescents, surchauffe locale du collecteur.",cons:["Risque de feu","surchauffe moteur"],ind:["Suies humides","collecteur fondu localement"],fire:true,chain:"Fuite EGR → glycol et suies → couvaison → inflammation du collecteur → feu",grav:"critique",url:"https://rappel.conso.gouv.fr/",date:"2026-01-01",powers:[100,120]},
+{id:"p4",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"BMW",model:"Série 1 / Série 3 / X3",engine:"N47 diesel",years:[2007,2018],fuel:"diesel",sys:"Distribution",dtc:["P0016","P0017"],sym:["claquement","bruit anormal"],title:"Chaîne N47 côté volant moteur — allongement et casse",meca:"Usure prématurée de la chaîne et du tendeur, allongement, saut de dent puis casse.",cons:["Décalage de calage","casse moteur complète"],ind:["Claquement à froid côté boîte"],fire:true,chain:"Casse de chaîne → casse moteur → huile sur parties chaudes → feu possible",grav:"critique",url:"",date:"2026-01-01"},
+{id:"p5",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Peugeot / Citroën / Mini / BMW",model:"308 / 3008 / C4 / Cooper",engine:"1.6 THP (EP6)",years:[2007,2019],fuel:"essence",sys:"Distribution / Turbo",dtc:["P0016","P0299"],sym:["claquement","perte de puissance","fumée"],title:"Chaîne EP6 et lubrification du turbo",meca:"Allongement de chaîne, tendeur fatigué, alimentation d'huile du turbo insuffisante, grippage, fuite d'huile sur carter 600-900 °C.",cons:["Casse turbo","feu de baie","décalage de calage"],ind:["Turbo bleui","turbo gras","claquement au démarrage"],fire:true,chain:"Grippage turbo → fuite d'huile sur carter chaud → feu",grav:"critique",url:"",date:"2026-01-01",powers:[150,200]},
+{id:"p6",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Hyundai / Kia",model:"Sonata / Tucson / Optima / Santa Fe",engine:"Theta II 2.0/2.4 GDi",years:[2011,2019],fuel:"essence",sys:"Bloc moteur",dtc:[],sym:["claquement","perte de puissance","fumée"],title:"Grippage des coussinets de bielle puis carter percé",meca:"Débris d'usinage, lubrification des bielles défaillante, grippage, bielle au travers du carter, huile sous pression sur l'échappement.",cons:["Casse moteur","feu compartiment moteur"],ind:["Carter percé","huile pulvérisée"],fire:true,chain:"Grippage de bielle → carter percé → huile sous pression sur échappement → feu",grav:"critique",url:"https://www.nhtsa.gov/recalls",date:"2026-01-01"},
+{id:"p7",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"BMW / Mercedes-Benz / Volkswagen / Audi",model:"6 cylindres diesel",engine:"N57 / OM642 / V6 TDI",years:[2012,2021],fuel:"diesel",sys:"EGR",dtc:["P0400"],sym:["odeur brûlé","fumée","perte de puissance"],title:"Refroidisseur EGR fuyard — couvaison",meca:"Fuite de glycol dans l'échangeur EGR et suies, dépôts incandescents, surchauffe locale, feu du collecteur.",cons:["Feu de baie moteur","perte de liquide de refroidissement"],ind:["Suies humides","collecteur fondu"],fire:true,chain:"Fuite EGR cooler → glycol et suies → couvaison → inflammation collecteur → feu",grav:"critique",url:"https://www.nhtsa.gov/recalls",date:"2026-01-01"},
+{id:"p8",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Volkswagen / Audi",model:"Golf / Passat / A4 / Q5",engine:"Alternateur",years:[2017,2022],fuel:"",sys:"Alternateur / B+",dtc:["P0562"],sym:["voyant allumé","odeur brûlé"],title:"Infiltration d'eau dans l'alternateur puis court interne",meca:"Eau, court-circuit interne de l'alternateur, risque de feu et panne du circuit 12V.",cons:["Feu de baie","panne électrique"],ind:["Pistes fondues","traces d'humidité"],fire:true,chain:"Eau dans l'alternateur → court-circuit → feu de baie",grav:"critique",url:"",date:"2026-01-01"},
+{id:"p9",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Hyundai / Kia",model:"Ioniq 5 / EV6 / Niro",engine:"E-GMP ICCU",years:[2021,2025],fuel:"electrique",sys:"Charge",dtc:[],sym:["voyant allumé","véhicule immobilisé"],title:"ICCU défaillante — charge 12V",meca:"Défaut de l'ICCU, panne du circuit 12V et échauffement des composants de puissance.",cons:["Immobilisation","risque thermique local"],ind:["Codes P1Axx","batterie 12V à plat répétée"],fire:true,chain:"ICCU → échauffement des composants de puissance → risque de feu local",grav:"critique",url:"https://www.nhtsa.gov/recalls",date:"2026-01-01"},
+{id:"p10",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Volkswagen",model:"ID.3 / ID.4",engine:"MEB pompe thermique",years:[2020,2023],fuel:"electrique",sys:"Thermique pack",dtc:[],sym:["voyant allumé"],title:"Humidité dans la pompe thermique du pack",meca:"Infiltration, court-circuit, risque de feu et perte de la gestion thermique du pack.",cons:["Feu local","dégradation du pack"],ind:["Pompe fondue"],fire:true,chain:"Humidité pompe → court-circuit → feu local",grav:"critique",url:"",date:"2026-01-01"},
+{id:"p11",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Ford",model:"Fiesta / Focus / Puma / EcoSport",engine:"1.0 EcoBoost",years:[2012,2023],fuel:"essence",sys:"Distribution / Injection",dtc:[],sym:["perte de puissance","fuite visible","odeur carburant"],title:"Courroie humide et durite de carburant",meca:"Dégradation de la courroie, débris dans la lubrification, durite de carburant fissurée, fuite en baie, vapeurs.",cons:["Casse moteur","risque de feu en baie"],ind:["Courroie glacée","durite marquée"],fire:true,chain:"Fuite de durite → vapeurs en baie → point chaud → feu",grav:"critique",url:"https://rappel.conso.gouv.fr/",date:"2026-01-01",powers:[95,155]},
+{id:"p12",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Dacia / Renault",model:"Sandero / Logan / Duster",engine:"GPL",years:[2018,2026],fuel:"essence",sys:"Injection GPL",dtc:[],sym:["odeur carburant"],title:"GPL : multivalve, électrovanne, détendeur",meca:"Fuite de GPL, nappe gazeuse lourde, flash retour à la première source d'inflammation.",cons:["Feu","explosion"],ind:["Marques de souffle","givre anormal"],fire:true,chain:"Fuite GPL → nappe → source d'inflammation → flash retour",grav:"critique",url:"https://rappel.conso.gouv.fr/",date:"2026-01-01"},
+{id:"p13",themes:["technique"],type:"panne",source:"base-kevin",make:"Volkswagen / Audi / Seat / Skoda",model:"Golf / Polo / Ibiza / Fabia",engine:"DQ200 DSG7",years:[2008,2019],fuel:"",sys:"Boîte de vitesses",dtc:["P0700"],sym:["à-coups boîte","bruit anormal"],title:"Mécatronique DQ200 et embrayage sec",meca:"Surchauffe de l'embrayage sec et défaut de mécatronique, mode dégradé.",cons:["Perte de motricité"],ind:["Disques bleuis"],fire:false,chain:"",grav:"eleve",url:"",date:"2026-01-01"},
+{id:"p14",themes:["technique"],type:"panne",source:"base-kevin",make:"Ford",model:"Focus / Fiesta",engine:"PowerShift DPS6",years:[2011,2019],fuel:"",sys:"Boîte de vitesses",dtc:["P0700"],sym:["à-coups boîte","odeur brûlé"],title:"Embrayage et mécatronique DPS6",meca:"Surchauffe chronique de l'embrayage, patinage et fumée.",cons:["Perte de motricité"],ind:["Disques glacés"],fire:false,chain:"",grav:"eleve",url:"",date:"2026-01-01"},
+{id:"p15",themes:["technique"],type:"panne",source:"base-kevin",make:"Multi-marques",model:"Tous",engine:"",years:[2010,2027],fuel:"",sys:"Batterie 12V",dtc:["P0562"],sym:["démarrage difficile","voyant allumé"],title:"Décharge parasite et batterie AGM fatiguée",meca:"Sulfatation, décharge profonde, tension insuffisante pour les calculateurs.",cons:["Immobilisation","défauts calculateurs multiples"],ind:["Tension de repos basse","ondulation alternateur supérieure à 0,5 V AC"],fire:false,chain:"",grav:"eleve",url:"",date:"2026-01-01"},
+{id:"p16",themes:["technique"],type:"panne",source:"base-kevin",make:"Multi-marques",model:"Tous",engine:"",years:[2015,2027],fuel:"",sys:"ADAS",dtc:[],sym:["voyant allumé"],title:"ADAS : caméra, radar, calibration",meca:"Perte de détection ou décalage de calibration, désactivation des fonctions.",cons:["Perte des fonctions de sécurité","faux positifs"],ind:["Codes de calibration","pare-brise remplacé"],fire:false,chain:"",grav:"eleve",url:"",date:"2026-01-01"},
+{id:"p17",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"Multi-marques diesel",model:"Tous",engine:"",years:[2010,2027],fuel:"diesel",sys:"Lubrification",dtc:[],sym:["bruit anormal","fumée","perte de puissance"],title:"Emballement diesel (PCV et post-injection)",meca:"Le moteur s'emballe sur sa propre huile, surrégime, surchauffe extrême.",cons:["Bielle percée","piston fondu","feu"],ind:["Bielle percée","piston fondu"],fire:true,chain:"Huile aspirée → emballement → casse → projections sur chaud → feu",grav:"critique",url:"",date:"2026-01-01"},
+{id:"p18",themes:["technique","incendie"],type:"panne",source:"base-kevin",make:"BMW / Mercedes-Benz / Volkswagen",model:"Diesels Common Rail",engine:"Pompe HP CP4",years:[2010,2024],fuel:"diesel",sys:"Injection",dtc:[],sym:["perte de puissance","fuite visible"],title:"Pompe haute pression CP4 — rupture et limaille",meca:"Rupture interne, limaille dans tout le circuit et fuite haute pression, inflammation possible.",cons:["Circuit d'injection hors service","risque de feu"],ind:["Limaille","pompe ouverte"],fire:true,chain:"Rupture CP4 → fuite gazole HP sur chaud → inflammation",grav:"critique",url:"",date:"2026-01-01"}
+];
+
+var ENG={
+"peugeot|208":[["1.2 PureTech",1199,"essence",[75,82,100,110,130]],["1.5 BlueHDi",1499,"diesel",[100]],["e-208 électrique",0,"electrique",[136,156]]],
+"peugeot|2008":[["1.2 PureTech",1199,"essence",[100,130,155]],["1.5 BlueHDi",1499,"diesel",[110,130]],["e-2008 électrique",0,"electrique",[136,156]]],
+"peugeot|308":[["1.2 PureTech",1199,"essence",[110,130]],["1.5 BlueHDi",1499,"diesel",[130]],["1.6 Hybrid PHEV",1598,"hybride",[180,225]],["e-308 électrique",0,"electrique",[156]]],
+"peugeot|3008":[["1.2 PureTech",1199,"essence",[130]],["1.5 BlueHDi",1499,"diesel",[130]],["1.6 BlueHDi",1560,"diesel",[120]],["2.0 BlueHDi",1997,"diesel",[150,180]],["1.6 Hybrid PHEV",1598,"hybride",[180,225,300]],["e-3008 électrique",0,"electrique",[210,230,325]]],
+"peugeot|5008":[["1.2 PureTech",1199,"essence",[130]],["1.5 BlueHDi",1499,"diesel",[130]],["2.0 BlueHDi",1997,"diesel",[150,180]],["1.6 Hybrid PHEV",1598,"hybride",[180,225]],["e-5008 électrique",0,"electrique",[210,230]]],
+"peugeot|508":[["1.6 PureTech",1598,"essence",[180,225]],["1.5 BlueHDi",1499,"diesel",[130]],["2.0 BlueHDi",1997,"diesel",[180]],["1.6 Hybrid PHEV",1598,"hybride",[225,360]]],
+"citroen|c3":[["1.2 PureTech",1199,"essence",[82,100,110]],["1.5 BlueHDi",1499,"diesel",[100]],["ë-C3 électrique",0,"electrique",[113]]],
+"citroen|c4":[["1.2 PureTech",1199,"essence",[100,130,155]],["1.5 BlueHDi",1499,"diesel",[110,130]],["ë-C4 électrique",0,"electrique",[136,156]]],
+"citroen|c5 aircross":[["1.2 PureTech",1199,"essence",[130]],["1.5 BlueHDi",1499,"diesel",[130]],["1.6 Hybrid PHEV",1598,"hybride",[180,225]]],
+"renault|clio":[["1.0 SCe",999,"essence",[65,75]],["1.0 TCe",999,"essence",[90,100,110]],["1.3 TCe",1332,"essence",[130,140]],["1.5 Blue dCi",1461,"diesel",[85,100,115]],["E-Tech Hybride",1598,"hybride",[140,145]]],
+"renault|captur":[["1.0 TCe",999,"essence",[90,100,110]],["1.3 TCe",1332,"essence",[130,140,150]],["1.5 Blue dCi",1461,"diesel",[95,115]],["E-Tech Hybride",1598,"hybride",[145,160]]],
+"renault|megane":[["1.3 TCe",1332,"essence",[140,160]],["1.5 Blue dCi",1461,"diesel",[115]],["E-Tech électrique",0,"electrique",[130,220]]],
+"renault|scenic":[["1.3 TCe",1332,"essence",[140,160]],["1.5 Blue dCi",1461,"diesel",[110,115]],["E-Tech électrique",0,"electrique",[170,220]]],
+"renault|austral":[["1.2 E-Tech Hybride",1199,"hybride",[130,160,200]],["1.3 TCe",1332,"essence",[140,160]]],
+"renault|arkana":[["1.3 TCe",1332,"essence",[140,160]],["1.6 E-Tech Hybride",1598,"hybride",[145,160]]],
+"dacia|duster":[["1.0 TCe",999,"essence",[90,100,110]],["1.3 TCe",1332,"essence",[130,150]],["1.5 Blue dCi",1461,"diesel",[95,115]],["Hybride 140",1598,"hybride",[140]]],
+"dacia|sandero":[["1.0 SCe",999,"essence",[65,75]],["1.0 TCe",999,"essence",[90,100,110]]],
+"dacia|jogger":[["1.0 TCe",999,"essence",[100,110]],["Hybride 140",1598,"hybride",[140]]],
+"dacia|spring":[["Electric 45",0,"electrique",[45]],["Electric 65",0,"electrique",[65]]],
+"skoda|elroq":[["Elroq 50 électrique",0,"electrique",[170]],["Elroq 60 électrique",0,"electrique",[204]],["Elroq 85 électrique",0,"electrique",[286]],["Elroq 85x AWD électrique",0,"electrique",[286]],["Elroq RS électrique",0,"electrique",[340]]],
+"skoda|enyaq":[["Enyaq 60 électrique",0,"electrique",[204]],["Enyaq 85 électrique",0,"electrique",[286]],["Enyaq 85x électrique",0,"electrique",[286]],["Enyaq RS électrique",0,"electrique",[340]]],
+"skoda|octavia":[["1.0 TSI",999,"essence",[110]],["1.5 TSI",1498,"essence",[130,150]],["2.0 TSI",1984,"essence",[190,204,245]],["2.0 TDI",1968,"diesel",[115,150,200]],["1.4 TSI iV PHEV",1395,"hybride",[204,245]]],
+"skoda|fabia":[["1.0 MPI",999,"essence",[75,80]],["1.0 TSI",999,"essence",[95,110]],["1.5 TSI",1498,"essence",[150]]],
+"skoda|scala":[["1.0 TSI",999,"essence",[95,110,115]],["1.5 TSI",1498,"essence",[150]]],
+"skoda|kamiq":[["1.0 TSI",999,"essence",[95,110,115]],["1.5 TSI",1498,"essence",[150]]],
+"skoda|karoq":[["1.0 TSI",999,"essence",[110,115]],["1.5 TSI",1498,"essence",[150]],["2.0 TDI",1968,"diesel",[115,150]]],
+"skoda|kodiaq":[["1.5 TSI",1498,"essence",[150]],["2.0 TSI",1984,"essence",[190,245]],["2.0 TDI",1968,"diesel",[150,190,200]]],
+"skoda|superb":[["1.5 TSI",1498,"essence",[150]],["2.0 TSI",1984,"essence",[190,272]],["2.0 TDI",1968,"diesel",[150,190,200]],["1.4 TSI iV",1395,"hybride",[218]]],
+"volkswagen|golf":[["1.0 TSI",999,"essence",[95,110,115]],["1.5 TSI",1498,"essence",[130,150]],["2.0 TSI GTI",1984,"essence",[245,300]],["2.0 TDI",1968,"diesel",[115,150,200]],["1.4 eHybrid",1395,"hybride",[204,245]]],
+"volkswagen|polo":[["1.0 MPI",999,"essence",[80]],["1.0 TSI",999,"essence",[95,110]],["2.0 TSI GTI",1984,"essence",[207]]],
+"volkswagen|tiguan":[["1.5 TSI",1498,"essence",[130,150]],["2.0 TSI",1984,"essence",[190,245]],["2.0 TDI",1968,"diesel",[150,190,200]]],
+"volkswagen|passat":[["1.5 TSI",1498,"essence",[150]],["2.0 TDI",1968,"diesel",[150,190,200]],["1.4 GTE",1395,"hybride",[218]]],
+"volkswagen|t roc":[["1.0 TSI",999,"essence",[110,115]],["1.5 TSI",1498,"essence",[150]],["2.0 TDI",1968,"diesel",[115,150]]],
+"volkswagen|id 3":[["Pro électrique",0,"electrique",[204]],["Pro S électrique",0,"electrique",[204]],["GTX électrique",0,"electrique",[326]]],
+"volkswagen|id 4":[["Pro électrique",0,"electrique",[204]],["GTX électrique",0,"electrique",[340]]],
+"volkswagen|id 7":[["Pro électrique",0,"electrique",[286]],["GTX électrique",0,"electrique",[340]]],
+"audi|a3":[["1.0 30 TFSI",999,"essence",[110]],["1.5 35 TFSI",1498,"essence",[150]],["2.0 35 TDI",1968,"diesel",[150]]],
+"audi|a4":[["2.0 40 TFSI",1984,"essence",[190,204]],["2.0 35 TDI",1968,"diesel",[163]],["2.0 40 TDI",1968,"diesel",[190,204]]],
+"audi|q3":[["1.5 35 TFSI",1498,"essence",[150]],["2.0 35 TDI",1968,"diesel",[150]]],
+"audi|q5":[["2.0 40 TFSI",1984,"essence",[204]],["2.0 40 TDI",1968,"diesel",[204]],["50 TFSI e",1984,"hybride",[299]]],
+"audi|q4 e tron":[["40 électrique",0,"electrique",[204]],["50 quattro électrique",0,"electrique",[299]]],
+"bmw|serie 1":[["1.5 118i",1499,"essence",[136,140]],["2.0 120i",1998,"essence",[178]],["2.0 118d",1995,"diesel",[150]]],
+"bmw|serie 3":[["2.0 320i",1998,"essence",[184]],["2.0 330i",1998,"essence",[245,258]],["2.0 320d",1995,"diesel",[190]],["3.0 330d",2993,"diesel",[286]],["2.0 330e PHEV",1998,"hybride",[292]]],
+"bmw|x1":[["1.5 18i",1499,"essence",[136]],["2.0 20i",1998,"essence",[192,204]],["2.0 18d",1995,"diesel",[150]]],
+"bmw|x3":[["2.0 20i",1998,"essence",[184]],["2.0 20d",1995,"diesel",[190]],["3.0 30d",2993,"diesel",[286]]],
+"bmw|i4":[["eDrive35 électrique",0,"electrique",[286]],["eDrive40 électrique",0,"electrique",[340]],["M50 électrique",0,"electrique",[544]]],
+"mercedes benz|classe a":[["1.3 A180",1332,"essence",[136]],["1.3 A200",1332,"essence",[163]],["2.0 A180d",1950,"diesel",[116]],["2.0 A220d",1950,"diesel",[190]]],
+"mercedes benz|classe c":[["1.5 C180",1496,"essence",[170]],["2.0 C200",1999,"essence",[204]],["2.0 C220d",1993,"diesel",[194]],["2.0 C300e PHEV",1999,"hybride",[313]]],
+"mercedes benz|gla":[["1.3 GLA180",1332,"essence",[136]],["1.3 GLA200",1332,"essence",[163]],["2.0 GLA220d",1950,"diesel",[190]]],
+"mercedes benz|eqa":[["250 électrique",0,"electrique",[190]],["300 4MATIC électrique",0,"electrique",[228]],["350 4MATIC électrique",0,"electrique",[292]]],
+"toyota|yaris":[["1.0 VVT-i",998,"essence",[72]],["1.5 Hybride",1490,"hybride",[116,130]]],
+"toyota|corolla":[["1.8 Hybride",1798,"hybride",[140]],["2.0 Hybride",1987,"hybride",[180,196]]],
+"toyota|c hr":[["1.8 Hybride",1798,"hybride",[122,140]],["2.0 Hybride",1987,"hybride",[180,198]]],
+"toyota|rav4":[["2.5 Hybride",2487,"hybride",[218,222]],["2.5 PHEV",2487,"hybride",[306]]],
+"toyota|bz4x":[["FWD électrique",0,"electrique",[204]],["AWD électrique",0,"electrique",[218]]],
+"nissan|qashqai":[["1.3 DIG-T",1332,"essence",[140,158]],["1.5 e-Power",1497,"hybride",[190]]],
+"nissan|leaf":[["40 kWh électrique",0,"electrique",[150]],["62 kWh électrique",0,"electrique",[217]]],
+"nissan|ariya":[["63 kWh électrique",0,"electrique",[218]],["87 kWh électrique",0,"electrique",[242]],["e-4ORCE électrique",0,"electrique",[306]]],
+"ford|fiesta":[["1.1 Ti-VCT",1084,"essence",[75,85]],["1.0 EcoBoost",999,"essence",[95,100,125,140,155]],["1.5 EcoBlue",1499,"diesel",[85,95]]],
+"ford|focus":[["1.0 EcoBoost",999,"essence",[100,125,155]],["1.5 EcoBlue",1499,"diesel",[95,120]],["2.0 EcoBlue",1997,"diesel",[150]]],
+"ford|puma":[["1.0 EcoBoost",999,"essence",[95,125,155,170]]],
+"ford|kuga":[["1.5 EcoBoost",1499,"essence",[120,150]],["2.0 EcoBlue",1997,"diesel",[150,190]],["2.5 Hybride",2488,"hybride",[190,225]]],
+"opel|corsa":[["1.2 Turbo",1199,"essence",[75,100,130]],["1.5 Diesel",1499,"diesel",[100,110]],["Corsa-e électrique",0,"electrique",[136,156]]],
+"opel|mokka":[["1.2 Turbo",1199,"essence",[100,130]],["1.5 Diesel",1499,"diesel",[110]],["Mokka-e électrique",0,"electrique",[136,156]]],
+"opel|astra":[["1.2 Turbo",1199,"essence",[110,130]],["1.5 Diesel",1499,"diesel",[130]],["1.6 Hybrid",1598,"hybride",[180,225]]],
+"hyundai|tucson":[["1.6 T-GDi",1598,"essence",[150,180]],["1.6 CRDi",1598,"diesel",[115,136]],["1.6 Hybride",1598,"hybride",[230]],["1.6 PHEV",1598,"hybride",[265]]],
+"hyundai|ioniq 5":[["58 kWh électrique",0,"electrique",[170]],["77 kWh électrique",0,"electrique",[229]],["AWD électrique",0,"electrique",[325]],["N électrique",0,"electrique",[650]]],
+"hyundai|kona":[["1.0 T-GDi",998,"essence",[120]],["39 kWh électrique",0,"electrique",[136]],["64 kWh électrique",0,"electrique",[204]]],
+"kia|ceed":[["1.0 T-GDi",998,"essence",[100,120]],["1.5 T-GDi",1482,"essence",[160]],["1.6 CRDi",1598,"diesel",[115,136]]],
+"kia|sportage":[["1.6 T-GDi",1598,"essence",[150,180]],["1.6 CRDi",1598,"diesel",[115,136]],["1.6 Hybride",1598,"hybride",[230]]],
+"kia|ev6":[["58 kWh électrique",0,"electrique",[170]],["77 kWh électrique",0,"electrique",[229]],["AWD électrique",0,"electrique",[325]],["GT électrique",0,"electrique",[609]]],
+"kia|niro":[["1.6 Hybride",1580,"hybride",[141]],["e-Niro électrique",0,"electrique",[204]]],
+"tesla|model 3":[["Propulsion électrique",0,"electrique",[283]],["Long Range électrique",0,"electrique",[498]],["Performance électrique",0,"electrique",[460]]],
+"tesla|model y":[["Propulsion électrique",0,"electrique",[299]],["Long Range électrique",0,"electrique",[514]],["Performance électrique",0,"electrique",[534]]],
+"volvo|xc40":[["1.5 T3",1477,"essence",[163]],["2.0 B4",1969,"hybride",[197]],["2.0 B5",1969,"hybride",[250]],["Recharge électrique",0,"electrique",[238,408]]],
+"volvo|xc60":[["2.0 B4",1969,"hybride",[197]],["2.0 B5",1969,"hybride",[250]],["2.0 T8 PHEV",1969,"hybride",[455]]],
+"volvo|ex30":[["Single Motor électrique",0,"electrique",[272]],["Twin Performance électrique",0,"electrique",[428]]],
+"fiat|500":[["1.0 Hybrid",999,"hybride",[70]],["500e électrique",0,"electrique",[95,118]]],
+"mg|mg4":[["Standard électrique",0,"electrique",[170]],["Comfort électrique",0,"electrique",[204]],["XPower électrique",0,"electrique",[435]]],
+"byd|atto 3":[["électrique",0,"electrique",[204]]],
+"cupra|born":[["150 kW électrique",0,"electrique",[204]],["VZ électrique",0,"electrique",[326]]],
+"cupra|formentor":[["1.5 TSI",1498,"essence",[150]],["2.0 TSI",1984,"essence",[190,310]],["1.4 e-Hybrid",1395,"hybride",[204,245]]]
+};
+var POOL={
+"peugeot":[["1.2 PureTech",1199,"essence",[82,100,110,130,155]],["1.5 BlueHDi",1499,"diesel",[100,110,130]],["2.0 BlueHDi",1997,"diesel",[150,180]],["1.6 Hybrid PHEV",1598,"hybride",[180,225]]],
+"renault":[["1.0 TCe",999,"essence",[90,100,110]],["1.3 TCe",1332,"essence",[130,140,160]],["1.5 Blue dCi",1461,"diesel",[95,115]],["E-Tech Hybride",1598,"hybride",[145,160]]],
+"volkswagen":[["1.0 TSI",999,"essence",[95,110]],["1.5 TSI",1498,"essence",[130,150]],["2.0 TDI",1968,"diesel",[115,150,200]]],
+"skoda":[["1.0 TSI",999,"essence",[95,110]],["1.5 TSI",1498,"essence",[130,150]],["2.0 TDI",1968,"diesel",[115,150,200]]],
+"citroen":[["1.2 PureTech",1199,"essence",[82,100,110,130]],["1.5 BlueHDi",1499,"diesel",[100,110,130]]],
+"dacia":[["1.0 TCe",999,"essence",[90,100,110]],["1.5 Blue dCi",1461,"diesel",[95,115]],["Hybride 140",1598,"hybride",[140]]],
+"toyota":[["1.5 Hybride",1490,"hybride",[116,130]],["1.8 Hybride",1798,"hybride",[122,140]],["2.0 Hybride",1987,"hybride",[180,196]]],
+"bmw":[["2.0 Essence",1998,"essence",[184,245]],["2.0 Diesel",1995,"diesel",[150,190]],["3.0 Diesel",2993,"diesel",[286]]],
+"mercedes benz":[["1.3 Essence",1332,"essence",[136,163]],["2.0 Diesel",1950,"diesel",[116,190,194]]],
+"audi":[["1.5 TFSI",1498,"essence",[150]],["2.0 TFSI",1984,"essence",[190,204]],["2.0 TDI",1968,"diesel",[150,190,204]]],
+"ford":[["1.0 EcoBoost",999,"essence",[100,125,155]],["1.5 EcoBlue",1499,"diesel",[95,120]],["2.0 EcoBlue",1997,"diesel",[150,190]]],
+"kia":[["1.6 T-GDi",1598,"essence",[150,180]],["1.6 CRDi",1598,"diesel",[115,136]],["1.6 Hybride",1598,"hybride",[230]]],
+"hyundai":[["1.0 T-GDi",998,"essence",[100,120]],["1.6 T-GDi",1598,"essence",[150,180]],["1.6 CRDi",1598,"diesel",[115,136]]],
+"opel":[["1.2 Turbo",1199,"essence",[100,130]],["1.5 Diesel",1499,"diesel",[110,130]]],
+"nissan":[["1.3 DIG-T",1332,"essence",[140,158]],["1.5 dCi",1461,"diesel",[115]],["e-Power",1497,"hybride",[190]]]
+};
+
+var LEGAL=[
+{id:"vice",t:"Vice caché",pro:false,mots:["vice","cache","panne","defaut","achat","occasion","moteur","boite"],r:"Un défaut caché, grave et antérieur à la vente peut relever de la garantie des vices cachés. Une panne survenue après l'achat ne suffit pas à le prouver.",rep:["Code civil, articles 1641, 1644 et 1648 : défaut rendant le véhicule impropre à l'usage ou réduisant fortement cet usage.","L'acheteur doit établir le défaut, sa gravité, son caractère caché et son antériorité à la vente.","Action dans les deux ans de la découverte du vice ; d'autres limites peuvent s'appliquer.","Restitution du véhicule contre remboursement, ou conservation avec réduction du prix."],dem:["Signaler le défaut au vendeur par écrit et conserver les échanges.","Faire établir un diagnostic puis une expertise contradictoire avant toute dépose des pièces litigieuses."],pr:["Annonce et contrat de vente","Date de découverte et kilométrage","Historique d'entretien, diagnostic, pièces conservées"],src:"https://www.service-public.fr/particuliers/vosdroits/F11007"},
+{id:"conf",t:"Garantie légale de conformité",pro:true,mots:["garantie","conformite","panne","achat","occasion","neuf","defaut","vendeur"],r:"Réservée à l'achat par un consommateur auprès d'un vendeur professionnel. Ne s'applique pas entre particuliers.",rep:["Code de la consommation, L. 217-3 et suivants : défauts de conformité dans les deux ans de la délivrance.","Présomption d'antériorité : 24 mois pour un bien neuf, 12 mois pour un bien d'occasion.","Réparation ou remplacement sans frais, dans un délai ne dépassant pas 30 jours (L. 217-10).","Réduction du prix ou résolution dans les cas de L. 217-14."],dem:["Adresser la demande au vendeur professionnel avec les justificatifs de non-conformité.","Conserver la date de demande, les propositions et la durée d'immobilisation."],pr:["Facture et date de délivrance","Caractéristiques annoncées et défaut constaté","Demande écrite de mise en conformité"],src:"https://www.service-public.fr/particuliers/vosdroits/F11094"},
+{id:"dol",t:"Dol et dissimulation",pro:false,mots:["dol","mensonge","dissimulation","tromperie","compteur","kilometrage","accident"],r:"Des manœuvres ou une dissimulation intentionnelle d'une information déterminante peuvent vicier le consentement.",rep:["Code civil, article 1137 : l'intention de tromper et le caractère déterminant doivent être établis.","Une panne seule ne démontre pas un dol ; éviter toute accusation sans preuve.","Article 1144 : le délai de l'action en nullité court à compter de la découverte."],dem:["Comparer l'annonce et les déclarations avec l'historique documenté du véhicule.","Faire examiner les éléments avant toute demande d'annulation ou d'indemnisation."],pr:["Annonce, messages et déclarations du vendeur","Contrôles techniques et historique kilométrique","Justificatifs d'un accident ou d'une information dissimulée"],src:"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036829827"},
+{id:"garage",t:"Garage, malfaçons et résultat",pro:false,mots:["garage","garagiste","reparation","malfacon","resultat","facture","intervention","atelier"],r:"Une réparation défectueuse peut engager la responsabilité du garage selon la mission confiée et les éléments techniques.",rep:["L'obligation de résultat ne rend pas le garage responsable de toute panne ultérieure.","La mission confiée, le défaut, le lien avec l'intervention et les preuves doivent être examinés.","Devis, ordre de réparation et facture délimitent les travaux commandés."],dem:["Demander au garage une explication écrite et une proposition de reprise.","Faire constater contradictoirement avant nouvelle réparation, sauf urgence de sécurité.","Après réclamation infructueuse, examiner la médiation de la consommation."],pr:["Ordre de réparation, devis et facture","Symptômes avant et après intervention","Diagnostic indépendant, photos et pièces"],src:"https://www.economie.gouv.fr/dgccrf/consommation/Resoudre-un-litige-de-consommation"},
+{id:"produit",t:"Incendie et produit défectueux",pro:false,sec:true,mots:["incendie","feu","flamme","brule","sinistre","assurance","expert","expertise","defectueux","securite"],r:"Un départ d'incendie lié à un défaut peut engager la responsabilité du producteur et ouvrir des recours d'assurance. Préserver les preuves est prioritaire.",rep:["Code civil, articles 1245 et suivants : le producteur répond du défaut de sécurité, même sans contrat.","Le défaut et le lien de causalité doivent être établis.","Assurance : vérifier la garantie incendie et déclarer le sinistre dans les délais, usuellement cinq jours ouvrés (L. 113-2).","Ne pas déplacer ni réparer le véhicule avant constat ; conserver pièces, faisceaux et fluides."],dem:["Sécuriser la zone, photographier l'état initial et le point de départ supposé.","Déclarer le sinistre et demander une expertise contradictoire.","Faire préserver le véhicule et les pièces ; solliciter un expert incendie automobile.","Mettre en cause le producteur si un défaut ou un rappel est documenté."],pr:["Photos et vidéos avant déplacement","Rapport des pompiers ou constat","Factures d'entretien et campagnes applicables au VIN","Expertise technique et préservation des pièces"],src:"https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136279/"},
+{id:"rappel",t:"Rappel et campagne de sécurité",pro:false,mots:["rappel","campagne","securite","constructeur","vin","concession"],r:"Une campagne corrige un défaut de sécurité connu ; son applicabilité au VIN et son exécution sont déterminantes.",rep:["Code de la consommation, L. 412-1 et R. 412-1 : rappel des produits dangereux, correction à la charge du professionnel.","Vérifier l'applicabilité de la campagne au VIN exact et si elle a été exécutée.","Une campagne applicable non exécutée renforce la démonstration d'un défaut connu."],dem:["Relever le VIN et interroger le constructeur ou la concession sur les campagnes ouvertes.","Demander l'exécution gratuite et conserver les courriers et ordres de réparation.","Croiser avec RappelConso, Safety Gate et NHTSA."],pr:["VIN et réponse du constructeur","Numéro de campagne et preuve d'exécution ou de non-exécution","Historique d'entretien"],src:"https://rappel.conso.gouv.fr/"}
+];
+
+var SYMPT=["voyant allumé","perte de puissance","à-coups moteur","à-coups boîte","bruit anormal","claquement","fumée","odeur carburant","odeur brûlé","surchauffe","fuite visible","démarrage difficile","incendie","véhicule immobilisé","après entretien","après choc","après immersion"];
+var FIRERE=/incendie|feu|flamme|embras|brulure|inflamm|fire|flamm|ignit|burn/i;
+var PWD="Kevin83600";
+var S={base:[],photos:{},theme:"tous",admin:false,name:ls("name")||"",
+ overlay:ls("overlay")||{entries:[],photos:[]},look:ls("look")||{op:55},
+ revs:ls("revs")||[],pending:[],sel:{},editId:null,mail:ls("mail")||"contact@kev-tech-fire.fr",
+ be:ls("be")||"kvdb",checks:{},carImg:null,busy:false,lastReport:null,lastVin:null};
+
+function reindex(){each(S.base,function(e){e._h=norm([e.make,e.model,e.engine,e.sys,e.title,e.meca,(e.cons||[]).join(" "),(e.sym||[]).join(" "),(e.dtc||[]).join(" ")].join(" "));});}
+function merge(list){var m={},i;for(i=0;i<S.base.length;i++)m[fkey(S.base[i])]=S.base[i];
+ if(list)for(i=0;i<list.length;i++)if(list[i]&&list[i].title)m[fkey(list[i])]=list[i];
+ S.base=[];for(var k in m)if(m.hasOwnProperty(k))S.base.push(m[k]);reindex();}
+function rebuildPhotos(){S.photos={};each(S.overlay.photos,function(p){if(!S.photos[p.fault])S.photos[p.fault]=[];S.photos[p.fault].push(p);});}
+function persist(){ls("overlay",S.overlay);rebuildPhotos();}
+function normalize(list){var out=[],i;if(!list)return out;
+ for(i=0;i<list.length;i++){var e=list[i];if(!e)continue;out.push({
+ id:e.id,themes:e.themes||["technique"],type:e.type||"panne",source:e.source||"import",
+ make:e.make||e.marque||"Multi-marques",model:e.model||e.modele||"Tous",engine:e.engine||e.motorisation||"",
+ years:e.years||e.annees||null,fuel:e.fuel||e.energie||"",sys:e.sys||e.systeme||"",
+ dtc:e.dtc||[],sym:e.sym||e.symptomes||[],title:e.title||e.defaut||e.titre||"Fiche",
+ meca:e.meca||e.mecanisme||"",cons:e.cons||e.consequences||[],ind:e.ind||e.indices||[],
+ fire:e.fire===true||e.risque_feu===true,chain:e.chain||e.chaine_feu||"",grav:e.grav||e.gravite||"eleve",
+ url:e.url||"",date:e.date||"",powers:e.powers||e.puissance_ch||null});}return out;}
+function stats(){var np=0,k;for(k in S.photos)if(S.photos.hasOwnProperty(k))np+=S.photos[k].length;
+ D("pBase").innerHTML="🗄️ "+S.base.length+" fiches · "+np+" 📷";
+ D("stats").innerHTML=S.base.length+" fiches · "+Object.keys(ENG).length+" couples moteur documentés · "+np+" photos · "+S.overlay.entries.length+" ajouts admin";}
+function check(k,lv,d){S.checks[k]={lv:lv,d:d};paintChecks();}
+function paintChecks(){
+ var order=[["boot","Ouverture de l'application"],["events","Contrôles & interactions"],["seed","Base embarquée"],["cache","Base locale (cache)"],["repo","Base du dépôt"],["admin","Pannes & photos admin"],["sync","Canal temps réel"],["upd","Mises à jour"],["sw","Service Worker"],["net","Réseau"],["store","Stockage local"]];
+ var h="",i,ok=0,bad=0,warn=0,tot=0;
+ for(i=0;i<order.length;i++){var k=order[i][0];if(!S.checks[k])continue;var s=S.checks[k];tot++;
+  if(s.lv==="ok")ok++;else if(s.lv==="bad")bad++;else warn++;
+  h+="<div class='sc "+s.lv+"'><span>"+(s.lv==="ok"?"✅":s.lv==="warn"?"⚠️":"❌")+"</span><div><b>"+esc(order[i][1])+"</b><small>"+esc(s.d)+"</small></div></div>";}
+ D("checks").innerHTML=h;D("dBox").innerHTML=h;
+ D("pHealth").innerHTML="🩺 "+ok+"/"+tot+(bad?" · "+bad+"❌":warn?" · "+warn+"⚠":"");
+ D("pHealth").className="pill "+(bad?"bad":warn?"warn":"ok");
+ var p=tot?Math.round(ok/tot*100):0;D("prog").style.width=p+"%";D("dProg").style.width=p+"%";}
+
+var BRANDS=[],MODELS={};
+(function(){var seen={},k;for(k in ENG){if(!ENG.hasOwnProperty(k))continue;var p=k.split("|");
+ if(!seen[p[0]]){seen[p[0]]=1;BRANDS.push(p[0]);}if(!MODELS[p[0]])MODELS[p[0]]=[];MODELS[p[0]].push(p[1]);}})();
+function fuelOf(m){var t=norm(m);
+ if(/electrique|electric|bev|kwh|elroq|enyaq|ioniq|eqa|recharge|spring|atto|mg4|corsa e|mokka e|ex30|bz4x|leaf|ariya|born|e niro|e 208|e 2008|e 3008|e 308|e 5008|id 3|id 4|id 7|ev6|model 3|model y|i4|500e/.test(t))return "electrique";
+ if(/hybrid|hybride|phev|hev|e tech|etech|plugin|rechargeable|gte|t8|e power|b4|b5|b6|iv/.test(t))return "hybride";
+ if(/diesel|tdi|hdi|dci|crdi|cdti|multijet|d 4d|skyactiv d|blue dci|bluehdi|ecoblue/.test(t))return "diesel";
+ return "essence";}
+function enginesFor(mk,mo){var k=norm(mk)+"|"+norm(mo),src=ENG[k],doc=!!src,i;
+ if(!src&&norm(mo)){for(var kk in ENG){if(!ENG.hasOwnProperty(kk))continue;var p=kk.split("|");
+  if(p[0]===norm(mk)&&(norm(mo).indexOf(p[1])===0||p[1].indexOf(norm(mo))===0)){src=ENG[kk];doc=true;break;}}}
+ if(!src)src=POOL[norm(mk)]||[];
+ var out=[];for(i=0;i<src.length;i++)out.push({m:src[i][0],cc:src[i][1],en:src[i][2],ch:src[i][3],src:doc?"documenté":"gamme"});
+ return out;}
+function matchEng(mk,mo,mt){if(!mt)return null;var a=norm(mt),l=enginesFor(mk,mo),i;
+ for(i=0;i<l.length;i++){var b=norm(l[i].m);
+  if(b===a||a.indexOf(b)===0||b.indexOf(a)===0)return l[i];
+  var x=a.split(" "),y=b.split(" ");if(x[0]===y[0]&&x[1]&&y[1]&&x[1]===y[1])return l[i];}
+ return null;}
+function powersFor(mk,mo,mt){var e=matchEng(mk,mo,mt);return e?e.ch.slice(0):[];}
+function renderEng(){var mk=D("vMake").value,mo=D("vModel").value,w=D("cEng");
+ if(!mk||!mo){D("nEng").innerHTML="0";w.innerHTML="<span class='wait'>Sélectionne une marque puis un modèle.</span>";return;}
+ var l=enginesFor(mk,mo);D("nEng").innerHTML=String(l.length);w._l=l;
+ var ic={essence:"🟡",diesel:"⚫",hybride:"🟢",electrique:"🔵"},h="",i;
+ for(i=0;i<l.length;i++){var e=l[i];h+="<button data-act='pickEng' data-e='"+i+"'>"+(ic[e.en]||"")+" "+esc(e.m)+" · "+e.en+" · "+e.ch.join("/")+" ch"+(e.cc?" · "+e.cc+" cm³":"")+"</button>";}
+ w.innerHTML=h||"<span class='wait'>Aucune motorisation documentée pour ce modèle.</span>";}
+function renderPow(){var ps=powersFor(D("vMake").value,D("vModel").value,D("vEngine").value),h="",i;
+ D("nPow").innerHTML=String(ps.length);
+ for(i=0;i<ps.length;i++)h+="<button data-act='pickPow' data-p='"+ps[i]+"'>"+ps[i]+" ch</button>";
+ D("cPow").innerHTML=h||"<span class='wait'>Choisis une motorisation pour voir ses puissances.</span>";}
+function renderAttrib(){var mk=D("vMake").value,mo=D("vModel").value,w=D("attrib");
+ if(!mk||!mo){w.innerHTML="";return;}var l=enginesFor(mk,mo);if(!l.length){w.innerHTML="";return;}
+ var doc=0,i;for(i=0;i<l.length;i++)if(l[i].src==="documenté")doc++;
+ var h="<h3>🧾 Vérification d'attribution — "+esc(mk)+" "+esc(mo)+"</h3><p class='sm'>"+doc+"/"+l.length+" motorisation(s) documentée(s) pour ce modèle.</p><table><tr><th>Motorisation</th><th>Énergie</th><th>Cylindrée</th><th>Puissances</th><th>Source</th></tr>";
+ for(i=0;i<l.length;i++){var e=l[i];h+="<tr><td><b>"+esc(e.m)+"</b></td><td>"+e.en+"</td><td>"+(e.cc?e.cc+" cm³":"—")+"</td><td>"+e.ch.join("/")+" ch</td><td><span class='tag "+(e.src==="documenté"?"ok":"")+"'>"+e.src+"</span></td></tr>";}
+ w.innerHTML=h+"</table>";}
+function autoAttr(){var mk=D("vMake").value,mo=D("vModel").value,mt=D("vEngine").value;if(!mt)return;
+ var en=fuelOf(mt),e=matchEng(mk,mo,mt),ps=e?e.ch:[];
+ D("vFuel").value=en;
+ if(ps.length&& !has(ps,parseInt(D("vPower").value,10)))D("vPower").value=ps[0];
+ renderPow();renderAttrib();toast("⚙️ "+esc(mt)+" → <b>"+en+"</b> · "+(D("vPower").value||"?")+" ch");}
+
+function gravRank(e){return e.grav==="critique"?3:e.grav==="eleve"?2:1;}
+function sortList(l){var m=D("fSort").value,a=l.slice(0);
+ if(m==="grav")a.sort(function(x,y){return gravRank(y)-gravRank(x);});
+ else if(m==="date")a.sort(function(x,y){return String(y.date||"").localeCompare(String(x.date||""));});
+ else if(m==="az")a.sort(function(x,y){return String(x.title||"").localeCompare(String(y.title||""));});
+ return a;}
+function search(q,lim){var t=norm(q).split(" "),toks=[],i,j,pool=[],out=[];
+ for(i=0;i<t.length;i++)if(t[i])toks.push(t[i]);
+ for(i=0;i<S.base.length;i++){var e=S.base[i];
+  if(S.theme!=="tous"&& !has(e.themes||[],S.theme))continue;
+  if(D("fMake").value&&norm(e.make).indexOf(norm(D("fMake").value))<0)continue;
+  if(D("fSys").value&&norm(e.sys)!==norm(D("fSys").value))continue;
+  if(D("fGrav").value&&e.grav!==D("fGrav").value)continue;
+  pool.push(e);}
+ if(!toks.length)return sortList(pool).slice(0,lim||30);
+ for(i=0;i<pool.length;i++){var s=0,e2=pool[i];
+  for(j=0;j<toks.length;j++){if(norm(e2.title).indexOf(toks[j])>=0)s+=3;else if(e2._h&&e2._h.indexOf(toks[j])>=0)s+=2;}
+  if(s>0)out.push([s,e2]);}
+ out.sort(function(x,y){return y[0]-x[0];});
+ var mode=D("fSort").value;
+ if(mode==="grav")out.sort(function(x,y){return gravRank(y[1])-gravRank(x[1]);});
+ else if(mode==="date")out.sort(function(x,y){return String(y[1].date||"").localeCompare(String(x[1].date||""));});
+ else if(mode==="az")out.sort(function(x,y){return String(x[1].title||"").localeCompare(String(y[1].title||""));});
+ var res=[];for(i=0;i<Math.min(out.length,lim||40);i++)res.push(out[i][1]);return res;}
+function vehicles(q){var t=norm(q).split(" "),toks=[],o=[],i,j;
+ for(i=0;i<t.length;i++)if(t[i])toks.push(t[i]);if(!toks.length)return o;
+ for(var k in ENG){if(!ENG.hasOwnProperty(k))continue;var p=k.split("|"),h=p[0]+" "+p[1],s=0;
+  for(j=0;j<toks.length;j++){if(has(p[0].split(" "),toks[j]))s+=5;else if(has(p[1].split(" "),toks[j]))s+=5;else if(h.indexOf(toks[j])>=0)s+=2;}
+  if(s>=5)o.push([s,{make:tc(p[0]),model:tc(p[1]),eng:enginesFor(p[0],p[1])}]);}
+ o.sort(function(x,y){return y[0]-x[0];});var res=[];for(i=0;i<Math.min(o.length,6);i++)res.push(o[i][1]);return res;}
+function card(e){var k=fkey(e),h="<div class='hit "+(e.fire?"fire":"")+"'><b class='t' data-act='detail' data-k='"+esc(k)+"'>"+esc(e.title||"Fiche")+"</b>";
+ h+="<div class='meta'>"+esc(e.make||"Multi-marques")+" · "+esc(e.model||"")+" "+esc(e.engine||"")+(e.years?" · "+e.years[0]+"-"+e.years[1]:"")+"</div><div>";
+ if(has(e.themes||[],"incendie"))h+="<span class='tag fire'>🔥 incendie</span>";
+ h+="<span class='tag'>"+esc(e.sys||"général")+"</span>";
+ if(e.grav==="critique")h+="<span class='tag crit'>critique</span>";
+ each(e.dtc||[],function(d){h+="<span class='tag'>"+esc(d)+"</span>";});
+ h+="<span class='tag ok'>"+esc(e.source||"")+"</span></div>";
+ if(e.meca)h+="<p class='sm'><b>Mécanisme :</b> "+esc(e.meca)+"</p>";
+ if((e.cons||[]).length)h+="<p class='sm'><b>Conséquences :</b> "+esc(e.cons.join(" ; "))+"</p>";
+ if(e.fire&&e.chain)h+="<p class='sm'>🔥 <b>Chaîne :</b> "+esc(e.chain)+"</p>";
+ if(e.url)h+="<a class='sm' href='"+esc(e.url)+"' target='_blank' rel='noopener'>📎 Source officielle</a>";
+ return h+"</div>";}
+function strip(e){var ph=S.photos[fkey(e)]||[];if(!ph.length)return "";
+ var h="<div class='chips' style='margin-top:7px'>",i;
+ for(i=0;i<Math.min(ph.length,4);i++)h+="<img class='thumb' data-act='lb' data-id='"+esc(ph[i].id)+"' src='"+esc(ph[i].url)+"' alt=''>";
+ if(ph.length>4)h+="<span class='tag'>+"+(ph.length-4)+"</span>";
+ return h+"<button data-act='gal' data-k='"+esc(fkey(e))+"'>🖼️ Photos ("+ph.length+")</button></div>";}
+function renderResults(){var q=D("q").value.replace(/^\s+|\s+$/g,""),box=D("results");
+ var f=search(q),v=q?vehicles(q):[],h="",i,j;
+ if(v.length){h+="<h3>🚗 Véhicules &amp; motorisations ("+v.length+")</h3>";
+  for(i=0;i<v.length;i++){var x=v[i];h+="<div class='hit'><b>🚗 "+esc(x.make)+" "+esc(x.model)+"</b><table><tr><th>Motorisation</th><th>Énergie</th><th>Cylindrée</th><th>Puissances</th></tr>";
+   for(j=0;j<x.eng.length;j++){var e=x.eng[j];h+="<tr><td>"+esc(e.m)+"</td><td>"+e.en+"</td><td>"+(e.cc?e.cc+" cm³":"—")+"</td><td>"+e.ch.join("/")+" ch</td></tr>";}
+   h+="</table><button class='btn gh sm' data-act='useVeh' data-m='"+esc(x.make)+"' data-o='"+esc(x.model)+"'>➕ Utiliser ce véhicule</button></div>";}}
+ h+="<h3>🔧 Pannes &amp; rappels ("+f.length+")</h3>";
+ if(f.length){for(i=0;i<f.length;i++)h+="<div>"+card(f[i])+strip(f[i])+"<button class='btn gh sm' data-act='webPhotos' data-q='"+esc(String(f[i].title||"").slice(0,60))+"'>📷 Photos web</button></div>";}
+ else h+="<div class='empty'>Aucun résultat pour cette recherche.</div>";
+ box.innerHTML=h;renderViews();}
+function renderViews(){var vs=ls("views")||[],h="<button data-act='saveView'>💾 Mémoriser cette vue</button>",i;
+ for(i=0;i<vs.length;i++)h+="<button data-act='loadView' data-i='"+i+"'>📁 "+esc(vs[i].name)+"</button>";
+ if(vs.length)h+="<button data-act='clearViews'>🗑️ Vider les vues</button>";
+ D("views").innerHTML=h;}
+function fillFilters(){var ms={},ss={},i,cm=D("fMake").value,cs=D("fSys").value,h1="<option value=''>Toutes</option>",h2="<option value=''>Tous</option>";
+ for(i=0;i<S.base.length;i++){var m=String(S.base[i].make||"").split("/")[0].replace(/^\s+|\s+$/g,"");if(m)ms[m]=1;if(S.base[i].sys)ss[S.base[i].sys]=1;}
+ var a=Object.keys(ms).sort(),b=Object.keys(ss).sort();
+ for(i=0;i<a.length;i++)h1+="<option>"+esc(a[i])+"</option>";
+ for(i=0;i<b.length;i++)h2+="<option>"+esc(b[i])+"</option>";
+ D("fMake").innerHTML=h1;D("fSys").innerHTML=h2;D("fMake").value=cm;D("fSys").value=cs;}
+
+function veh(){return{make:D("vMake").value.replace(/^\s+|\s+$/g,""),model:D("vModel").value.replace(/^\s+|\s+$/g,""),
+ engine:D("vEngine").value.replace(/^\s+|\s+$/g,""),power:parseInt(D("vPower").value,10)||0,
+ year:parseInt(D("vYear").value,10)||0,fuel:D("vFuel").value};}
+function matchV(e,v){var s=0;
+ if(v.make&&norm(e.make).indexOf(norm(v.make))>=0)s+=4;else if(v.make&&e.make&&!/multi/i.test(e.make))return -1;
+ if(v.model){var m=norm(e.model);if(m&&m.indexOf(norm(v.model))>=0)s+=4;else if(m&&!/tous|multi/i.test(m))s-=2;}
+ if(v.engine&&norm(e.engine).indexOf(norm(v.engine).split(" ")[0])>=0)s+=3;
+ if(v.year&&e.years)s+=(v.year>=e.years[0]&&v.year<=e.years[1])?3:-3;
+ if(v.power&&e.powers&&v.power>=e.powers[0]*0.9&&v.power<=e.powers[1]*1.1)s+=2;
+ if(v.fuel&&e.fuel&&e.fuel!==v.fuel)s-=2;return s;}
+function checkedSym(){var l=D("qcm").getElementsByTagName("input"),o=[],i;
+ for(i=0;i<l.length;i++)if(l[i].checked)o.push(l[i].value);return o;}
+function hyps(v,toks,dtcs,syms){var o=[],i,j;
+ for(i=0;i<S.base.length;i++){var e=S.base[i];
+  if(S.theme!=="tous"&& !has(e.themes||[],S.theme))continue;
+  var s=matchV(e,v);if(s<0)continue;s*=2;var why=[];
+  if(s>=8)why.push("véhicule concordant");
+  for(j=0;j<(dtcs||[]).length;j++)if(has(e.dtc||[],dtcs[j])){s+=8;why.push("DTC "+dtcs[j]);}
+  for(j=0;j<(syms||[]).length;j++){var y=syms[j],hit=norm(e.title).indexOf(norm(y))>=0;
+   each(e.sym||[],function(x){if(norm(x).indexOf(norm(y))>=0)hit=true;});if(hit)s+=3;}
+  for(j=0;j<(toks||[]).length;j++){if(norm(e.title).indexOf(toks[j])>=0)s+=2;else if(e._h&&e._h.indexOf(toks[j])>=0)s+=1;}
+  if(e.type==="rappel"){s+=5;why.push("campagne officielle");}
+  if(s>=6)o.push({e:e,s:s,why:why});}
+ o.sort(function(x,y){return y.s-x.s;});return o.slice(0,10);}
+function conf(t){var s=t.s,d=false,c=false,i;
+ for(i=0;i<t.why.length;i++){if(t.why[i].indexOf("DTC")===0)d=true;if(t.why[i].indexOf("campagne")===0)c=true;}
+ var lvl,crit;
+ if(s>=20&&d&&c){lvl="CERTAIN";crit="Preuves convergentes : DTC documenté, campagne officielle et véhicule concordant.";}
+ else if(s>=14){lvl="PROBABLE";crit="Faisceau cohérent ; à confirmer par mesure, lecture OBD ou expertise.";}
+ else if(s>=8){lvl="POSSIBLE";crit="Mécanisme plausible et documenté ; preuves partielles, hypothèse à vérifier.";}
+ else{lvl="INDÉTERMINÉ";crit="Données insuffisantes ; expertise physique et essais requis.";}
+ return{lvl:lvl,crit:crit,pct:Math.max(5,Math.min(95,Math.round(s/25*100)))};}
+function fireBox(v,h){var sp=[],doc=[],i;
+ for(i=0;i<h.length;i++)if(h[i].e.fire)sp.push(h[i].e);
+ for(i=0;i<S.base.length&&doc.length<6;i++){var e=S.base[i];
+  if(e.fire&&/multi/i.test(e.make||"")&&(!v.fuel||!e.fuel||e.fuel===v.fuel))doc.push(e);}
+ var anyRap=false;for(i=0;i<sp.length;i++)if(sp[i].type==="rappel")anyRap=true;
+ var lvl=anyRap?"h":sp.length?"m":"l";
+ var txt=lvl==="h"?"ÉLEVÉ — rappel incendie concordant":lvl==="m"?"MODÉRÉ — chaînes documentées":"GÉNÉRIQUE — doctrine applicable";
+ var s="<div class='fbox'><h3>🔥 Analyse incendie — "+esc(v.make)+" "+esc(v.model)+" "+esc(v.engine)+"</h3><p><span class='lvl "+lvl+"'>"+txt+"</span></p>";
+ for(i=0;i<Math.min(sp.length,5);i++)s+="<div class='hit fire'><b>"+esc(sp[i].title)+"</b><p class='sm'>⛓️ "+esc(sp[i].chain||sp[i].meca||"")+"</p></div>";
+ if(doc.length){s+="<details><summary class='sm'>Doctrine applicable à cette énergie ("+doc.length+")</summary>";
+  for(i=0;i<doc.length;i++)s+="<div class='hit fire'><b>"+esc(doc[i].title)+"</b><p class='sm'>"+esc(doc[i].meca||"")+"</p></div>";s+="</details>";}
+ return s+"<p class='sm'>Niveau fondé sur les données documentées. Ne préjuge pas de l'origine réelle : expertise physique indispensable. En cas de doute, ne pas rouler ni recharger un véhicule électrique.</p></div>";}
+function legalMatch(c,seller){var n=norm(c),o=[],i,j;
+ for(i=0;i<LEGAL.length;i++){var f=LEGAL[i];if(f.pro&&seller!=="professionnel")continue;
+  var s=0;for(j=0;j<f.mots.length;j++)if(n.indexOf(norm(f.mots[j]))>=0)s++;
+  if(s>0)o.push({f:f,s:s});}
+ o.sort(function(x,y){return ((y.f.sec?1:0)-(x.f.sec?1:0))||(y.s-x.s);});
+ var res=[];for(i=0;i<Math.min(o.length,5);i++)res.push(o[i].f);return res;}
+function legalHtml(l){if(!l.length)return "<p class='sm'>Aucune qualification détectée — précise achat, vendeur, panne, incendie ou litige.</p>";
+ var h="",i,j;for(i=0;i<l.length;i++){var f=l[i];
+  h+="<div class='hit'><span class='tag "+(f.sec?"crit":"ok")+"'>"+esc(f.t)+"</span><p class='sm'>"+esc(f.r)+"</p><details><summary>Repères · démarches · preuves</summary><ul class='sm'>";
+  for(j=0;j<f.rep.length;j++)h+="<li>"+esc(f.rep[j])+"</li>";h+="</ul><h3>Démarches</h3><ul class='sm'>";
+  for(j=0;j<f.dem.length;j++)h+="<li>"+esc(f.dem[j])+"</li>";h+="</ul><h3>À conserver</h3><ul class='sm'>";
+  for(j=0;j<f.pr.length;j++)h+="<li>"+esc(f.pr[j])+"</li>";
+  h+="</ul><a class='sm' href='"+esc(f.src)+"' target='_blank' rel='noopener'>📎 Source officielle</a></details></div>";}
+ return h;}
+function quotaUse(){if(S.admin)return{ok:true};
+ var q=ls("quota")||{start:0,n:0},now=Date.now();
+ if(now-q.start>=604800000)q={start:now,n:0};
+ if(q.n>=5)return{ok:false,reset:q.start+604800000};
+ q.n++;ls("quota",q);return{ok:true};}
+function quotaShow(){if(S.admin){D("quota").innerHTML="🎟️ admin ∞";return;}
+ var q=ls("quota")||{start:0,n:0};D("quota").innerHTML="🎟️ "+Math.max(0,5-q.n)+"/5 cette semaine";}
+function ctxRun(){var ctx=D("ctx").value.replace(/^\s+|\s+$/g,"");
+ if(!ctx){toast("Décris la situation dans le contexte.");return;}
+ var q=quotaUse();quotaShow();
+ if(!q.ok){toast("🚫 Quota atteint : 5 analyses sur 7 jours. Réinitialisation le "+new Date(q.reset).toLocaleDateString("fr-FR"));return;}
+ var v=veh(),seller=D("vSeller").value,toks=[],t=norm(ctx).split(" "),i,j;
+ for(i=0;i<t.length;i++)if(t[i].length>3)toks.push(t[i]);
+ var dtcs=uniq((ctx.toUpperCase().match(/[PCBU]\d{4}/g)||[]).concat(D("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g)||[]));
+ var syms=checkedSym(),h=hyps(v,toks,dtcs,syms),top=h[0];
+ var c=top?conf(top):{lvl:"INDÉTERMINÉ",crit:"Aucune hypothèse concordante.",pct:5};
+ var feu=/incendie|feu|flamme|sinistre/.test(norm(ctx))||(top&&top.e.fire);
+ var legal=legalMatch(ctx,seller),eng=enginesFor(v.make,v.model);
+ var s="<div class='card'><h2>🧾 Compte rendu d'expertise — "+new Date().toLocaleString("fr-FR")+"</h2>";
+ s+="<h3>1. Identification du véhicule</h3><table><tr><th>Marque / Modèle</th><td><b>"+esc(v.make||"—")+" "+esc(v.model)+"</b></td></tr>";
+ s+="<tr><th>Motorisation</th><td>"+esc(v.engine||"—")+"</td></tr><tr><th>Puissance / Énergie</th><td>"+(v.power||"—")+" ch · "+esc(v.fuel||"—")+"</td></tr>";
+ s+="<tr><th>Millésime</th><td>"+(v.year||"—")+"</td></tr><tr><th>Vendeur</th><td>"+esc(seller)+"</td></tr>";
+ s+="<tr><th>Constatations</th><td>"+esc(syms.join(", ")||"—")+"</td></tr><tr><th>DTC</th><td>"+(dtcs.join(", ")||"—")+"</td></tr></table>";
+ s+="<h3>2. Origine la plus probable</h3>";
+ if(top){s+="<div class='hit "+(top.e.fire?"fire":"")+"'><span class='tag "+(c.lvl==="CERTAIN"?"ok":c.lvl==="PROBABLE"?"info":"crit")+"'>"+c.lvl+" · indice "+c.pct+"%</span> <b>"+esc(top.e.title)+"</b>";
+  s+="<div class='meta'>"+esc(top.e.source)+"</div><p class='sm'><b>Critère :</b> "+esc(c.crit)+"</p>";
+  s+="<p class='sm'><b>Éléments concordants :</b> "+esc(top.why.join(" · ")||"termes du contexte retrouvés dans la base")+"</p>";
+  s+="<p class='sm'><b>Chaîne causale :</b> "+esc(top.e.meca||"—")+" → "+esc((top.e.cons||[]).join(" ; ")||"—")+"</p>"+strip(top.e)+"</div>";}
+ else s+="<p class='sm'>Aucune hypothèse concordante dans la base pour ces critères — expertise physique requise.</p>";
+ if(h.length>1){s+="<h3>3. Diagnostic différentiel</h3><table><tr><th>#</th><th>Hypothèse</th><th>Score</th></tr>";
+  for(i=1;i<Math.min(h.length,5);i++)s+="<tr><td>"+(i+1)+"</td><td>"+esc(String(h[i].e.title).slice(0,72))+"</td><td><b>"+h[i].s+"</b></td></tr>";s+="</table>";}
+ if(feu)s+="<h3>4. Volet incendie renforcé</h3>"+fireBox(v,h);
+ s+="<h3>"+(feu?"5":"4")+". Qualification juridique</h3>"+legalHtml(legal);
+ if(eng.length){s+="<h3>Motorisations attribuées à ce modèle</h3><table><tr><th>Motorisation</th><th>Énergie</th><th>Cylindrée</th><th>Puissances</th></tr>";
+  for(i=0;i<eng.length;i++)s+="<tr><td>"+esc(eng[i].m)+"</td><td>"+eng[i].en+"</td><td>"+(eng[i].cc?eng[i].cc+" cm³":"—")+"</td><td>"+eng[i].ch.join("/")+" ch</td></tr>";s+="</table>";}
+ var plan=[];for(i=0;i<legal.length;i++)for(j=0;j<legal[i].dem.length;j++)if(!has(plan,legal[i].dem[j]))plan.push(legal[i].dem[j]);
+ var extra=["Conserver factures, annonce, contrat et historique d'entretien","Faire établir un diagnostic écrit avant toute réparation","Réaliser une lecture OBD horodatée et conserver les codes","En cas de litige : réclamation écrite puis expertise contradictoire"];
+ for(i=0;i<extra.length;i++)if(!has(plan,extra[i]))plan.push(extra[i]);
+ s+="<h3>Plan d'action &amp; conservation des preuves</h3><ul class='sm'>";
+ for(i=0;i<Math.min(plan.length,10);i++)s+="<li>"+esc(plan[i])+"</li>";
+ s+="</ul><p class='sm'>⚠️ Méthode : qualifier, inférer, corréler, analyser, tester, conclure. Ce compte rendu est une aide documentaire fondée sur les sources citées ; il ne remplace ni une expertise physique du véhicule ni une consultation juridique personnalisée.</p>";
+ s+="<div class='noprint'><button class='btn gh' data-act='print'>🖨️ PDF</button><button class='btn gh' data-act='ctxJson'>📤 JSON</button></div></div>";
+ D("ctxOut").innerHTML=s;
+ S.lastReport={date:new Date().toISOString(),vehicule:v,contexte:ctx,niveau:c,origine:top?top.e:null,juridique:(function(){var o=[];for(var z=0;z<legal.length;z++)o.push(legal[z].id);return o;})()};
+ toast("🧾 Compte rendu généré — niveau <b>"+c.lvl+"</b> ("+c.pct+" %)");}
+function studyRun(){var v=veh();if(!v.make&&!v.model){toast("Renseigne au moins la marque et le modèle.");return;}
+ var syms=checkedSym(),dtcs=D("dtc").value.toUpperCase().match(/[PCBU]\d{4}/g)||[],t=norm(D("ctx").value).split(" "),toks=[],i;
+ for(i=0;i<t.length;i++)if(t[i].length>3)toks.push(t[i]);
+ var h=hyps(v,toks,dtcs,syms),top=h[0],c=top?conf(top):{lvl:"INDÉTERMINÉ",pct:5,crit:"—"},rap=[],pan=[];
+ for(i=0;i<h.length;i++){if(h[i].e.type==="rappel")rap.push(h[i].e);else pan.push(h[i].e);}
+ var s="<div class='card'><h2>📋 Étude de cas — "+esc(v.make)+" "+esc(v.model)+" "+esc(v.engine)+"</h2>";
+ s+="<p class='sm'>"+new Date().toLocaleString("fr-FR")+" · "+S.base.length+" fiches · thème "+S.theme+"</p>";
+ s+="<h3>🎯 Origine déterminée</h3><div class='hit'><span class='tag "+(c.lvl==="CERTAIN"?"ok":"info")+"'>"+c.lvl+" · "+c.pct+"%</span> <b>"+esc(top?top.e.title:"Indéterminé")+"</b><p class='sm'>"+esc(c.crit)+"</p></div>";
+ s+="<h3>1️⃣ Rappels officiels concordants ("+rap.length+")</h3>";
+ if(rap.length)for(i=0;i<rap.length;i++)s+=card(rap[i])+strip(rap[i]);else s+="<p class='sm'>Aucun.</p>";
+ s+="<h3>2️⃣ Pannes connues ("+pan.length+")</h3>";
+ if(pan.length)for(i=0;i<pan.length;i++)s+=card(pan[i])+strip(pan[i]);else s+="<p class='sm'>Aucune.</p>";
+ s+=fireBox(v,h)+"<h3>Conclusion</h3><p class='sm'>Aide documentaire fondée sur les sources ; ne remplace pas une expertise physique du véhicule.</p></div>";
+ D("studyOut").innerHTML=s;
+ var hi=ls("histo")||[];hi.unshift({date:new Date().toLocaleString("fr-FR"),v:v,niveau:c.lvl});ls("histo",hi.slice(0,20));renderHisto();
+ toast("✅ Étude terminée — "+rap.length+" rappel(s), "+pan.length+" panne(s)");}
+function renderHisto(){var h=ls("histo")||[],s="",i;
+ for(i=0;i<h.length;i++)s+="<div class='hit'><b>"+esc(h[i].v.make)+" "+esc(h[i].v.model)+"</b> <span class='sm'>"+esc(h[i].date)+" — "+esc(h[i].niveau)+"</span></div>";
+ D("histo").innerHTML=s||"<p class='sm'>Aucune étude enregistrée.</p>";}
+
+function compress(src,mw,q,cb){mw=mw||1000;q=q||0.72;
+ function run(im){try{
+  var sc=Math.min(1,mw/im.width),c=document.createElement("canvas");
+  c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));
+  c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  var u=c.toDataURL("image/jpeg",q);
+  while(u.length*0.75>170000&&q>0.3){q-=0.08;u=c.toDataURL("image/jpeg",q);}
+  cb(null,u);}catch(e){cb(e.message||"compression impossible");}}
+ if(typeof src==="string"){var i=new Image();i.crossOrigin="anonymous";
+  i.onload=function(){run(i);};i.onerror=function(){cb("image inaccessible");};i.src=src;}
+ else{var fr=new FileReader();fr.onload=function(){var i2=new Image();
+  i2.onload=function(){run(i2);};i2.onerror=function(){cb("fichier image illisible");};i2.src=fr.result;};
+  fr.onerror=function(){cb("lecture du fichier impossible");};fr.readAsDataURL(src);}}
+function addPending(s,c){S.pending.push({id:"ph-"+uid(),src:s,cap:c||"",ts:Date.now()});renderPending();}
+function intake(files,cap){var arr=[],i;for(i=0;i<files.length;i++)if(/^image\//.test(files[i].type))arr.push(files[i]);
+ if(!arr.length){toast("Aucune image reconnue.");return;}
+ var done=0;for(i=0;i<arr.length;i++)(function(f){compress(f,1000,0.72,function(err,u){
+  done++;if(!err)addPending(u,cap||f.name);
+  if(done===arr.length){renderPending();toast("📷 "+arr.length+" photo(s) prête(s) — rattache-les à une panne.");}});})(arr[i]);}
+function renderPending(){var w=D("pending"),h="",i;
+ for(i=0;i<S.pending.length;i++)h+="<span style='position:relative;display:inline-block;margin:3px'><img class='thumb' src='"+esc(S.pending[i].src)+"'><button data-act='rmPending' data-i='"+i+"' style='position:absolute;top:-6px;right:-6px;border:0;border-radius:50%;background:#ff2d55;color:#fff;width:19px;height:19px;cursor:pointer'>✕</button></span>";
+ w.innerHTML=h||"<span class='wait'>Aucune photo en attente.</span>";}
+function faultPicker(){var q=norm(D("fFilter").value),cur=D("fTarget").value,h="<option value='__new__'>➕ Créer une NOUVELLE panne…</option>",n=0,i;
+ for(i=0;i<S.base.length&&n<80;i++){var e=S.base[i];
+  if(q&&norm(e.title+" "+e.make+" "+e.model).indexOf(q)<0)continue;
+  h+="<option value='"+esc(fkey(e))+"'>"+esc(String(e.title||"").slice(0,66))+" · "+esc(e.make||"")+"</option>";n++;}
+ D("fTarget").innerHTML=h;
+ var opts=D("fTarget").options,found=false;for(i=0;i<opts.length;i++)if(opts[i].value===cur)found=true;
+ if(found)D("fTarget").value=cur;
+ setCls(D("newForm"),"hide",D("fTarget").value!=="__new__");}
+function readForm(){var g=function(i){return D(i).value;},feu=D("nFire").checked;
+ var ch=(g("nPower").match(/\d{2,4}/g)||[]),yr=(g("nYears").match(/\d{4}/g)||[]),i,c=[],y=[];
+ for(i=0;i<ch.length;i++)c.push(parseInt(ch[i],10));for(i=0;i<yr.length;i++)y.push(parseInt(yr[i],10));
+ return{id:S.editId||"admin-"+uid(),themes:feu?["technique","incendie"]:["technique"],type:"panne",source:"admin",
+ make:g("nMake")||"Multi-marques",model:g("nModel")||"Tous",engine:g("nEngine"),
+ years:y.length?[Math.min.apply(null,y),Math.max.apply(null,y)]:null,fuel:g("nFuel")||fuelOf(g("nEngine")),
+ sys:g("nSys"),dtc:(g("nDtc").toUpperCase().match(/[PCBU]\d{4}/g)||[]),sym:lines(g("nSym").replace(/,/g,"\n")),
+ title:g("nTitle").replace(/^\s+|\s+$/g,""),meca:g("nMeca"),cons:lines(g("nCons")),ind:lines(g("nInd")),
+ fire:feu,chain:feu?g("nChain"):"",grav:g("nGrav"),url:g("nSrc"),powers:c.length?c:null,date:new Date().toISOString().slice(0,10)};}
+function clearForm(){var ids=["nTitle","nMake","nModel","nEngine","nPower","nYears","nSys","nDtc","nSym","nSrc","nMeca","nCons","nInd","nChain"],i;
+ for(i=0;i<ids.length;i++)D(ids[i]).value="";
+ D("nFuel").value="";D("nGrav").value="eleve";D("nFire").checked=false;S.editId=null;
+ D("nfTitle").innerHTML="Nouvelle panne — caractéristiques";}
+function attach(){var t=D("fTarget").value;
+ if(t==="__new__"){var nf=readForm();
+  if(!nf.title){toast("Renseigne le titre du défaut.");D("nTitle").focus();return;}
+  var keep=[],i;for(i=0;i<S.overlay.entries.length;i++)if(S.overlay.entries[i].id!==nf.id)keep.push(S.overlay.entries[i]);
+  keep.unshift(nf);S.overlay.entries=keep;t=nf.id;merge([nf]);clearForm();toast("💾 Panne enregistrée.");}
+ else if(!S.pending.length){toast("Ajoute au moins une photo, ou crée une nouvelle panne.");return;}
+ for(var j=0;j<S.pending.length;j++){var p=S.pending[j];S.overlay.photos.push({id:p.id,fault:t,url:p.src,cap:p.cap,ts:p.ts});}
+ var n=S.pending.length;S.pending=[];persist();renderPending();faultPicker();renderResults();renderFaultList();fillFilters();stats();
+ if(n)toast("✅ "+n+" photo(s) rattachée(s) — publie pour diffuser aux tiers.");
+ if(ls("auto"))syncPush(false);}
+function renderFaultList(){var own=S.overlay.entries,h="",i,j;
+ if(own.length){for(i=0;i<own.length;i++){var e=own[i],k=fkey(e),ph=S.photos[k]||[];
+  h+="<div class='hit "+(S.sel[e.id]?"sel":"")+"'><label class='sm' style='display:flex;gap:8px;align-items:center'><input type='checkbox' data-act='selOne' data-id='"+esc(e.id)+"' "+(S.sel[e.id]?"checked":"")+"> <b class='t' data-act='detail' data-k='"+esc(k)+"'>"+esc(e.title)+"</b></label>";
+  h+="<div class='meta'>"+esc(e.make)+" · "+esc(e.model)+" · "+esc(e.engine)+" · "+ph.length+" photo(s)</div>";
+  if(ph.length){h+="<div class='chips'>";for(j=0;j<Math.min(ph.length,8);j++)h+="<img class='thumb' data-act='lb' data-id='"+esc(ph[j].id)+"' src='"+esc(ph[j].url)+"'>";h+="</div>";}
+  h+="<button class='btn gh sm' data-act='editFault' data-id='"+esc(e.id)+"'>✏️ Modifier</button>";
+  h+="<button class='btn gh sm' data-act='moveUp' data-i='"+i+"' "+(i===0?"disabled":"")+">⬆️</button>";
+  h+="<button class='btn gh sm' data-act='moveDown' data-i='"+i+"' "+(i===own.length-1?"disabled":"")+">⬇️</button>";
+  h+="<button class='btn rd sm' data-act='delFault' data-id='"+esc(e.id)+"'>🗑️ Supprimer</button></div>";}}
+ else h="<p class='sm'>Aucune panne créée pour l'instant. Choisis « Créer une NOUVELLE panne » ci-dessus.</p>";
+ var ks=[],k2;for(k2 in S.photos){if(!S.photos.hasOwnProperty(k2))continue;var found=false;
+  for(i=0;i<own.length;i++)if(fkey(own[i])===k2)found=true;if(!found)ks.push(k2);}
+ if(ks.length){h+="<h3>Photos rattachées aux pannes de la base</h3>";
+  for(i=0;i<Math.min(ks.length,30);i++){var id=ks[i],f=null;
+   for(j=0;j<S.base.length;j++)if(fkey(S.base[j])===id)f=S.base[j];
+   h+="<div class='hit'><b class='t' data-act='detail' data-k='"+esc(id)+"'>"+esc(f?f.title:id)+"</b><div class='meta'>"+S.photos[id].length+" photo(s)</div><div class='chips'>";
+   for(j=0;j<Math.min(S.photos[id].length,8);j++)h+="<img class='thumb' data-act='lb' data-id='"+esc(S.photos[id][j].id)+"' src='"+esc(S.photos[id][j].url)+"'>";
+   h+="</div></div>";}}
+ D("faultList").innerHTML=h;}
+function delFaults(ids){var re=[],rp=[],ke=[],kp=[],i,base=[];
+ for(i=0;i<S.overlay.entries.length;i++){if(has(ids,S.overlay.entries[i].id))re.push(S.overlay.entries[i]);else ke.push(S.overlay.entries[i]);}
+ for(i=0;i<S.overlay.photos.length;i++){if(has(ids,S.overlay.photos[i].fault))rp.push(S.overlay.photos[i]);else kp.push(S.overlay.photos[i]);}
+ for(i=0;i<S.base.length;i++)if(!has(ids,S.base[i].id))base.push(S.base[i]);
+ S.overlay.entries=ke;S.overlay.photos=kp;S.base=base;reindex();
+ for(i=0;i<ids.length;i++)delete S.sel[ids[i]];
+ persist();renderFaultList();renderResults();fillFilters();stats();
+ toast("🗑️ "+re.length+" panne(s) supprimée(s).",8000,function(){
+  S.overlay.entries=re.concat(S.overlay.entries);S.overlay.photos=S.overlay.photos.concat(rp);
+  persist();merge(re);renderFaultList();renderResults();fillFilters();stats();toast("↩️ Suppression annulée.");});}
+var TERMS=[[/courroie|distribution/,"timing belt damage delamination"],[/chaine/,"timing chain wear"],[/turbo/,"turbocharger failure"],
+[/egr/,"EGR cooler leak soot"],[/fap|cataly/,"DPF diesel particulate filter clogged"],[/adblue|scr/,"AdBlue crystallization injector"],
+[/inject/,"fuel injector coking"],[/batterie|12v/,"car battery corrosion terminal"],[/haute tension|pack ht/,"EV high voltage battery damage"],
+[/faisceau|alternat/,"car wiring harness burnt"],[/frein/,"brake disc overheated"],[/huile|lubrif/,"engine oil leak"],
+[/incendie|feu/,"car engine fire damage"],[/surchauffe/,"engine overheating damage"]];
+function enQuery(f){var t=norm((f.sys||"")+" "+(f.title||"")),i;
+ for(i=0;i<TERMS.length;i++)if(TERMS[i][0].test(t))return TERMS[i][1];return "car engine component damage";}
+function commons(q,cb){var u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch="+encodeURIComponent(q)+"&gsrnamespace=6&gsrlimit=6&prop=imageinfo&iiprop=url%7Cextmetadata&iiurlwidth=480";
+ jget(u,9000,function(j){var out=[],p=j&&j.query&&j.query.pages,k;if(!p){cb(out);return;}
+  for(k in p){if(!p.hasOwnProperty(k))continue;var x=p[k],i=x.imageinfo&&x.imageinfo[0];if(!i||!i.thumburl)continue;
+   var md=i.extmetadata||{};out.push({thumb:i.thumburl,title:String(x.title||"").replace(/^File:/,""),
+    lic:(md.LicenseShortName&&md.LicenseShortName.value)||""});}
+  cb(out);});}
+function gallery(f){var out=D("photoOut"),box=document.createElement("div");box.className="hit";
+ out.insertBefore(box,out.firstChild);
+ var ph=S.photos[fkey(f)]||[],h="<h3>🖼️ "+esc(String(f.title||"").slice(0,90))+"</h3><p class='sm'>"+esc(f.make||"")+" "+esc(f.model||"")+" "+esc(f.engine||"")+"</p>",i;
+ h+="<h3>📌 Photos intégrées ("+ph.length+")</h3>";
+ if(ph.length){h+="<div class='pgrid'>";for(i=0;i<ph.length;i++)h+="<figure class='pitem' data-act='lb' data-id='"+esc(ph[i].id)+"'><img src='"+esc(ph[i].url)+"' loading='lazy'><figcaption>"+esc(ph[i].cap||"photo admin")+"</figcaption></figure>";h+="</div>";}
+ else h+="<p class='sm'>Aucune photo locale pour cette panne. Admin → Pannes &amp; photos → rattacher → publier.</p>";
+ h+="<h3>🌐 Photothèque libre (Commons)</h3><p class='sm' data-cw='1'>⏳ recherche en cours…</p>";
+ box.innerHTML=h;
+ commons(enQuery(f),function(res){var w=null,l=box.getElementsByTagName("p"),i2;
+  for(i2=0;i2<l.length;i2++)if(l[i2].getAttribute("data-cw"))w=l[i2];
+  if(!w)return;var g="";
+  if(res.length){g="<div class='pgrid'>";for(i2=0;i2<res.length;i2++)g+="<figure class='pitem' data-act='lbUrl' data-u='"+esc(res[i2].thumb)+"' data-c='"+esc(res[i2].title)+"'><img src='"+esc(res[i2].thumb)+"' loading='lazy'><figcaption>"+esc(res[i2].title.slice(0,42))+(res[i2].lic?" <span class='tag ok'>"+esc(res[i2].lic)+"</span>":"")+"</figcaption></figure>";g+="</div>";}
+  else g="<p class='sm'>Aucune photo libre trouvée automatiquement.</p>";
+  var tmp=document.createElement("div");tmp.innerHTML=g;w.parentNode.replaceChild(tmp,w);});}
+function photoSearch(){var q=D("pq").value.replace(/^\s+|\s+$/g,"");if(!q){toast("Saisis une panne à rechercher.");return;}
+ var l=search(q,4),i;D("photoOut").innerHTML=l.length?"":"<div class='empty'>Aucune panne ne correspond à cette recherche.</div>";
+ for(i=0;i<l.length;i++)gallery(l[i]);}
+function findPhoto(id){var k,i,j;for(k in S.photos){if(!S.photos.hasOwnProperty(k))continue;
+ for(i=0;i<S.photos[k].length;i++)if(S.photos[k][i].id===id)return S.photos[k][i];}return null;}
+function lightbox(s,c){var m=D("mLb");m.getElementsByTagName("img")[0].src=s;D("lbCap").innerHTML=esc(c||"");m.className="modal on";}
+function openDetail(k){var e=null,i;for(i=0;i<S.base.length;i++)if(fkey(S.base[i])===k)e=S.base[i];
+ if(!e){toast("Fiche introuvable.");return;}
+ var ph=S.photos[k]||[],h="<h2>📄 "+esc(e.title)+"</h2>"+card(e);
+ if((e.ind||[]).length){h+="<h3>Indices visuels</h3><ul class='sm'>";for(i=0;i<e.ind.length;i++)h+="<li>"+esc(e.ind[i])+"</li>";h+="</ul>";}
+ if((e.sym||[]).length){h+="<h3>Symptômes associés</h3><div class='chips'>";for(i=0;i<e.sym.length;i++)h+="<span class='tag'>"+esc(e.sym[i])+"</span>";h+="</div>";}
+ h+="<h3>Photos ("+ph.length+")</h3>";
+ if(ph.length){h+="<div class='pgrid'>";for(i=0;i<ph.length;i++)h+="<figure class='pitem' data-act='lb' data-id='"+esc(ph[i].id)+"'><img src='"+esc(ph[i].url)+"'><figcaption>"+esc(ph[i].cap||"")+"</figcaption></figure>";h+="</div>";}
+ else h+="<p class='sm'>Aucune photo rattachée.</p>";
+ h+="<button class='btn gh' data-act='gal' data-k='"+esc(k)+"'>📷 Ouvrir dans le catalogue</button>";
+ if(S.admin&&e.source==="admin")h+="<button class='btn gh' data-act='editFault' data-id='"+esc(e.id)+"'>✏️ Modifier</button><button class='btn rd' data-act='delFault' data-id='"+esc(e.id)+"'>🗑️ Supprimer</button>";
+ D("detailBody").innerHTML=h;D("mDetail").className="modal on";}
+
+var WMI={"VF1":"Renault","VF3":"Peugeot","VF7":"Citroën","VR1":"Peugeot","VR3":"Peugeot","VR7":"Citroën","UU1":"Dacia","WVW":"Volkswagen","WV1":"Volkswagen","WV2":"Volkswagen","WAU":"Audi","TRU":"Audi","TMB":"Skoda","VSS":"SEAT","WBA":"BMW","WBS":"BMW","WBY":"BMW","WDB":"Mercedes-Benz","WDD":"Mercedes-Benz","W1K":"Mercedes-Benz","WMW":"Mini","WP0":"Porsche","WP1":"Porsche","SAJ":"Jaguar","SAL":"Land Rover","WF0":"Ford","W0L":"Opel","W0V":"Opel","ZFA":"Fiat","ZAR":"Alfa Romeo","JTD":"Toyota","SB1":"Toyota","VNK":"Toyota","JHM":"Honda","SHH":"Honda","JN1":"Nissan","SJN":"Nissan","VSK":"Nissan","KMH":"Hyundai","KM8":"Hyundai","KNA":"Kia","KNE":"Kia","JMZ":"Mazda","JM1":"Mazda","JF1":"Subaru","JF2":"Subaru","JSA":"Suzuki","5YJ":"Tesla","7SA":"Tesla","LRW":"Tesla","YV1":"Volvo","YV2":"Volvo","LYV":"Volvo","1G1":"Chevrolet","1C4":"Jeep","LGX":"BYD","LSJ":"MG","WME":"Smart","9BW":"Volkswagen","8A1":"Renault","TMA":"Hyundai","U5Y":"Kia"};
+var YC={"A":[1980,2010],"B":[1981,2011],"C":[1982,2012],"D":[1983,2013],"E":[1984,2014],"F":[1985,2015],"G":[1986,2016],"H":[1987,2017],"J":[1988,2018],"K":[1989,2019],"L":[1990,2020],"M":[1991,2021],"N":[1992,2022],"P":[1993,2023],"R":[1994,2024],"S":[1995,2025],"T":[1996,2026],"V":[1997,2027],"W":[1998,2028],"X":[1999,2029],"Y":[2000,2030],"1":[2001],"2":[2002],"3":[2003],"4":[2004],"5":[2005],"6":[2006],"7":[2007],"8":[2008],"9":[2009]};
+var TR={"A":1,"B":2,"C":3,"D":4,"E":5,"F":6,"G":7,"H":8,"J":1,"K":2,"L":3,"M":4,"N":5,"P":7,"R":9,"S":2,"T":3,"U":4,"V":5,"W":6,"X":7,"Y":8,"Z":9};
+var VWT=[8,7,6,5,4,3,2,10,0,9,8,7,6,5,4,3,2];
+function vinCheck(v){if(v.length!==17)return{ok:false,why:"longueur différente de 17 caractères"};
+ if(/[IOQ]/.test(v))return{ok:false,why:"les lettres I, O et Q sont interdites"};
+ var s=0,i;for(i=0;i<17;i++){var c=v.charAt(i),n=(c>="0"&&c<="9")?parseInt(c,10):TR[c];
+  if(n===undefined)return{ok:false,why:"caractère invalide"};s+=n*VWT[i];}
+ var r=s%11,cd=r===10?"X":String(r);
+ return{ok:cd===v.charAt(8),why:cd===v.charAt(8)?"chiffre de contrôle valide":"chiffre de contrôle attendu "+cd+", lu "+v.charAt(8)};}
+var RURL={"peugeot":"https://www.peugeot.fr/services-et-engagements/rappels-vehicules.html","citroen":"https://www.citroen.fr/services-et-engagements/rappels-vehicules.html","renault":"https://www.renault.fr/services/rappels-vehicules.html","dacia":"https://www.dacia.fr/services/rappels-vehicules.html","volkswagen":"https://www.volkswagen.fr/fr/informations-utiles/campagnes-de-rappel.html","audi":"https://www.audi.fr/fr/fr/company/rappels.html","skoda":"https://www.skoda.fr/services/rappels/","bmw":"https://www.bmw.fr/fr/topics/offres-et-services/apres-vente/rappel-bmw.html","mercedes-benz":"https://www.mercedes-benz.fr/passengercars/being-an-owner/campaigns.html","toyota":"https://www.toyota.fr/services/rappels","tesla":"https://www.tesla.com/vin-recall-search","ford":"https://www.ford.fr/support/rappels/","opel":"https://www.opel.fr/services/rappels.html","hyundai":"https://www.hyundai.com/fr/fr/e-services/rappels.html","kia":"https://www.kia.com/fr/services/rappels/"};
+function runVin(){var raw=D("vin").value.replace(/\s/g,"").toUpperCase(),out=D("vinOut");
+ if(!raw){toast("Saisis un numéro VIN.");return;}
+ var v=vinCheck(raw),mk=WMI[raw.slice(0,3)]||WMI[raw.slice(0,2)]||"",yc=YC[raw.charAt(9)],ref=new Date().getFullYear();
+ var year=yc?(yc.length===1?yc[0]:(ref>=yc[1]-1?yc[1]:yc[0])):0;
+ D("vinState").innerHTML=v.ok?"VIN valide":"à vérifier";D("vinState").className="pill "+(v.ok?"ok":"warn");
+ var kv=function(l,x){return "<div><b>"+esc(l)+"</b>"+esc(x||"—")+"</div>";};
+ out.innerHTML="<h3>1. Décodage local</h3><p class='sm'>"+(v.ok?"✅":"⚠️")+" "+esc(v.why)+"</p><div class='kv'>"+kv("WMI",raw.slice(0,3))+kv("Marque",mk)+kv("Millésime",year)+kv("Usine",raw.charAt(10))+kv("N° série",raw.slice(11))+"</div><p class='sm'>⏳ Interrogation des sources officielles…</p>";
+ var make=mk,model="",yr=year,fuel="",disp="";
+ jget("https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/"+encodeURIComponent(raw)+"?format=json",9000,function(vp){
+  var d=vp&&vp.Results&&vp.Results[0];
+  if(d){make=d.Make||make;model=d.Model||"";yr=parseInt(d.ModelYear,10)||yr;fuel=d.FuelTypePrimary||"";disp=d.DisplacementL||"";}
+  function finish(us){
+   var loc=[],i;for(i=0;i<S.base.length&&loc.length<8;i++){var e=S.base[i];
+    if(e.type==="rappel"&&norm(e.make).indexOf(norm(make))>=0&&(!model||norm(e.model).indexOf(norm(model))>=0)&&(!yr||(e.years&&yr>=e.years[0]&&yr<=e.years[1])))loc.push(e);}
+   var h="<h3>1. Décodage du VIN</h3><p class='sm'>"+(v.ok?"✅":"⚠️")+" "+esc(v.why)+"</p><div class='kv'>"+kv("Marque",make)+kv("Modèle",model)+kv("Millésime",yr)+kv("Cylindrée",disp?disp+" L":"")+kv("Carburant",fuel)+kv("WMI",raw.slice(0,3))+"</div>";
+   h+="<h3>2. Campagnes de rappel applicables</h3><p class='sm'><b>🇺🇸 NHTSA :</b> "+us.length+" campagne(s)</p>";
+   for(i=0;i<us.length;i++){var r=us[i];
+    h+="<div class='hit "+(/fire|flamm/i.test((r.Summary||"")+(r.Consequence||""))?"fire":"")+"'><b>"+esc(r.NHTSACampaignNumber)+"</b> · "+esc(r.ReportReceivedDate||"")+(r.parkIt?" <span class='tag crit'>PARK IT</span>":"")+"<p class='sm'>"+esc(r.Component||"")+"</p><p class='sm'>"+esc(String(r.Summary||"").slice(0,280))+"</p><a class='sm' href='https://www.nhtsa.gov/recalls?nhtsaId="+esc(r.NHTSACampaignNumber)+"' target='_blank' rel='noopener'>📎 Fiche NHTSA</a></div>";}
+   h+="<p class='sm'><b>🇫🇷 / 🇪🇺 Base locale :</b> "+loc.length+" fiche(s)</p>";
+   for(i=0;i<loc.length;i++)h+=card(loc[i]);
+   h+="<h3>3. Statut de ce VIN</h3><p class='sm'>Le statut traité ou non traité n'est publié que par le constructeur. Ouvre sa page officielle : le VIN est copié dans le presse-papier.</p>";
+   h+="<button class='btn gr' data-act='vinBrand'>🏭 Page rappels "+esc(make||"constructeur")+"</button><button class='btn gh' data-act='vinFill'>🚗 Remplir le sélecteur véhicule</button>";
+   out.innerHTML=h;
+   S.lastVin={raw:raw,make:make,model:model,year:yr,fuel:fuel,
+    url:RURL[norm(make).replace(/ /g,"-")]||RURL[norm(make)]||("https://www.google.com/search?q="+encodeURIComponent(make+" rappel campagne VIN officiel"))};}
+  if(make&&model&&yr)jget("https://api.nhtsa.gov/recalls/recallsByVehicle?make="+encodeURIComponent(make)+"&model="+encodeURIComponent(model)+"&modelYear="+yr,9000,function(j){finish((j&&j.results)||[]);});
+  else finish([]);});}
+
+var obdW=null,obdBuf="",UUID="0000fff0-0000-1000-8000-00805f9b34fb";
+function obdSend(c,w,cb){obdBuf="";
+ try{obdW.writeValue(new TextEncoder().encode(c+"\r")).then(function(){
+  var t=Date.now(),iv=setInterval(function(){
+   if(obdBuf.indexOf(">")>=0||Date.now()-t>w){clearInterval(iv);cb(obdBuf);}},60);
+  },function(e){cb("");});}catch(e){cb("");}}
+function decodeDTC(h){var parts=h.replace(/^\s+|\s+$/g,"").split(/\s+/),b=[],i;
+ for(i=0;i<parts.length;i++){var n=parseInt(parts[i],16);if(!isNaN(n))b.push(n);}
+ var idx=-1;for(i=0;i<b.length;i++)if(b[i]===0x43||b[i]===0x47){idx=i;break;}
+ if(idx<0)return[];var o=[];
+ for(i=idx+1;i+1<b.length;i+=2){var a=b[i],c=b[i+1];if(!a&&!c)continue;
+  o.push("PCBU".charAt((a>>6)&3)+String((a>>4)&3)+(a&15).toString(16).toUpperCase()+(c>>4).toString(16).toUpperCase()+(c&15).toString(16).toUpperCase());}
+ return o;}
+function obdConnect(){if(!navigator.bluetooth){D("obdState").innerHTML="Web Bluetooth indisponible ici — ouvre l'application dans Chrome Android.";return;}
+ D("obdState").innerHTML="⏳ Sélection de l'adaptateur…";
+ navigator.bluetooth.requestDevice({filters:[{services:[UUID]}],optionalServices:["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]})
+ .then(function(dev){return dev.gatt.connect().then(function(srv){
+  return srv.getPrimaryService(UUID).catch(function(){return srv.getPrimaryServices().then(function(a){return a[0];});})
+  .then(function(svc){return svc.getCharacteristics();}).then(function(chs){
+   var n=null,i;for(i=0;i<chs.length;i++){if(chs[i].properties.notify||chs[i].properties.indicate)n=chs[i];
+    if(chs[i].properties.write||chs[i].properties.writeWithoutResponse)obdW=chs[i];}
+   if(!n||!obdW)throw new Error("caractéristiques BLE incompatibles");
+   return n.startNotifications().then(function(){
+    n.addEventListener("characteristicvaluechanged",function(ev){obdBuf+=new TextDecoder().decode(ev.target.value);});
+    D("obdState").innerHTML="✅ Connecté : "+esc(dev.name||"adaptateur");D("bObdRead").disabled=false;
+    obdSend("ATZ",1200,function(){obdSend("ATE0",900,function(){obdSend("ATL0",900,function(){obdSend("ATSP0",1600,function(){});});});});});});})
+ .catch(function(e){D("obdState").innerHTML="❌ "+esc(e.message||e);});}
+function obdRead(){D("obdState").innerHTML="⏳ Lecture des défauts…";
+ obdSend("03",2500,function(a){obdSend("07",2500,function(b){
+  var codes=uniq(decodeDTC(a).concat(decodeDTC(b))),h="",i;
+  D("obdState").innerHTML="✅ "+codes.length+" code(s) lu(s).";
+  for(i=0;i<codes.length;i++){var e=null,j;for(j=0;j<S.base.length;j++)if(has(S.base[j].dtc||[],codes[i]))e=S.base[j];
+   h+="<div class='hit'><b>"+codes[i]+"</b><p class='sm'>"+esc(e?e.title:"Code absent de la base — recherche élargie conseillée.")+"</p></div>";}
+  D("obdOut").innerHTML=h||"<p class='sm'>Aucun code défaut stocké ou en attente.</p>";
+  if(codes.length){D("dtcOn").checked=true;setCls(D("dtc"),"hide",false);D("dtc").value=codes.join(", ");toast("✅ "+codes.length+" code(s) injecté(s) dans l'étude de cas.");}});});}
+
+var AD={
+kvdb:{name:"kvdb.io",keys:true,
+ create:function(cb){xhr("https://kvdb.io/",9000,function(e,r){if(e||!r.ok){cb(e||("HTTP "+r.status));return;}cb(null,r.text.replace(/^\s+|\s+$/g,"").split("/").pop());},"POST","")},
+ read:function(c,cb){xhr("https://kvdb.io/"+c+"/ktf",9000,function(e,r){if(e){cb(e);return;}if(r.status===404){cb(null,null);return;}
+  if(!r.ok){cb("HTTP "+r.status);return;}try{cb(null,r.text?JSON.parse(r.text):null);}catch(x){cb("réponse illisible");}})},
+ write:function(c,o,cb){xhr("https://kvdb.io/"+c+"/ktf",12000,function(e,r){cb(e||(r.ok?null:"HTTP "+r.status));},"PUT",JSON.stringify(o),"text/plain")},
+ putPh:function(c,i,d,cb){xhr("https://kvdb.io/"+c+"/ph_"+i,12000,function(e,r){cb(e||(r.ok?null:"HTTP "+r.status));},"PUT",d,"text/plain")},
+ getPh:function(c,i,cb){xhr("https://kvdb.io/"+c+"/ph_"+i,12000,function(e,r){cb(e||!r.ok?null:r.text);})}},
+restful:{name:"restful-api.dev",keys:false,
+ create:function(cb){xhr("https://api.restful-api.dev/objects",11000,function(e,r){if(e||!r.ok){cb(e||("HTTP "+r.status));return;}
+  try{cb(null,JSON.parse(r.text).id);}catch(x){cb("réponse illisible");}},"POST",JSON.stringify({name:"ktf",state:{}}),"application/json")},
+ read:function(c,cb){xhr("https://api.restful-api.dev/objects/"+c,9000,function(e,r){if(e){cb(e);return;}if(!r.ok){cb(null,null);return;}
+  try{var j=JSON.parse(r.text);cb(null,j.state||null);}catch(x){cb("réponse illisible");}})},
+ write:function(c,o,cb){xhr("https://api.restful-api.dev/objects/"+c,12000,function(e,r){cb(e||(r.ok?null:"HTTP "+r.status));},"PUT",JSON.stringify({name:"ktf",state:o}),"application/json")}},
+jsonblob:{name:"jsonblob.com",keys:false,
+ create:function(cb){xhr("https://jsonblob.com/api/jsonBlob",11000,function(e,r){if(e||!r.ok){cb(e||("HTTP "+r.status));return;}
+  var id=r.xid||(r.loc||"").split("/").pop();if(!id){cb("identifiant non exposé par le service");return;}cb(null,id);},"POST","{}","application/json")},
+ read:function(c,cb){xhr("https://jsonblob.com/api/jsonBlob/"+c,9000,function(e,r){if(e){cb(e);return;}if(!r.ok){cb(null,null);return;}
+  try{cb(null,JSON.parse(r.text));}catch(x){cb("réponse illisible");}})},
+ write:function(c,o,cb){xhr("https://jsonblob.com/api/jsonBlob/"+c,12000,function(e,r){cb(e||(r.ok?null:"HTTP "+r.status));},"PUT",JSON.stringify(o),"application/json")}}};
+function chan(){return ls("chan")||"";}
+function setChan(c){ls("chan",c||"");D("pSync").innerHTML=c?"📡 "+c.slice(0,7)+"…":"📡 aucun canal";D("pSync").className="pill "+(c?"ok":"");}
+function syncPush(manual,cb){var c=chan();
+ if(!c){if(manual)toast("❌ Crée d'abord un canal dans l'onglet 📡 Sync.");if(cb)cb(false);return;}
+ var A=AD[S.be],embed={},meta=[],list=S.overlay.photos,i=0;
+ function step(){
+  if(i>=list.length){
+   A.write(c,{v:1,ts:Date.now(),entries:S.overlay.entries,photos:meta,embedded:embed,look:S.look,revs:S.revs,mail:S.mail},function(err){
+    var ok=!err;D("syState").innerHTML=ok?"✅ "+new Date().toLocaleTimeString("fr-FR"):"❌ "+esc(err);
+    D("syState").className="pill "+(ok?"ok":"bad");
+    if(ok&&manual)toast("📡 Publié — les tiers reçoivent sous 60 secondes.");
+    if(!ok&&manual)toast("❌ "+esc(err));if(cb)cb(ok);});
+   return;}
+  var p=list[i];i++;
+  if(A.keys&&p.url.indexOf("data:")===0){A.putPh(c,p.id,p.url,function(){meta.push({id:p.id,fault:p.fault,cap:p.cap,ts:p.ts,ref:"key"});step();});return;}
+  if(p.url.indexOf("data:")===0){if(Object.keys(embed).length<4)embed[p.id]=p.url;meta.push({id:p.id,fault:p.fault,cap:p.cap,ts:p.ts,ref:"embed"});step();return;}
+  meta.push({id:p.id,fault:p.fault,cap:p.cap,ts:p.ts,ref:"url",url:p.url});step();}
+ step();}
+function syncPull(cb){var c=chan();
+ if(!c){check("sync","warn","aucun canal configuré");if(cb)cb();return;}
+ var A=AD[S.be];
+ A.read(c,function(err,st){
+  if(err){check("sync","warn",A.name+" injoignable : "+err);if(cb)cb();return;}
+  if(!st){check("sync","warn","canal vide — l'admin n'a pas encore publié");if(cb)cb();return;}
+  if(st.entries&&st.entries.length)merge(normalize(st.entries));
+  var meta=st.photos||[],i=0;
+  function step(){
+   if(i>=meta.length){
+    if(st.look){S.look=st.look;applyLook();}
+    if(st.revs&&st.revs.length){each(st.revs,function(s){if(!has(S.revs,s))S.revs.push(s);});ls("revs",S.revs);checkRev();}
+    if(st.mail)S.mail=st.mail;
+    check("sync","ok",A.name+" · reçu "+new Date(st.ts||Date.now()).toLocaleTimeString("fr-FR"));
+    fillFilters();renderResults();stats();if(cb)cb();return;}
+   var m=meta[i];i++;
+   var exists=false,arr=S.photos[m.fault]||[];for(var j=0;j<arr.length;j++)if(arr[j].id===m.id)exists=true;
+   if(exists){step();return;}
+   if(m.ref==="key"){var ca=ls("ph:"+m.id);
+    if(ca){if(!S.photos[m.fault])S.photos[m.fault]=[];S.photos[m.fault].push({id:m.id,url:ca,cap:m.cap,ts:m.ts});step();return;}
+    if(A.getPh){A.getPh(c,m.id,function(du){if(du){ls("ph:"+m.id,du);if(!S.photos[m.fault])S.photos[m.fault]=[];
+      S.photos[m.fault].push({id:m.id,url:du,cap:m.cap,ts:m.ts});}step();});return;}
+    step();return;}
+   var url=m.ref==="embed"?((st.embedded||{})[m.id]||""):(m.url||"");
+   if(url){if(!S.photos[m.fault])S.photos[m.fault]=[];S.photos[m.fault].push({id:m.id,url:url,cap:m.cap,ts:m.ts});}
+   step();}
+  step();});}
+function applyLook(){D("wall").style.backgroundImage=S.look.bg?"url("+S.look.bg+")":"";
+ var op=(S.look.op===undefined||S.look.op===null)?55:S.look.op;
+ D("wall").style.opacity=op/100;D("op").value=op;D("opVal").innerHTML=op+"%";
+ if(S.look.car){var i=new Image();i.onload=function(){S.carImg=i;};i.src=S.look.car;}else S.carImg=null;
+ ls("look",S.look);}
+function checkRev(){var a=ls("access");if(a&&has(S.revs,a.sig)){ls("access",null);if(!S.admin)gate("revoque");}}
+
+function b64u(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function unb64u(s){return decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/"))));}
+var SCREENS=["s-home","s-login","s-gate","s-app","s-admin"];
+function show(id){each(SCREENS,function(x){setCls(D(x),"hide",x!==id);});
+ setCls(D("bQuit"),"hide",!(id==="s-app"||id==="s-admin"));try{window.scrollTo(0,0);}catch(e){}}
+function gate(st,n){show("s-gate");each(["gForm","gOk","gKo"],function(i){setCls(D(i),"hide",true);});
+ if(st==="ok"){setCls(D("gOk"),"hide",false);D("gHello").innerHTML=esc(n||S.name);}
+ else if(st==="refus"||st==="revoque"){setCls(D("gKo"),"hide",false);
+  D("gWhy").innerHTML=st==="revoque"?"🔒 Ce code a été révoqué par l'administrateur.":"❌ Code invalide ou expiré.";}
+ else setCls(D("gForm"),"hide",false);}
+function showApp(){show("s-app");setCls(D("bToAdmin"),"hide",!S.admin);renderHisto();quotaShow();renderOutbox();renderResults();}
+function showAdmin(){show("s-admin");renderCodes();renderRevs();faultPicker();renderPending();renderFaultList();paintChecks();}
+function codes(){return ls("codes")||[];}
+function renderCodes(){var a=codes(),h="",i;
+ if(a.length){h="<table><tr><th>Prénom</th><th>Expire</th><th>État</th><th></th></tr>";
+  for(i=0;i<a.length;i++){var x=a[i],rv=has(S.revs,x.sig),ex=x.exp<Date.now();
+   h+="<tr><td>"+esc(x.name)+"</td><td class='sm'>"+new Date(x.exp).toLocaleDateString("fr-FR")+"</td><td><span class='tag "+(rv?"crit":ex?"":"ok")+"'>"+(rv?"révoqué":ex?"expiré":"actif")+"</span></td>";
+   h+="<td><button class='btn gh sm' data-act='copyUser' data-i='"+i+"'>📋</button><button class='btn rd sm' data-act='revoke' data-i='"+i+"' "+(rv?"disabled":"")+">🚫</button></td></tr>";}
+  h+="</table>";}else h="<p class='sm'>Aucun code émis pour l'instant.</p>";
+ D("codes").innerHTML=h;}
+function renderRevs(){D("revs").innerHTML="<p class='sm'>"+S.revs.length+" code(s) révoqué(s).</p>";}
+function renderOutbox(){var o=ls("outbox")||[],h="",i;
+ for(i=0;i<o.length;i++)h+="<div class='hit'><span class='sm'>"+new Date(o[i].at).toLocaleString("fr-FR")+"</span><p class='sm'>"+esc(o[i].t.slice(0,180))+"</p></div>";
+ D("outbox").innerHTML=h||"<p class='sm'>Aucun message envoyé.</p>";}
+function sendMsg(copy){var t=D("msg").value.replace(/^\s+|\s+$/g,"");if(!t){toast("Écris ton message.");return;}
+ var o=ls("outbox")||[];o.unshift({t:t,at:Date.now()});ls("outbox",o.slice(0,30));renderOutbox();
+ if(copy)copyText(t);
+ else location.href="mailto:"+S.mail+"?subject="+encodeURIComponent("Message KEV TECH & FIRE — "+S.name)+"&body="+encodeURIComponent(t);
+ D("msg").value="";D("predMsg").innerHTML="";}
+
+function checkUpd(force,cb){jget("data/index.json?t="+Date.now(),6000,function(idx){
+ if(!idx){check("upd","warn","index.json injoignable — base locale conservée");if(cb)cb();return;}
+ var local=ls("ver")||"";
+ if(!force&&idx.version===local){check("upd","ok","à jour ("+idx.version+")");if(cb)cb();return;}
+ var files=idx.chunks||[];
+ if(!files.length){check("upd","ok","base embarquée à jour");ls("ver",idx.version||"");if(cb)cb();return;}
+ var all=[],i=0;
+ function step(){if(i>=files.length){
+   if(all.length){merge(normalize(all));ls("ver",idx.version||"");ls("cache",{ts:Date.now(),entries:S.base.slice(0,2500)});
+    fillFilters();renderResults();stats();check("upd","ok","MAJ appliquée : "+all.length+" fiches");toast("⬆️ Base mise à jour.");}
+   else check("upd","warn","fichiers de données vides");
+   if(cb)cb();return;}
+  var f=files[i];i++;jget("data/"+f,9000,function(c){if(c&&c.length)all=all.concat(c);step();});}
+ step();});}
+function harvest(cb){if(S.busy){if(cb)cb();return;}S.busy=true;toast("🛰️ Interrogation de RappelConso…");
+ var base="https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/rappelconso-v2-gtin-espaces/records",off=0,out=[];
+ function step(){
+  if(off>=1200){finish();return;}
+  var u=base+"?where="+encodeURIComponent('categorie_produit="automobiles et moyens de déplacement"')+"&limit=100&offset="+off+"&order_by="+encodeURIComponent("date_publication desc");
+  jget(u,9000,function(j){
+   var res=(j&&j.results)||[];if(!res.length){finish();return;}
+   each(res,function(r){var txt=[r.motif_rappel,r.risques_encourus].join(" "),feu=FIRERE.test(txt);
+    var yy=String(r.modeles_ou_references||"").match(/(?:19|20)\d{2}/g)||[],yr=[],i;
+    for(i=0;i<yy.length;i++)yr.push(parseInt(yy[i],10));
+    out.push({id:"rc-"+(r.numero_fiche||uid()),themes:feu?["technique","incendie"]:["technique"],type:"rappel",source:"rappelconso",
+     make:tc(r.marque_produit||""),model:r.modeles_ou_references||"",engine:"",
+     years:yr.length?[Math.min.apply(null,yr),Math.max.apply(null,yr)]:null,fuel:"",
+     sys:r.sous_categorie_produit||"",dtc:[],sym:[],title:String(r.libelle||r.motif_rappel||"Rappel").slice(0,300),
+     meca:r.motif_rappel||"",cons:[r.risques_encourus||""],ind:[],fire:feu,
+     chain:feu?"Rappel officiel : "+txt.slice(0,220):"",grav:feu?"critique":"eleve",
+     url:r.lien_vers_la_fiche_rappel||"",date:String(r.date_publication||"").slice(0,10)});});
+   off+=100;if(off>=(j.total_count||0)){finish();return;}setTimeout(step,90);});}
+ function finish(){
+  if(out.length){merge(out);ls("cache",{ts:Date.now(),entries:S.base.slice(0,2500)});ls("rcTs",Date.now());
+   fillFilters();renderResults();stats();toast("🛰️ <b>"+out.length+"</b> rappels officiels intégrés.");}
+  else toast("⚠️ RappelConso injoignable — la base locale reste disponible.");
+  S.busy=false;if(cb)cb();}
+ step();}
+
+var cv=D("scene"),cx=cv.getContext("2d"),W=0,H=0,stars=[],b1=[],b2=[],dash=0,raf=0,visible=true;
+function resize(){var d=Math.min(window.devicePixelRatio||1,1.5);W=window.innerWidth;H=window.innerHeight;
+ cv.width=Math.max(1,Math.round(W*d));cv.height=Math.max(1,Math.round(H*d));
+ cx.setTransform(d,0,0,d,0,0);stars=[];var i;
+ for(i=0;i<70;i++)stars.push({x:Math.random()*W,y:Math.random()*H*0.55,r:Math.random()*1.4+0.3,p:Math.random()*6});
+ function mk(n,h){var a=[],j;for(j=0;j<n;j++)a.push({x:j*(W/n),w:W/n*0.7,h:h+Math.random()*h});return a;}
+ b1=mk(14,H*0.16);b2=mk(20,H*0.1);}
+function accent(){try{var v=getComputedStyle(document.documentElement).getPropertyValue("--acc");return v?v.replace(/^\s+|\s+$/g,""):"#00e676";}catch(e){return "#00e676";}}
+function drawCar(x,y,s,t){cx.save();cx.translate(x,y+Math.sin(t/180)*1.6);cx.scale(s,s);
+ if(S.carImg){cx.drawImage(S.carImg,-150,-78,300,90);cx.restore();return;}
+ var a=accent();cx.shadowColor=a;cx.shadowBlur=18;cx.fillStyle="#0d1330";cx.strokeStyle=a;cx.lineWidth=2;
+ cx.beginPath();cx.moveTo(-140,0);cx.quadraticCurveTo(-130,-30,-80,-36);cx.lineTo(-45,-58);cx.quadraticCurveTo(0,-72,55,-56);
+ cx.lineTo(95,-36);cx.quadraticCurveTo(140,-30,146,-8);cx.lineTo(146,0);cx.closePath();cx.fill();cx.stroke();
+ cx.shadowBlur=0;cx.fillStyle="rgba(144,202,249,.85)";cx.beginPath();cx.moveTo(-40,-54);cx.lineTo(48,-52);cx.lineTo(78,-38);cx.lineTo(-62,-38);cx.closePath();cx.fill();
+ var wheels=[-88,92],w,k;
+ for(w=0;w<2;w++){cx.fillStyle="#05070f";cx.beginPath();cx.arc(wheels[w],2,20,0,6.2832);cx.fill();cx.strokeStyle=a;cx.lineWidth=2;cx.stroke();
+  cx.save();cx.translate(wheels[w],2);cx.rotate(t/90);cx.strokeStyle="rgba(255,255,255,.55)";cx.lineWidth=2;
+  for(k=0;k<4;k++){cx.rotate(Math.PI/2);cx.beginPath();cx.moveTo(0,0);cx.lineTo(0,-14);cx.stroke();}cx.restore();}
+ cx.fillStyle="rgba(255,241,118,.9)";cx.beginPath();cx.moveTo(146,-14);cx.lineTo(228,-4);cx.lineTo(228,10);cx.lineTo(146,2);cx.closePath();cx.fill();
+ cx.fillStyle="#ff2d55";cx.fillRect(-146,-16,6,8);cx.restore();}
+function frame(t){if(!visible){raf=0;return;}
+ var a=accent(),road=H*0.8,i,x;
+ var g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#05081a");g.addColorStop(0.55,"#141034");g.addColorStop(1,"#05081a");
+ cx.fillStyle=g;cx.fillRect(0,0,W,H);
+ for(i=0;i<2;i++){var bx=W*(0.3+0.4*i)+Math.sin(t/4000+i*2)*W*0.12;
+  var rg=cx.createRadialGradient(bx,H*0.22,0,bx,H*0.22,W*0.35);
+  rg.addColorStop(0,i?"rgba(139,92,255,.18)":"rgba(0,229,255,.14)");rg.addColorStop(1,"rgba(0,0,0,0)");
+  cx.fillStyle=rg;cx.fillRect(0,0,W,H);}
+ cx.fillStyle="#ffffff";for(i=0;i<stars.length;i++){var s=stars[i];cx.globalAlpha=0.3+0.5*Math.abs(Math.sin(t/900+s.p));cx.fillRect(s.x,s.y,s.r,s.r);}
+ cx.globalAlpha=1;cx.fillStyle="rgba(10,14,36,.9)";
+ for(i=0;i<b1.length;i++){x=(b1[i].x-t*0.008)%W;cx.fillRect(x<0?x+W:x,road-b1[i].h,b1[i].w,b1[i].h);}
+ cx.fillStyle="rgba(16,20,52,.95)";
+ for(i=0;i<b2.length;i++){x=(b2[i].x-t*0.02)%W;cx.fillRect(x<0?x+W:x,road-b2[i].h,b2[i].w,b2[i].h);}
+ cx.fillStyle=a;cx.globalAlpha=0.5;cx.fillRect(0,road,W,2);cx.globalAlpha=1;
+ cx.fillStyle="#0a0d1c";cx.fillRect(0,road,W,H-road);
+ dash=(dash+6)%160;cx.fillStyle="rgba(255,215,64,.8)";
+ for(x=-dash;x<W;x+=160)cx.fillRect(x,road+(H-road)*0.5,70,5);
+ drawCar(W*0.34,road-2,Math.min(1,W/700),t);
+ raf=window.requestAnimationFrame(frame);}
+function startLoop(){if(raf){window.cancelAnimationFrame(raf);raf=0;}visible=true;
+ if(window.requestAnimationFrame)raf=window.requestAnimationFrame(frame);else frame(0);}
+function net(){var c=navigator.connection||{},t=c.type==="wifi"?"WiFi":String(c.effectiveType||"").toUpperCase();
+ D("pNet").innerHTML=navigator.onLine?"📶 "+(t||"réseau"):"📴 hors ligne";
+ D("pNet").className="pill "+(navigator.onLine?"ok":"warn");
+ check("net",navigator.onLine?"ok":"warn",navigator.onLine?"en ligne":"hors ligne — base locale utilisable");}
+
+function sgProvider(kind){
+ if(kind==="make")return function(){var c=norm(D("vMake").value),o=[],i;
+  for(i=0;i<BRANDS.length;i++)if(!c||BRANDS[i].indexOf(c)>=0)o.push({value:tc(BRANDS[i]),label:tc(BRANDS[i]),hint:(MODELS[BRANDS[i]]||[]).length+" modèles"});return o;};
+ if(kind==="model")return function(){var b=norm(D("vMake").value),c=norm(D("vModel").value),l=[],i,k;
+  if(MODELS[b])l=MODELS[b].slice(0);else{for(k in MODELS){if(!MODELS.hasOwnProperty(k))continue;if(!b||k.indexOf(b)>=0)l=l.concat(MODELS[k]);}}
+  l=uniq(l);var o=[];for(i=0;i<l.length;i++)if(!c||l[i].indexOf(c)>=0)o.push({value:tc(l[i]),label:tc(l[i]),hint:""});return o;};
+ if(kind==="engine")return function(){var l=enginesFor(D("vMake").value,D("vModel").value),c=norm(D("vEngine").value),o=[],i;
+  var ic={essence:"🟡",diesel:"⚫",hybride:"🟢",electrique:"🔵"};
+  for(i=0;i<l.length;i++){var e=l[i];if(c&&norm(e.m).indexOf(c)<0)continue;
+   o.push({value:e.m,label:(ic[e.en]||"")+" "+e.m+" · "+e.en+" · "+e.ch.join("/")+" ch"+(e.cc?" · "+e.cc+" cm³":""),hint:e.src});}return o;};
+ if(kind==="power")return function(){var ps=powersFor(D("vMake").value,D("vModel").value,D("vEngine").value),o=[],i;
+  for(i=0;i<ps.length;i++)o.push({value:String(ps[i]),label:ps[i]+" ch",hint:Math.round(ps[i]/1.35962)+" kW"});return o;};
+ return function(){var c=norm(D("q").value);if(c.length<2)return[];var s={},i,k,o=[];
+  for(i=0;i<BRANDS.length;i++)s[tc(BRANDS[i])]=1;
+  for(k in MODELS){if(!MODELS.hasOwnProperty(k))continue;for(i=0;i<MODELS[k].length;i++)s[tc(MODELS[k][i])]=1;}
+  for(i=0;i<Math.min(S.base.length,1500);i++){var e=S.base[i];each(e.dtc||[],function(d){s[d]=1;});if(e.sys)s[e.sys]=1;}
+  for(k in s){if(!s.hasOwnProperty(k))continue;if(norm(k).indexOf(c)>=0)o.push({value:k,label:k,hint:""});}
+  return o.slice(0,10);};}
+function suggest(inp){if(!inp||inp._sg)return;inp._sg=true;
+ var kind=inp.getAttribute("data-sg"),prov=sgProvider(kind);
+ var w=document.createElement("div");w.className="sgw";inp.parentNode.insertBefore(w,inp);w.appendChild(inp);
+ var l=document.createElement("div");l.className="sgl";l.style.display="none";w.appendChild(l);
+ function open(){var it=[];try{it=prov().slice(0,12);}catch(e){it=[];}
+  if(!it.length){l.style.display="none";return;}
+  var h="",i;for(i=0;i<it.length;i++)h+="<div data-i='"+i+"'>"+esc(it[i].label)+(it[i].hint?" <span style='color:#93a4d8;font-size:.66rem'>"+esc(it[i].hint)+"</span>":"")+"</div>";
+  l.innerHTML=h;l._i=it;l.style.display="block";}
+ inp.addEventListener("focus",open);inp.addEventListener("click",open);inp.addEventListener("input",open);
+ l.addEventListener("mousedown",function(ev){var t=ev.target;while(t&&t!==l&&!t.getAttribute("data-i"))t=t.parentNode;
+  if(!t||t===l)return;ev.preventDefault();var it=l._i[parseInt(t.getAttribute("data-i"),10)];
+  inp.value=it.value;l.style.display="none";fireChange(inp);});
+ inp.addEventListener("blur",function(){setTimeout(function(){l.style.display="none";},180);});}
+function fireChange(el){var ev;try{ev=new Event("change",{bubbles:true});}catch(e){ev=document.createEvent("HTMLEvents");ev.initEvent("change",true,false);}el.dispatchEvent(ev);}
+function feedWords(ta,ch){ta.addEventListener("input",function(){
+ var w=norm(ta.value).split(" "),last=w[w.length-1]||"";
+ if(last.length<3){ch.innerHTML="";return;}
+ var s={},i,k,h="";
+ for(i=0;i<Math.min(S.base.length,1200);i++){var t=norm(S.base[i].title+" "+S.base[i].sys).split(" ");
+  each(t,function(x){if(x.indexOf(last)===0&&x!==last)s[x]=1;});}
+ for(k in s){if(!s.hasOwnProperty(k))continue;h+="<button data-act='word' data-w='"+esc(k)+"' data-t='"+ta.id+"'>"+esc(k)+" ⏎</button>";}
+ ch.innerHTML=h;});}
+
+var ACT={
+home:function(){ls("mode",null);show("s-home");},
+modeAdmin:function(){D("pwd").value="";show("s-login");D("pwd").focus();},
+modeTiers:function(){ls("mode","tiers");var a=ls("access");if(a&& !has(S.revs,a.sig)){S.name=a.name;showApp();}else gate("form");},
+login:function(){var p=D("pwd").value;D("pwd").value="";if(!p)return;
+ if(p===PWD){S.admin=true;showAdmin();toast("🛡️ Mode administrateur déverrouillé.");}else toast("❌ Mot de passe incorrect.");},
+gate:function(){var p=D("gName").value.replace(/^\s+|\s+$/g,""),c=D("gCode").value.replace(/^\s+|\s+$/g,"");
+ if(!p||!c){toast("Prénom et code d'accès requis.");return;}
+ var parts=c.split("."),pl=parts[0],sg=parts[1];if(!pl||!sg){gate("refus");return;}
+ var pay;try{pay=JSON.parse(unb64u(pl));}catch(e){gate("refus");return;}
+ if(sig8(pl)!==sg){gate("refus");return;}
+ if(pay.exp&&Date.now()>pay.exp){gate("refus");return;}
+ if(has(S.revs,sg)){gate("revoque");return;}
+ S.name=p;ls("name",p);ls("access",{name:p,sig:sg});gate("ok",p);},
+gateRetry:function(){gate("form");},
+enter:function(){showApp();},
+askCode:function(){var p=D("gName").value.replace(/^\s+|\s+$/g,"")||"(ton prénom)";
+ location.href="mailto:"+S.mail+"?subject="+encodeURIComponent("Demande de code KEV TECH & FIRE")+"&body="+encodeURIComponent("Bonjour,\n\nPrénom : "+p+"\nJe souhaite un code d'accès à l'application.\n\nMerci !");
+ toast("📧 Demande préparée dans ta messagerie.");},
+joinChan:function(){setChan(D("gChan").value.replace(/^\s+|\s+$/g,""));syncPull();toast(chan()?"✅ Canal rejoint.":"Canal effacé.");},
+quit:function(){S.admin=false;show("s-home");},
+toAdmin:function(){if(S.admin)showAdmin();},
+toApp:function(){showApp();},
+theme:function(t){S.theme=t.getAttribute("data-t");document.documentElement.setAttribute("data-theme",S.theme);
+ var b=D("seg").getElementsByTagName("button"),i;for(i=0;i<b.length;i++)setCls(b[i],"on",b[i]===t);renderResults();},
+tabApp:function(t){var v=t.getAttribute("data-v"),ids=["search","study","photos","obd","msg"],i;
+ for(i=0;i<ids.length;i++)setCls(D("v-"+ids[i]),"hide",ids[i]!==v);
+ var b=D("tabsApp").getElementsByTagName("button");
+ for(i=0;i<b.length;i++)if(b[i].getAttribute("data-v"))setCls(b[i],"on",b[i]===t);},
+tabAdm:function(t){var a=t.getAttribute("data-a"),ids=["access","faults","look","sync","base"],i;
+ for(i=0;i<ids.length;i++)setCls(D("a-"+ids[i]),"hide",ids[i]!==a);
+ var b=D("tabsAdm").getElementsByTagName("button");
+ for(i=0;i<b.length;i++)if(b[i].getAttribute("data-a"))setCls(b[i],"on",b[i]===t);
+ if(a==="faults"){faultPicker();renderFaultList();}if(a==="base")paintChecks();},
+pickEng:function(t){var l=D("cEng")._l||[],e=l[parseInt(t.getAttribute("data-e"),10)];if(!e)return;D("vEngine").value=e.m;autoAttr();},
+pickPow:function(t){D("vPower").value=t.getAttribute("data-p");},
+useVeh:function(t){D("vMake").value=t.getAttribute("data-m");D("vModel").value=t.getAttribute("data-o");
+ D("vEngine").value="";D("vPower").value="";renderEng();renderPow();renderAttrib();
+ try{window.scrollTo(0,0);}catch(e){}toast("✅ Véhicule chargé dans le sélecteur.");},
+detail:function(t){openDetail(t.getAttribute("data-k"));},
+detailClose:function(){D("mDetail").className="modal";},
+lb:function(t){var p=findPhoto(t.getAttribute("data-id"));if(p)lightbox(p.url,p.cap);},
+lbUrl:function(t){lightbox(t.getAttribute("data-u"),t.getAttribute("data-c"));},
+lbClose:function(){D("mLb").className="modal";},
+gal:function(t){var k=t.getAttribute("data-k"),f=null,i;for(i=0;i<S.base.length;i++)if(fkey(S.base[i])===k)f=S.base[i];
+ D("mDetail").className="modal";showApp();
+ var b=D("tabsApp").getElementsByTagName("button");for(i=0;i<b.length;i++)if(b[i].getAttribute("data-v")==="photos"){ACT.tabApp(b[i]);break;}
+ D("photoOut").innerHTML="";if(f)gallery(f);},
+webPhotos:function(t){showApp();var b=D("tabsApp").getElementsByTagName("button"),i;
+ for(i=0;i<b.length;i++)if(b[i].getAttribute("data-v")==="photos"){ACT.tabApp(b[i]);break;}
+ D("pq").value=t.getAttribute("data-q");photoSearch();},
+photoSearch:function(){photoSearch();},
+ctxRun:function(){ctxRun();},
+ctxJson:function(){dl("analyse-contexte.json",JSON.stringify(S.lastReport||{vehicule:veh(),contexte:D("ctx").value},null,1));},
+studyRun:function(){studyRun();},
+studyJson:function(){dl("etude-cas.json",JSON.stringify({vehicule:veh(),contexte:D("ctx").value},null,1));},
+print:function(){window.print();},
+word:function(t){var ta=D(t.getAttribute("data-t"));if(!ta)return;
+ ta.value=ta.value.replace(/[A-Za-z0-9\u00c0-\u00ff-]+$/,t.getAttribute("data-w"))+" ";ta.focus();
+ var ev;try{ev=new Event("input",{bubbles:true});}catch(e){ev=document.createEvent("HTMLEvents");ev.initEvent("input",true,false);}ta.dispatchEvent(ev);},
+obdConnect:function(){obdConnect();},obdRead:function(){obdRead();},
+msgSend:function(){sendMsg(false);},msgCopy:function(){sendMsg(true);},
+vinRun:function(){runVin();},
+vinPaste:function(){if(navigator.clipboard&&navigator.clipboard.readText){
+  navigator.clipboard.readText().then(function(t){D("vin").value=t.replace(/\s/g,"").slice(0,17);runVin();},function(){toast("Colle le VIN manuellement.");});}
+ else toast("Colle le VIN manuellement dans le champ.");},
+vinBrand:function(){if(!S.lastVin)return;copyText(S.lastVin.raw);window.open(S.lastVin.url,"_blank","noopener");},
+vinFill:function(){if(!S.lastVin)return;var v=S.lastVin;
+ if(v.make)D("vMake").value=tc(v.make.toLowerCase());if(v.model)D("vModel").value=v.model;if(v.year)D("vYear").value=v.year;
+ if(v.fuel)D("vFuel").value=/electric/i.test(v.fuel)?"electrique":/diesel/i.test(v.fuel)?"diesel":/hybrid/i.test(v.fuel)?"hybride":"essence";
+ renderEng();renderPow();renderAttrib();try{window.scrollTo(0,0);}catch(e){}toast("✅ Sélecteur véhicule pré-rempli.");},
+genCode:function(){var p=D("acName").value.replace(/^\s+|\s+$/g,"");if(!p){toast("Prénom requis.");return;}
+ var days=Math.max(1,parseInt(D("acDays").value,10)||365),pay={p:p,n:uid(),exp:Date.now()+days*86400000};
+ var pl=b64u(JSON.stringify(pay)),sg=sig8(pl),code=pl+"."+sg;
+ D("genOut").innerHTML=esc(code);setCls(D("genOut"),"hide",false);
+ var a=codes();a.unshift({name:p,exp:pay.exp,sig:sg,code:code});ls("codes",a);renderCodes();toast("🎟️ Code généré pour "+esc(p)+".");},
+copyGen:function(){copyText(D("genOut").innerHTML.replace(/&amp;/g,"&"));},
+shareGen:function(){var t="Code d'accès KEV TECH & FIRE :\n"+D("genOut").innerHTML;
+ if(navigator.share)navigator.share({title:"Code d'accès",text:t}).catch(function(){copyText(t);});else copyText(t);},
+copyUser:function(t){var a=codes(),x=a[parseInt(t.getAttribute("data-i"),10)];if(x)copyText(x.code);},
+revoke:function(t){var a=codes(),x=a[parseInt(t.getAttribute("data-i"),10)];if(!x)return;
+ if(!has(S.revs,x.sig))S.revs.push(x.sig);ls("revs",S.revs);renderCodes();renderRevs();toast("🚫 Code révoqué — publie pour diffuser.");},
+pubRevs:function(){syncPush(true);},
+dropClick:function(){D("pFile").click();},
+urlAdd:function(){var u=D("pUrl").value.replace(/^\s+|\s+$/g,"");if(!u){toast("Saisis une URL d'image.");return;}
+ compress(u,1000,0.72,function(err,d){if(err){addPending(u,D("pCap").value||u);toast("ℹ️ URL conservée en lien direct.");}
+  else addPending(d,D("pCap").value||u);D("pUrl").value="";});},
+rmPending:function(t){S.pending.splice(parseInt(t.getAttribute("data-i"),10),1);renderPending();},
+attach:function(){attach();},
+cancelEdit:function(){clearForm();D("fTarget").value="__new__";setCls(D("newForm"),"hide",false);toast("Édition annulée.");},
+pubFaults:function(){syncPush(true);},
+expFaults:function(){dl("ktf-pannes-photos.json",JSON.stringify(S.overlay,null,1));},
+editFault:function(t){var id=t.getAttribute("data-id"),e=null,i;
+ for(i=0;i<S.overlay.entries.length;i++)if(S.overlay.entries[i].id===id)e=S.overlay.entries[i];
+ if(!e){toast("Panne introuvable.");return;}
+ S.editId=e.id;D("mDetail").className="modal";showAdmin();
+ var b=D("tabsAdm").getElementsByTagName("button");for(i=0;i<b.length;i++)if(b[i].getAttribute("data-a")==="faults"){ACT.tabAdm(b[i]);break;}
+ D("fTarget").value="__new__";setCls(D("newForm"),"hide",false);
+ D("nfTitle").innerHTML="Modifier la panne — "+esc(e.title);
+ D("nTitle").value=e.title||"";D("nMake").value=e.make||"";D("nModel").value=e.model||"";D("nEngine").value=e.engine||"";
+ D("nPower").value=(e.powers||[]).join(",");D("nYears").value=e.years?e.years.join("-"):"";D("nFuel").value=e.fuel||"";
+ D("nSys").value=e.sys||"";D("nDtc").value=(e.dtc||[]).join(",");D("nSym").value=(e.sym||[]).join(", ");
+ D("nGrav").value=e.grav||"eleve";D("nSrc").value=e.url||"";D("nMeca").value=e.meca||"";
+ D("nCons").value=(e.cons||[]).join("\n");D("nInd").value=(e.ind||[]).join("\n");D("nFire").checked=!!e.fire;D("nChain").value=e.chain||"";},
+delFault:function(t){delFaults([t.getAttribute("data-id")]);},
+moveUp:function(t){var i=parseInt(t.getAttribute("data-i"),10),a=S.overlay.entries;if(i<1)return;
+ var x=a.splice(i,1)[0];a.splice(i-1,0,x);persist();renderFaultList();},
+moveDown:function(t){var i=parseInt(t.getAttribute("data-i"),10),a=S.overlay.entries;if(i>=a.length-1)return;
+ var x=a.splice(i,1)[0];a.splice(i+1,0,x);persist();renderFaultList();},
+selOne:function(t){var id=t.getAttribute("data-id");if(t.checked)S.sel[id]=1;else delete S.sel[id];renderFaultList();},
+selAll:function(){each(S.overlay.entries,function(e){S.sel[e.id]=1;});renderFaultList();},
+selNone:function(){S.sel={};renderFaultList();},
+bulkDel:function(){var ids=[],k;for(k in S.sel)if(S.sel.hasOwnProperty(k))ids.push(k);
+ if(!ids.length){toast("Aucune panne sélectionnée.");return;}delFaults(ids);},
+opApply:function(){S.look.op=parseInt(D("op").value,10);applyLook();toast("💾 Opacité appliquée.");},
+lookReset:function(){S.look={op:55};applyLook();toast("🎨 Apparence réinitialisée.");},
+pubLook:function(){S.mail=D("mail").value.replace(/^\s+|\s+$/g,"")||S.mail;ls("mail",S.mail);syncPush(true);},
+syCreate:function(){toast("⏳ Création du canal…");
+ AD[S.be].create(function(err,id){if(err){toast("❌ "+esc(AD[S.be].name)+" : "+esc(err)+" — essaie un autre service.");return;}
+  setChan(id);D("syCh").value=id;syncPush(false,function(){toast("✅ Canal créé : <b>"+esc(id)+"</b> — partage ce code aux tiers.");});});},
+syUse:function(){setChan(D("syCh").value.replace(/^\s+|\s+$/g,""));syncPull();},
+syShare:function(){var c=chan();if(!c){toast("Aucun canal.");return;}
+ var t="Code canal KEV TECH & FIRE : "+c+"\nÀ coller dans l'application (badge 📡 ou écran d'accès).";
+ if(navigator.share)navigator.share({title:"Canal de synchronisation",text:t}).catch(function(){copyText(t);});else copyText(t);},
+syTest:function(){var c=D("syCh").value.replace(/^\s+|\s+$/g,"")||chan();if(!c){toast("Renseigne un code canal.");return;}
+ AD[S.be].read(c,function(err,st){if(err){toast("❌ "+esc(err));return;}toast(st?"✅ Canal joignable et alimenté.":"⚠️ Canal joignable mais vide.");});},
+syPub:function(){syncPush(true);},
+syPull:function(){syncPull(function(){toast("🔄 Synchronisation effectuée.");});},
+reload:function(){background(true,function(){toast("✅ Base rechargée.");});},
+upd:function(){checkUpd(true);},
+harvest:function(){harvest();},
+diag:function(){D("mDiag").className="modal on";paintChecks();},
+diagClose:function(){D("mDiag").className="modal";},
+goBase:function(){if(S.admin){showAdmin();var b=D("tabsAdm").getElementsByTagName("button"),i;
+  for(i=0;i<b.length;i++)if(b[i].getAttribute("data-a")==="base"){ACT.tabAdm(b[i]);break;}}
+ else D("mDiag").className="modal on";},
+askChan:function(){var c=window.prompt("Code canal de synchronisation :",chan());if(c===null)return;
+ setChan(c.replace(/^\s+|\s+$/g,""));syncPull();},
+hardReset:function(){try{localStorage.clear();}catch(e){}
+ if(window.caches&&caches.keys)caches.keys().then(function(ks){each(ks,function(k){caches.delete(k);});}).catch(function(){});
+ setTimeout(function(){location.reload();},400);},
+errClose:function(){setCls(D("err"),"hide",true);},
+expAll:function(){dl("ktf-base-complete.json",JSON.stringify({version:new Date().toISOString(),entries:S.base,photos:S.overlay.photos},null,1));},
+saveView:function(){var name=window.prompt("Nom de cette vue :",(D("q").value||"Vue")+" "+new Date().toLocaleDateString("fr-FR"));
+ if(!name)return;var vs=ls("views")||[];
+ vs.push({name:name,q:D("q").value,make:D("fMake").value,sys:D("fSys").value,grav:D("fGrav").value,sort:D("fSort").value,theme:S.theme});
+ ls("views",vs.slice(-8));renderViews();toast("💾 Vue mémorisée.");},
+loadView:function(t){var vs=ls("views")||[],v=vs[parseInt(t.getAttribute("data-i"),10)];if(!v)return;
+ D("q").value=v.q||"";fillFilters();D("fMake").value=v.make||"";D("fSys").value=v.sys||"";
+ D("fGrav").value=v.grav||"";D("fSort").value=v.sort||"score";
+ S.theme=v.theme||"tous";document.documentElement.setAttribute("data-theme",S.theme);
+ var b=D("seg").getElementsByTagName("button"),i;for(i=0;i<b.length;i++)setCls(b[i],"on",b[i].getAttribute("data-t")===S.theme);
+ renderResults();toast("📁 Vue « "+esc(v.name)+" » chargée.");},
+clearViews:function(){ls("views",[]);renderViews();toast("🗑️ Vues effacées.");}
+};
+
+function doImport(inp){if(!S.admin){toast("Import réservé à l'administrateur.");inp.value="";return;}
+ var files=[],i;for(i=0;i<inp.files.length;i++)files.push(inp.files[i]);
+ var idx=0,count=0;
+ function step(){
+  if(idx>=files.length){persist();fillFilters();renderResults();renderFaultList();stats();inp.value="";toast("📥 Import terminé : "+count+" élément(s) fusionné(s).");return;}
+  var f=files[idx];idx++;var fr=new FileReader();
+  fr.onload=function(){var txt=String(fr.result||"");
+   try{
+    if(/\.json$/i.test(f.name)){var j=JSON.parse(txt),a=(Object.prototype.toString.call(j)==="[object Array]")?j:(j.entries||[]);
+     var nn=normalize(a);each(nn,function(e){S.overlay.entries.push(e);});merge(nn);count+=nn.length;
+     if(j.photos)each(j.photos,function(p){S.overlay.photos.push(p);count++;});}
+    else{var blocks=txt.split(/\n\s*\n/);each(blocks,function(x){if(x.replace(/\s/g,"").length<40)return;
+      var e={id:"doc-"+uid(),themes:["technique"],type:"document",source:"import",make:"Multi-marques",model:"Tous",
+       title:f.name+" — extrait "+(count+1),meca:x.slice(0,1800),cons:[],dtc:(x.toUpperCase().match(/[PCBU]\d{4}/g)||[]),
+       fire:FIRERE.test(x),grav:"modere",date:new Date().toISOString().slice(0,10)};
+      S.overlay.entries.push(e);merge([e]);count++;});}
+   }catch(e){toast("❌ "+esc(f.name)+" : fichier illisible.");}
+   step();};
+  fr.onerror=function(){toast("❌ Lecture de "+esc(f.name)+" impossible.");step();};
+  fr.readAsText(f);}
+ step();}
+
+function bindEvents(){
+ document.addEventListener("click",function(ev){
+  var t=upAct(ev.target);if(!t)return;var name=t.getAttribute("data-act"),fn=ACT[name];if(!fn)return;
+  if(t.tagName==="A"||name==="dropClick")ev.preventDefault();
+  try{fn(t,ev);}catch(e){toast("❌ "+esc(e.message||e));report(name+" → "+(e.message||e));}},false);
+ document.addEventListener("input",function(ev){
+  var i=ev.target;if(!i||!i.id)return;
+  try{
+   if(i.id==="q")renderResults();
+   else if(i.id==="fFilter")faultPicker();
+   else if(i.id==="op"){D("opVal").innerHTML=i.value+"%";D("wall").style.opacity=i.value/100;}
+   else if(i.id==="ctx"){
+    var n=norm(i.value),boxes=D("qcm").getElementsByTagName("input"),j;
+    for(j=0;j<boxes.length;j++){var s=boxes[j].value;
+     if(n.indexOf(norm(s).split(" ")[0])>=0&&!boxes[j].checked){boxes[j].checked=true;setCls(boxes[j].parentNode,"on",true);}}
+    var dtc=i.value.toUpperCase().match(/[PCBU]\d{4}/g)||[];
+    if(dtc.length&&!D("dtc").value){D("dtc").value=uniq(dtc).join(", ");D("dtcOn").checked=true;setCls(D("dtc"),"hide",false);}
+    var toks=[],w=n.split(" ");for(j=0;j<w.length;j++)if(w[j].length>3)toks.push(w[j]);
+    var h=hyps(veh(),toks,dtc,checkedSym()).slice(0,3),out="";
+    for(j=0;j<h.length;j++)out+="<span class='tag "+(h[j].e.fire?"fire":"")+"'>"+esc(String(h[j].e.title).slice(0,46))+" · "+h[j].s+"</span>";
+    D("live").innerHTML=out?"<b style='color:#ffc400'>🔎 Corrélations détectées :</b> "+out:"";}
+  }catch(e){report("saisie → "+(e.message||e));}},false);
+ document.addEventListener("change",function(ev){
+  var i=ev.target;if(!i)return;
+  try{
+   if(i.id==="vMake"||i.id==="vModel"){renderEng();
+    var l=enginesFor(D("vMake").value,D("vModel").value),ok=false,j;
+    for(j=0;j<l.length;j++)if(norm(l[j].m)===norm(D("vEngine").value))ok=true;
+    if(D("vEngine").value&&!ok){D("vEngine").value="";D("vPower").value="";}
+    renderPow();renderAttrib();}
+   else if(i.id==="vEngine")autoAttr();
+   else if(i.id==="fMake"||i.id==="fSys"||i.id==="fGrav"||i.id==="fSort")renderResults();
+   else if(i.id==="dtcOn")setCls(D("dtc"),"hide",!i.checked);
+   else if(i.id==="fTarget")setCls(D("newForm"),"hide",i.value!=="__new__");
+   else if(i.id==="syBe"){S.be=i.value;ls("be",S.be);}
+   else if(i.id==="syAuto")ls("auto",i.checked);
+   else if(i.id==="pFile"&&i.files.length){intake(i.files,D("pCap").value);i.value="";}
+   else if(i.id==="bgFile"&&i.files[0])compress(i.files[0],1600,0.85,function(err,u){if(err){toast("❌ "+esc(err));return;}S.look.bg=u;applyLook();toast("🎨 Fond appliqué.");});
+   else if(i.id==="carFile"&&i.files[0])compress(i.files[0],900,0.85,function(err,u){if(err){toast("❌ "+esc(err));return;}S.look.car=u;applyLook();toast("🚗 Véhicule animé appliqué.");});
+   else if(i.id==="imp")doImport(i);
+   else if(i.type==="checkbox"&&inId(i,"qcm"))setCls(i.parentNode,"on",i.checked);
+  }catch(e){report("changement → "+(e.message||e));}},false);
+ document.addEventListener("keydown",function(ev){
+  var id=ev.target&&ev.target.id;
+  if(ev.key==="Enter"&&id==="pwd"){ev.preventDefault();ACT.login();}
+  else if(ev.key==="Enter"&&id==="vin"){ev.preventDefault();runVin();}
+  else if(ev.key==="Enter"&&id==="pq"){ev.preventDefault();photoSearch();}
+  else if(ev.key==="Enter"&&id==="gCode"){ev.preventDefault();ACT.gate();}
+  else if(ev.key==="Escape"){D("mLb").className="modal";D("mDiag").className="modal";D("mDetail").className="modal";}},false);
+ document.addEventListener("paste",function(ev){
+  if(!S.admin||!ev.clipboardData||!ev.clipboardData.items)return;
+  var files=[],i;for(i=0;i<ev.clipboardData.items.length;i++){var it=ev.clipboardData.items[i];
+   if(/^image\//.test(it.type)){var f=it.getAsFile();if(f)files.push(f);}}
+  if(!files.length)return;ev.preventDefault();intake(files,"photo collée");},false);
+ var dz=D("drop");
+ dz.addEventListener("dragenter",function(ev){ev.preventDefault();setCls(dz,"on",true);});
+ dz.addEventListener("dragover",function(ev){ev.preventDefault();setCls(dz,"on",true);});
+ dz.addEventListener("dragleave",function(ev){ev.preventDefault();setCls(dz,"on",false);});
+ dz.addEventListener("drop",function(ev){ev.preventDefault();setCls(dz,"on",false);
+  if(ev.dataTransfer&&ev.dataTransfer.files.length)intake(ev.dataTransfer.files,D("pCap").value);});
+ each(["mLb","mDiag","mDetail"],function(id){D(id).addEventListener("click",function(ev){if(ev.target===D(id))D(id).className="modal";});});
+ window.addEventListener("resize",function(){safe(resize,"redimensionnement");});
+ window.addEventListener("online",function(){net();syncPull();checkUpd(false);});
+ window.addEventListener("offline",net);
+ document.addEventListener("visibilitychange",function(){
+  if(document.hidden){visible=false;if(raf){window.cancelAnimationFrame(raf);raf=0;}}
+  else{startLoop();syncPull();checkUpd(false);}});
+}
+
+function background(force,cb){
+ var c=ls("cache");
+ if(c&&c.entries&&c.entries.length){merge(c.entries);check("cache","ok",c.entries.length+" fiches restaurées ("+new Date(c.ts).toLocaleDateString("fr-FR")+")");}
+ else check("cache","warn","cache vide — premier lancement");
+ fillFilters();renderResults();stats();
+ jget("data/seed.json",5000,function(s){
+  if(s&&s.length){merge(normalize(s));check("repo","ok","seed.json : "+s.length+" fiches");}
+  else check("repo","warn","seed.json absent — base embarquée utilisée");
+  jget("data/manual.json",5000,function(man){
+   if(man){var a=(Object.prototype.toString.call(man)==="[object Array]")?man:(man.entries||[]);
+    merge(normalize(a));check("admin","ok",a.length+" pannes admin publiées");}
+   else check("admin","warn","manual.json absent — ajouts locaux uniquement");
+   jget("data/photos.json",5000,function(ph){
+    if(ph){var arr=(Object.prototype.toString.call(ph)==="[object Array]")?ph:(ph.photos||[]);
+     each(arr,function(p){var cur=S.photos[p.fault]||[],found=false;
+      each(cur,function(x){if(x.id===p.id)found=true;});
+      if(!found){if(!S.photos[p.fault])S.photos[p.fault]=[];S.photos[p.fault].push(p);}});}
+    fillFilters();renderResults();stats();ls("cache",{ts:Date.now(),entries:S.base.slice(0,2500)});
+    checkUpd(!!force,function(){syncPull(function(){
+     var rcTs=ls("rcTs")||0;
+     if(navigator.onLine&&(force||S.base.length<120||Date.now()-rcTs>604800000))harvest(function(){paintChecks();if(cb)cb();});
+     else{paintChecks();if(cb)cb();}});});});});});}
+
+function boot(){
+ safe(function(){var h="",i;for(i=0;i<SYMPT.length;i++)h+="<label><input type='checkbox' value='"+esc(SYMPT[i])+"'>"+esc(SYMPT[i])+"</label>";
+  D("qcm").innerHTML=h;},"constatations");
+ safe(function(){D("mail").value=S.mail;D("syBe").value=S.be;D("syCh").value=chan();D("syAuto").checked=!!ls("auto");},"champs admin");
+ safe(resize,"canvas");
+ safe(applyLook,"apparence");
+ safe(bindEvents,"événements");
+ check("events","ok","contrôles liés par délégation — aucun gestionnaire manquant");
+ safe(function(){each(["vMake","vModel","vEngine","vPower","q"],function(id){suggest(D(id));});},"prédiction");
+ safe(function(){feedWords(D("ctx"),D("predCtx"));feedWords(D("msg"),D("predMsg"));},"rédaction prédictive");
+ safe(function(){merge(SEED);merge(S.overlay.entries);rebuildPhotos();},"base embarquée");
+ safe(fillFilters,"filtres");safe(renderEng,"moteurs");safe(renderPow,"puissances");
+ safe(renderResults,"résultats");safe(stats,"statistiques");safe(renderHisto,"historique");
+ safe(renderOutbox,"messages");safe(quotaShow,"quota");safe(function(){setChan(chan());},"canal");
+ safe(net,"réseau");
+ check("boot","ok","application autonome chargée — aucun script externe requis");
+ check("seed","ok",SEED.length+" fiches embarquées, fonctionne hors ligne");
+ var st="ok";try{localStorage.setItem("ktf:t","1");localStorage.removeItem("ktf:t");}catch(e){st="warn";}
+ check("store",st,st==="ok"?"localStorage opérationnel":"stockage restreint — session en mémoire");
+ safe(startLoop,"animation");
+ setCls(D("boot"),"off",true);
+ var mode=ls("mode"),acc=ls("access");
+ if(mode==="tiers"&&acc&& !has(S.revs,acc.sig)){S.name=acc.name;showApp();}else show("s-home");
+ if(navigator.serviceWorker){navigator.serviceWorker.register("sw.js").then(function(){check("sw","ok","enregistré — mode hors ligne actif");},function(e){check("sw","warn",e.message||"enregistrement refusé");});}
+ else check("sw","warn","non supporté par ce navigateur");
+ paintChecks();
+ setTimeout(function(){background(false);},350);
+ setInterval(function(){syncPull();checkUpd(false);if(S.admin&&ls("auto"))syncPush(false);},60000);
+}
+window.KTF={state:S,actions:ACT,syncPush:syncPush,syncPull:syncPull,checkUpd:checkUpd,harvest:harvest,enginesFor:enginesFor};
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+})();
+</script>
+</body>
+</html>
