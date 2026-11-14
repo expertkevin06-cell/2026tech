@@ -402,11 +402,22 @@ td{padding:8px 7px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:
 </section>
 </main>
 
-<div class="modal" id="mDiag"><div class="mcard"><h2>🩺 Autovérification de l'application</h2><div class="prog"><i id="dProg"></i></div><div id="dBox"></div>
-<div style="margin-top:14px"><button class="btn" data-act="runSelfTest">🧪 Relancer l'autovérification</button><button class="btn am" data-act="manualUpdate">🔄 Mise à jour manuelle</button><button class="btn rd" data-act="hardReset">🧹 Vider le cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
-<div class="modal" id="mDetail"><div class="mcard"><div id="detailBody"></div><button class="btn gh" data-act="detailClose">✕ Fermer</button></div></div>
-<div class="modal" id="mLb"><div class="mcard" style="text-align:center"><img alt=""><p class="sm" id="lbCap" style="margin-top:11px"></p><button class="btn gh sm" data-act="lbClose">✕ Fermer</button></div></div>
-<div id="toasts"></div>
+<div class="modal" id="mDiag"><div class="mcard">
+<h2>🩺 Autovérification de l'application</h2>
+<div style="display:flex;align-items:center;gap:12px;margin:6px 0 4px">
+  <div class="prog" style="flex:1"><i id="dProg"></i></div>
+  <b id="dPct" style="color:var(--acc);font-size:.85rem;min-width:52px;text-align:right">0 %</b>
+</div>
+<p class="sm" id="dHint">Vérification séquentielle des 13 points de contrôle. La barre atteint 100 % même en cas d'avertissements (canal non configuré, hors ligne…).</p>
+<div id="dBox" style="max-height:52vh;overflow:auto;padding-right:6px"></div>
+<div style="margin-top:14px">
+  <button class="btn" data-act="runSelfTest">🧪 Relancer l'autovérification</button>
+  <button class="btn am" data-act="manualUpdate">🔄 Mise à jour manuelle (2 URL)</button>
+  <button class="btn gh" data-act="checkSupport">🔎 Vérifier les 2 URL</button>
+  <button class="btn rd" data-act="hardReset">🧹 Vider le cache</button>
+  <button class="btn gh" data-act="diagClose">✕ Fermer</button>
+</div>
+</div></div>
 
 <script>
 window.__ERRS=[];
