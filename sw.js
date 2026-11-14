@@ -1,4 +1,4 @@
-var CACHE = "ktf-2026-recall1";
+var CACHE = "ktf-2026-upd2";
 var SHELL = ["./","./index.html","./db-core.js","./db-faults.js","./kdb.js","./app.js","./manifest.webmanifest","./icon.svg"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) {
