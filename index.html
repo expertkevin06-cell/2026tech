@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="tous">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -12,216 +12,274 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
-:root{--acc:#00e676;--acc2:#00e5ff;--edge:rgba(140,165,255,.2);--dim:#93a4d8}
-html[data-theme="technique"]{--acc:#00e5ff;--acc2:#8b5cff}
-html[data-theme="incendie"]{--acc:#ff7a18;--acc2:#ff2d55}
-*{box-sizing:border-box}
-body{margin:0;background:#05081a;color:#eaf0ff;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
-canvas{display:block}img{max-width:100%;display:block}
+:root{
+--ink:#05081a;--ink2:#0a0f28;--surf:rgba(14,20,48,.88);--surf2:rgba(24,32,72,.62);
+--edge:rgba(140,165,255,.18);--edge2:rgba(140,165,255,.34);
+--txt:#eaf0ff;--dim:#93a4d8;--dim2:#66759f;
+--cyan:#00e5ff;--violet:#8b5cff;--fire:#ff7a18;--red:#ff2d55;--acid:#00e676;--amber:#ffc400;--steel:#4a6fa5;
+--acc:#00e676;--acc2:#00e5ff;--r:20px;--r2:13px;--sh:0 20px 60px rgba(0,0,0,.5);color-scheme:dark}
+html[data-theme=technique]{--acc:#00e5ff;--acc2:#8b5cff}
+html[data-theme=incendie]{--acc:#ff7a18;--acc2:#ff2d55}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:#05081a;color:#eaf0ff;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+img,svg,canvas{display:block;max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 a{color:var(--acc)}
-*::-webkit-scrollbar{width:10px;height:10px}
-*::-webkit-scrollbar-track{background:rgba(140,165,255,.07)}
-*::-webkit-scrollbar-thumb{background:var(--acc);border-radius:10px;border:2px solid #05081a}
-#scene{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3}
-#wall{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;opacity:0;background-size:cover;background-position:center;transition:opacity .8s}
-#veil{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;
-background:radial-gradient(ellipse at 50% 0%,rgba(0,0,0,0) 30%,rgba(5,8,26,.72));
-animation:veilMove 16s ease-in-out infinite alternate}
+*{scrollbar-width:thin;scrollbar-color:var(--acc) rgba(140,165,255,.08)}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-track{background:rgba(140,165,255,.07);border-radius:11px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--acc),var(--acc2));border-radius:11px;border:2px solid #05081a}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#ffc400,#ff7a18)}
+#scene{position:fixed;inset:0;z-index:-4;width:100%;height:100%}
+#wall{position:fixed;inset:0;z-index:-3;opacity:0;background-size:cover;background-position:center;transition:opacity .8s}
+#veil{position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 85% 55% at 50% -5%,transparent 25%,rgba(5,8,26,.45) 70%,rgba(3,5,16,.9));animation:veilMove 16s ease-in-out infinite alternate}
 @keyframes veilMove{0%{opacity:.85;transform:translateY(0)}100%{opacity:1;transform:translateY(-14px)}}
-#boot{position:fixed;top:0;left:0;width:100%;height:100%;z-index:900;background:#05081a;display:flex;align-items:center;justify-content:center;text-align:center;animation:bo .4s ease 2s forwards}
-#boot.off{display:none}
-@keyframes bo{to{opacity:0;visibility:hidden}}
-.bl{width:80px;height:80px;margin:0 auto 16px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,#00e5ff,#8b5cff,#ff7a18);animation:spin 5s linear infinite}
-@keyframes spin{to{filter:hue-rotate(360deg)}}
+#boot{position:fixed;inset:0;z-index:900;background:radial-gradient(ellipse at 50% 32%,#1a1f52,#05081a 65%);display:flex;align-items:center;justify-content:center;text-align:center;animation:bootOut .45s ease 2.4s forwards}
+#boot.off{opacity:0;visibility:hidden;pointer-events:none;animation:none}
+@keyframes bootOut{to{opacity:0;visibility:hidden;pointer-events:none}}
+.bcore{width:360px;max-width:88vw}
+.blogo{width:88px;height:88px;margin:0 auto 20px;border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:2.3rem;background:linear-gradient(135deg,#00e5ff,#8b5cff 45%,#ff7a18 75%,#ff2d55);box-shadow:0 0 70px rgba(0,229,255,.45);animation:hue 6s linear infinite}
+@keyframes hue{to{filter:hue-rotate(360deg)}}
+.btitle{font-size:1.4rem;font-weight:900;margin:0 0 8px;color:#00e5ff;letter-spacing:.5px}
+.bsub{color:#93a4d8;font-size:.8rem;margin:0 0 20px}
+.bbar{height:5px;border-radius:5px;background:rgba(140,165,255,.14);overflow:hidden}
+.bbar i{display:block;height:100%;width:36%;border-radius:5px;background:linear-gradient(90deg,#00e5ff,#00e676,#ffc400,#ff7a18);animation:run 1.1s ease-in-out infinite}
+@keyframes run{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
 #err{position:fixed;top:0;left:0;width:100%;z-index:999;background:#4a0d1a;border-bottom:2px solid #ff2d55;padding:12px;font-size:.75rem;max-height:45vh;overflow:auto}
 #err pre{white-space:pre-wrap;word-break:break-word;color:#ffcdd2;font-size:.7rem;margin:6px 0}
-header{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:rgba(5,8,26,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge)}
-.mark{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#00e5ff,#8b5cff,#ff7a18)}
-h1{margin:0;font-size:1rem;color:var(--acc)}
-header small{display:block;color:#66759f;font-size:.58rem;text-transform:uppercase}
-.pills{display:flex;gap:5px;flex-wrap:wrap}
-.pill{font-size:.65rem;font-weight:800;padding:5px 10px;border-radius:18px;background:rgba(140,165,255,.1);border:1px solid var(--edge);color:var(--dim);cursor:pointer;white-space:nowrap}
-.pill.ok{color:#00e676;border-color:rgba(0,230,118,.4)}
-.pill.warn{color:#ffc400;border-color:rgba(255,196,0,.4)}
-.pill.bad{color:#ff2d55;border-color:rgba(255,45,85,.5)}
-.seg{display:flex;gap:2px;padding:3px;margin-left:auto;background:rgba(140,165,255,.1);border:1px solid var(--edge);border-radius:20px}
-.seg button{border:0;background:none;color:var(--dim);padding:6px 12px;border-radius:17px;font-size:.72rem;font-weight:800;cursor:pointer}
-.seg button.on{background:var(--acc);color:#04102a}
-.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:12px;padding:10px 16px;margin:4px 4px 0 0;font-size:.84rem;font-weight:800;color:#04102a;background:linear-gradient(100deg,var(--acc),var(--acc2));cursor:pointer}
-.btn:active{transform:scale(.97)}
-.btn[disabled]{opacity:.4}
-.btn.gh{background:rgba(140,165,255,.1);color:#eaf0ff;border:1px solid var(--edge)}
+header{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 16px;background:linear-gradient(180deg,rgba(5,8,26,.97),rgba(5,8,26,.84));backdrop-filter:blur(18px);border-bottom:1px solid var(--edge)}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:linear-gradient(135deg,#00e5ff,#8b5cff 55%,#ff7a18);box-shadow:0 0 24px rgba(0,229,255,.3)}
+header h1{margin:0;font-size:1.05rem;font-weight:900;white-space:nowrap;color:var(--acc)}
+.brand small{display:block;color:#66759f;font-size:.6rem;letter-spacing:.6px;text-transform:uppercase}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:.67rem;font-weight:800;padding:5px 11px;border-radius:20px;background:rgba(140,165,255,.08);border:1px solid var(--edge);color:#93a4d8;white-space:nowrap;cursor:pointer}
+.pill:hover{border-color:var(--edge2);color:#eaf0ff}
+.pill.ok{color:#00e676;border-color:rgba(0,230,118,.35);background:rgba(0,230,118,.09)}
+.pill.warn{color:#ffc400;border-color:rgba(255,196,0,.35);background:rgba(255,196,0,.09)}
+.pill.bad{color:#ff2d55;border-color:rgba(255,45,85,.4);background:rgba(255,45,85,.1)}
+.seg{display:flex;gap:2px;padding:3px;margin-left:auto;background:rgba(140,165,255,.08);border:1px solid var(--edge);border-radius:22px}
+.seg button{border:0;background:transparent;color:#93a4d8;cursor:pointer;padding:6px 14px;border-radius:19px;font-size:.73rem;font-weight:800}
+.seg button.on{background:linear-gradient(95deg,var(--acc),var(--acc2));color:#04102a}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:13px;cursor:pointer;padding:11px 17px;margin:4px 5px 0 0;font-size:.85rem;font-weight:800;color:#04102a;background:linear-gradient(100deg,var(--acc),var(--acc2));box-shadow:0 5px 20px rgba(0,230,118,.22);transition:transform .16s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.btn.gh{background:rgba(140,165,255,.09);color:#eaf0ff;border:1px solid var(--edge2);box-shadow:none}
+.btn.gh:hover{background:rgba(140,165,255,.17)}
 .btn.rd{background:linear-gradient(100deg,#ff2d55,#ff7a18);color:#fff}
-.btn.sm{padding:6px 11px;font-size:.74rem}
-main{width:1100px;max-width:100%;margin:0 auto;padding:16px 14px 80px}
-.card{background:rgba(14,20,48,.86);border:1px solid var(--edge);border-radius:18px;padding:18px;margin-bottom:14px;backdrop-filter:blur(12px)}
-.card.mid{text-align:center;padding:32px 20px}
+.btn.gr{background:linear-gradient(100deg,#00e676,#00e5ff)}
+.btn.am{background:linear-gradient(100deg,#ffc400,#ff7a18);color:#2a1500}
+.btn.sm{padding:7px 12px;font-size:.75rem;border-radius:9px}
+main{width:1120px;max-width:100%;margin:0 auto;padding:20px 16px 90px}
+.card{position:relative;background:var(--surf);border:1px solid var(--edge);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:var(--sh);backdrop-filter:blur(16px);animation:pop .45s ease both}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,transparent,var(--acc),#8b5cff,#ff7a18,transparent);opacity:.85}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card.mid{text-align:center;padding:38px 24px}
 .hide{display:none!important}
-h2{margin:0 0 12px;font-size:1rem;color:var(--acc);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-h3{margin:14px 0 6px;font-size:.88rem}
-p{line-height:1.6;margin:7px 0}
-.sm,small{font-size:.73rem;color:var(--dim);line-height:1.5}
-.hero{font-size:3.2rem;animation:float 3.4s ease-in-out infinite}
+h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 15px;font-size:1.04rem;font-weight:900;color:var(--acc)}
+h3{margin:18px 0 8px;font-size:.9rem;font-weight:800}
+p{line-height:1.62;margin:8px 0}
+.sm,small{font-size:.74rem;color:#93a4d8;line-height:1.55}
+.hero{font-size:3.6rem;animation:float 3.6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-8px)}}
-.fld{display:flex;flex-direction:column;gap:4px}
-.fld>label{font-size:.65rem;font-weight:800;color:var(--dim);text-transform:uppercase}
-input,select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--edge);background:rgba(5,8,26,.9);font-size:.88rem}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
-textarea{min-height:96px;resize:vertical}
-input[type=checkbox]{width:auto;accent-color:#00e676}
-input[type=range]{padding:0;height:24px;background:none;border:0}
-input[type=file]{padding:8px;font-size:.75rem;border-style:dashed;color:var(--dim)}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.chips button{border:1px solid var(--acc);background:rgba(5,8,26,.85);color:var(--acc);border-radius:16px;padding:5px 11px;font-size:.73rem;font-weight:800;cursor:pointer}
-.chips label{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--edge);border-radius:16px;padding:5px 11px;font-size:.74rem;cursor:pointer}
-.chips label.on{border-color:var(--acc);color:var(--acc);background:rgba(0,230,118,.12)}
-.wait{color:#66759f;font-size:.74rem;font-style:italic}
-.tag{display:inline-block;font-size:.63rem;font-weight:800;padding:3px 8px;border-radius:10px;margin:2px 3px 2px 0;background:rgba(140,165,255,.13);color:var(--dim)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld>label{font-size:.67rem;font-weight:800;letter-spacing:.6px;color:#93a4d8;text-transform:uppercase}
+input,select,textarea{width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--edge2);background:rgba(5,8,26,.92);font-size:.9rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,230,118,.18)}
+textarea{min-height:104px;resize:vertical;line-height:1.55}
+input[type=checkbox]{width:auto;accent-color:#00e676;cursor:pointer}
+input[type=range]{padding:0;height:26px;background:transparent;border:0;accent-color:#00e676}
+input[type=file]{padding:9px;cursor:pointer;font-size:.76rem;color:#93a4d8;border-style:dashed}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.grid.w{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.rng{display:flex;align-items:center;gap:12px}.rng input{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.chips button{border:1px solid rgba(0,230,118,.45);background:rgba(5,8,26,.85);color:var(--acc);border-radius:17px;padding:6px 12px;font-size:.74rem;font-weight:800;cursor:pointer}
+.chips button:hover{background:rgba(0,230,118,.16)}
+.chips label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--edge2);border-radius:17px;padding:6px 12px;font-size:.75rem;background:rgba(5,8,26,.8)}
+.chips label.on{border-color:var(--acc);background:rgba(0,230,118,.15);color:var(--acc)}
+.wait{color:#66759f;font-size:.75rem;font-style:italic}
+.tag{display:inline-block;font-size:.64rem;font-weight:800;padding:3px 9px;border-radius:11px;margin:2px 4px 2px 0;background:rgba(140,165,255,.12);color:#93a4d8}
 .tag.fire{background:rgba(255,122,24,.2);color:#ffb066}
 .tag.crit{background:rgba(255,45,85,.2);color:#ff8fa8}
 .tag.ok{background:rgba(0,230,118,.15);color:#6ee7a8}
+.tag.info{background:rgba(0,229,255,.15);color:#7fe9ff}
 .sgw{position:relative}
-.sgl{position:absolute;top:100%;left:0;right:0;z-index:90;max-height:230px;overflow:auto;background:#080c22;border:1px solid var(--acc);border-radius:12px}
-.sgl div{padding:8px 12px;font-size:.78rem;cursor:pointer;border-bottom:1px solid rgba(140,165,255,.1)}
-.sgl div:hover{background:rgba(0,230,118,.15)}
-.hit{border-left:4px solid var(--acc);border-radius:12px;background:rgba(5,8,26,.85);padding:12px;margin:9px 0}
-.hit.fire{border-left-color:#ff7a18}
-.hit.sel{outline:2px solid var(--acc)}
-.hit b.t{cursor:pointer;font-size:.9rem}
+.sgl{position:absolute;top:100%;left:0;right:0;z-index:90;max-height:250px;overflow:auto;background:#080c22;border:1px solid var(--acc);border-radius:13px;box-shadow:0 20px 55px rgba(0,0,0,.7)}
+.sgl div{padding:9px 13px;cursor:pointer;font-size:.79rem;border-bottom:1px solid rgba(140,165,255,.09)}
+.sgl div:hover{background:rgba(0,230,118,.14);color:var(--acc)}
+.hit{border-left:4px solid var(--acc);border-radius:13px;background:rgba(5,8,26,.86);padding:14px;margin:10px 0}
+.hit.fire{border-left-color:#ff7a18;background:linear-gradient(90deg,rgba(255,122,24,.09),rgba(5,8,26,.86) 45%)}
+.hit.sel{outline:2px solid var(--acc);outline-offset:2px}
+.hit b.t{cursor:pointer;font-size:.93rem}
 .hit b.t:hover{color:var(--acc)}
-.meta{font-size:.69rem;color:var(--dim);margin:4px 0 6px}
-.fbox{border:1px solid rgba(255,122,24,.4);border-radius:16px;padding:14px;margin:12px 0;background:rgba(52,20,4,.5)}
+.hit .meta{font-size:.7rem;color:#93a4d8;margin:5px 0 7px}
+.hit ul{margin:6px 0;padding-left:20px}
+.hit summary{cursor:pointer;color:var(--acc);font-weight:800;font-size:.77rem}
+.fbox{border:1px solid rgba(255,122,24,.4);border-radius:18px;padding:16px;margin:14px 0;background:linear-gradient(150deg,rgba(52,20,4,.7),rgba(24,10,32,.6))}
 .fbox h3{color:#ffb066;margin-top:0}
-.lvl{display:inline-block;font-weight:900;font-size:.75rem;padding:4px 12px;border-radius:10px;background:#ff7a18;color:#fff}
-table{width:100%;border-collapse:collapse;font-size:.75rem;margin:8px 0}
-th{text-align:left;font-size:.64rem;text-transform:uppercase;color:var(--dim);padding:7px 6px;border-bottom:1px solid var(--edge)}
-td{padding:7px 6px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:top}
-.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;padding:5px;border-radius:16px;background:rgba(140,165,255,.06);border:1px solid var(--edge)}
-.tabs .btn{flex:1;min-width:95px;margin:0;background:none;color:#eaf0ff;border:1px solid transparent}
-.tabs .btn.on{background:var(--acc);color:#04102a}
-.modes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:20px 0}
-.mode{width:100%;margin:0;padding:24px 16px;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:160px;justify-content:center}
-.mode .ic{font-size:2.4rem}
+.lvl{display:inline-block;font-weight:900;font-size:.76rem;padding:5px 13px;border-radius:11px;background:#ff7a18;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:.77rem;margin:9px 0}
+th{text-align:left;font-size:.66rem;text-transform:uppercase;color:#93a4d8;padding:8px 7px;border-bottom:1px solid var(--edge2)}
+td{padding:8px 7px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:top}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px;padding:6px;border-radius:20px;background:rgba(140,165,255,.05);border:1px solid var(--edge)}
+.tabs .btn{flex:1;min-width:100px;margin:0;background:transparent;color:#eaf0ff;border:1px solid transparent;box-shadow:none}
+.tabs .btn.on{background:linear-gradient(100deg,var(--acc),var(--acc2));color:#04102a}
+.modes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:24px 0}
+.mode{width:100%;margin:0;padding:26px 18px;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:9px;min-height:172px;justify-content:center}
+.mode .ic{font-size:2.6rem}
 .mode.ad{background:linear-gradient(140deg,#8b5cff,#00e5ff);color:#04102a}
-.mode.ti{background:rgba(140,165,255,.09);border:1px solid var(--edge);color:#eaf0ff}
-.trust{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:16px}
-.trust span{font-size:.66rem;font-weight:800;padding:5px 11px;border-radius:16px;background:rgba(140,165,255,.08);border:1px solid var(--edge);color:var(--dim)}
-.stic{font-size:2.8rem;margin-bottom:10px}
-#gForm input{max-width:320px;margin:0 auto 9px;text-align:center}
-.pgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));margin:10px 0}
-.pitem{margin:0;border-radius:11px;overflow:hidden;border:1px solid var(--edge);cursor:zoom-in}
-.pitem img{width:100%;height:108px;object-fit:cover}
-.pitem figcaption{font-size:.64rem;color:var(--dim);padding:6px}
-.thumb{width:68px;height:50px;object-fit:cover;border-radius:8px;border:1px solid var(--acc);cursor:zoom-in}
-#drop{border:2px dashed var(--acc);border-radius:13px;padding:18px;text-align:center;color:var(--dim);cursor:pointer}
-#drop.on{background:rgba(0,230,118,.12)}
-.code{font-family:monospace;font-size:.72rem;word-break:break-all;background:rgba(0,230,118,.09);border:1px dashed var(--acc);border-radius:9px;padding:10px;margin:9px 0;color:#6ee7a8}
-.vinbox{font-family:monospace;letter-spacing:2px;text-transform:uppercase}
-.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0}
-.kv>div{background:rgba(140,165,255,.07);border:1px solid var(--edge);border-radius:9px;padding:8px 10px}
-.kv b{display:block;font-size:.6rem;color:var(--dim);text-transform:uppercase}
-.sc{display:flex;gap:9px;padding:9px 11px;border-radius:10px;margin:5px 0;border:1px solid var(--edge)}
-.sc.ok{border-color:rgba(0,230,118,.35)}
-.sc.warn{border-color:rgba(255,196,0,.4)}
-.sc.bad{border-color:rgba(255,45,85,.45);background:rgba(255,45,85,.07)}
-.sc b{font-size:.78rem}.sc small{display:block;color:var(--dim);font-size:.68rem}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;z-index:700;display:none;background:rgba(3,5,16,.9);padding:14px;overflow:auto}
+.mode.ti{background:rgba(140,165,255,.08);border:1px solid var(--edge2);color:#eaf0ff}
+.trust{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.trust span{font-size:.68rem;font-weight:800;padding:6px 13px;border-radius:17px;background:rgba(140,165,255,.07);border:1px solid var(--edge);color:#93a4d8}
+.trust b{color:var(--acc)}
+.stic{font-size:3rem;margin-bottom:12px}
+#gForm input{max-width:340px;margin:0 auto 10px;text-align:center}
+.pgrid{display:grid;gap:11px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin:11px 0}
+.pitem{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--edge);background:rgba(8,12,34,.8);cursor:zoom-in}
+.pitem:hover{border-color:var(--acc)}
+.pitem img{width:100%;height:114px;object-fit:cover}
+.pitem figcaption{font-size:.65rem;color:#93a4d8;padding:7px}
+.thumb{width:72px;height:54px;object-fit:cover;border-radius:9px;border:1px solid rgba(0,229,255,.45);cursor:zoom-in}
+#drop{border:2px dashed rgba(0,229,255,.45);border-radius:14px;padding:20px;text-align:center;color:#93a4d8;cursor:pointer;background:rgba(0,229,255,.04)}
+#drop.on{border-color:#00e676;background:rgba(0,230,118,.1);color:#eaf0ff}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;word-break:break-all;background:rgba(0,230,118,.08);border:1px dashed rgba(0,230,118,.4);border-radius:10px;padding:11px;margin:10px 0;color:#6ee7a8}
+.vinbox{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:2px;text-transform:uppercase}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:9px;margin:11px 0}
+.kv>div{background:rgba(140,165,255,.06);border:1px solid var(--edge);border-radius:10px;padding:9px 11px}
+.kv b{display:block;font-size:.62rem;color:#93a4d8;text-transform:uppercase;margin-bottom:2px}
+.sc{display:flex;gap:10px;padding:10px 12px;border-radius:11px;margin:6px 0;border:1px solid var(--edge);background:rgba(140,165,255,.04)}
+.sc.ok{border-color:rgba(0,230,118,.3)}
+.sc.warn{border-color:rgba(255,196,0,.35);background:rgba(255,196,0,.06)}
+.sc.bad{border-color:rgba(255,45,85,.4);background:rgba(255,45,85,.07)}
+.sc b{font-size:.79rem}.sc small{display:block;color:#93a4d8;font-size:.69rem}
+.modal{position:fixed;inset:0;z-index:700;display:none;background:rgba(3,5,16,.9);padding:16px;overflow:auto}
 .modal.on{display:block}
-.mcard{width:800px;max-width:100%;margin:20px auto;background:#0a0f28;border:1px solid var(--edge);border-radius:18px;padding:18px}
-.prog{height:6px;border-radius:6px;background:rgba(140,165,255,.14);overflow:hidden;margin:8px 0}
-.prog i{display:block;height:100%;width:0;background:var(--acc)}
-#toasts{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:800;width:500px;max-width:94vw;pointer-events:none}
-.toast{pointer-events:auto;display:flex;gap:9px;align-items:center;justify-content:space-between;background:#080c22;border:1px solid var(--acc);border-radius:12px;padding:12px 14px;margin-top:8px;font-size:.8rem}
-.hr{height:1px;margin:14px 0;background:var(--edge)}
-.empty{text-align:center;padding:24px;color:#66759f;font-size:.8rem}
-#mLb img{max-height:70vh;margin:0 auto;border-radius:12px}
-@media(max-width:760px){header small{display:none}.pills{order:3;width:100%}.seg button{padding:5px 9px;font-size:.68rem}main{padding:12px 10px 70px}.card{padding:15px}.grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))}.tabs .btn{min-width:calc(50% - 3px)}.modes{grid-template-columns:1fr}table{font-size:.7rem}}
-@media print{body{background:#fff;color:#000}header,#scene,#wall,#veil,#boot,#toasts,.noprint,.tabs,.modal,#err{display:none!important}.card,.hit,.fbox{background:#fff;color:#000;border:1px solid #999}h2,h3{color:#000}.sm,small{color:#333}}
+.mcard{width:820px;max-width:100%;margin:20px auto;background:linear-gradient(160deg,rgba(10,15,40,.99),rgba(24,14,52,.99));border:1px solid var(--edge2);border-radius:22px;padding:20px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.prog{height:7px;border-radius:7px;background:rgba(140,165,255,.12);overflow:hidden;margin:9px 0}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#00e676,#ffc400);transition:width .35s}
+#toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:800;width:520px;max-width:94vw;pointer-events:none}
+.toast{pointer-events:auto;display:flex;gap:10px;align-items:center;justify-content:space-between;background:#080c22;border:1px solid var(--acc);border-radius:13px;padding:13px 16px;margin-top:9px;font-size:.82rem;box-shadow:0 16px 46px rgba(0,0,0,.65)}
+.hr{height:1px;margin:17px 0;background:linear-gradient(90deg,transparent,var(--edge2),transparent)}
+.empty{text-align:center;padding:28px 14px;color:#66759f;font-size:.81rem}
+#mLb img{max-height:74vh;margin:0 auto;border-radius:14px}
+.idwrap{margin-top:16px;border:1px solid var(--edge2);border-radius:18px;overflow:hidden;background:rgba(5,8,26,.55)}
+.idhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 16px;background:linear-gradient(90deg,rgba(0,229,255,.12),rgba(139,92,255,.1),rgba(255,122,24,.08));border-bottom:1px solid var(--edge)}
+.idhead b{color:var(--acc)}
+.idbody{padding:14px 16px}
+.idcols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.idsec{border:1px solid var(--edge);border-radius:14px;padding:12px;background:rgba(14,20,48,.6)}
+.idsec h4{margin:0 0 9px;font-size:.82rem;color:var(--acc);display:flex;gap:7px;align-items:center}
+.idsec.rec h4{color:#ffc400}
+.mini{border-left:3px solid var(--acc);border-radius:10px;background:rgba(5,8,26,.8);padding:10px;margin:8px 0;cursor:pointer}
+.mini:hover{border-left-color:var(--amber)}
+.mini.fire{border-left-color:#ff7a18}
+.mini.rec{border-left-color:#ffc400}
+.mini b{font-size:.8rem;display:block}
+.mini .meta{font-size:.66rem;color:#93a4d8;margin:4px 0}
+.updatebox{margin-top:14px;border:1px dashed rgba(255,196,0,.5);border-radius:14px;padding:13px;background:rgba(255,196,0,.06)}
+.updatebox h4{margin:0 0 7px;font-size:.82rem;color:#ffc400}
+.updatebox .row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+@media(max-width:760px){header{padding:9px 12px}.brand small{display:none}.pills{order:3;width:100%}.seg button{padding:6px 10px;font-size:.69rem}main{padding:15px 12px 76px}.card{padding:17px}.grid{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}.tabs .btn{min-width:calc(50% - 3px)}.modes{grid-template-columns:1fr}table{font-size:.71rem}.idcols{grid-template-columns:1fr}}
+@media print{body{background:#fff!important;color:#000!important}header,#scene,#wall,#veil,#boot,#toasts,.noprint,.tabs,#vinCard,.modal,#err,.updatebox{display:none!important}.card,.hit,.fbox,.idwrap,.idsec{background:#fff!important;color:#000!important;border:1px solid #999!important;box-shadow:none!important}h2,h3,h4{color:#000!important}.sm,small{color:#333!important}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
 </head>
 <body>
-
-<div id="err" class="hide"><b>⚠️ ERREUR DÉTECTÉE — copie ce message</b><pre id="errMsg"></pre>
-<button class="btn rd sm" data-act="hardReset">🧹 Réinitialiser</button>
-<button class="btn gh sm" data-act="errClose">Masquer</button></div>
-
 <canvas id="scene"></canvas><div id="wall"></div><div id="veil"></div>
-<div id="boot"><div><div class="bl">⚡</div><h1>KEV TECH &amp; FIRE</h1><p class="sm">Démarrage…</p></div></div>
+<div id="boot"><div class="bcore"><div class="blogo">⚡</div><p class="btitle">KEV TECH &amp; FIRE</p><p class="bsub" id="bootMsg">Autovérification au lancement…</p><div class="bbar"><i></i></div></div></div>
+<div id="err" class="hide"><b>⚠️ Incident détecté — copie ce message</b><pre id="errMsg"></pre>
+<button class="btn rd sm" data-act="hardReset">🧹 Réinitialiser</button><button class="btn gh sm" data-act="errClose">Masquer</button></div>
 
 <header>
-<div class="mark">⚡</div>
-<div><h1>KEV TECH &amp; FIRE</h1><small>Diagnostic · Incendie · Expertise</small></div>
+<div class="brand"><div class="mark">⚡</div><div><h1>KEV TECH &amp; FIRE</h1><small>Diagnostic · Incendie · Expertise</small></div></div>
 <div class="pills">
-<span class="pill" id="pNet" data-act="noop">📶 …</span>
+<span class="pill ok" id="pNet">📶 …</span>
 <span class="pill" id="pBase" data-act="goBase">🗄️ …</span>
 <span class="pill" id="pSync" data-act="askChan">📡 …</span>
 <span class="pill" id="pHealth" data-act="diag">🩺 …</span>
 </div>
 <div class="seg" id="seg">
 <button data-act="theme" data-t="tous" class="on">Tous</button>
-<button data-act="theme" data-t="technique">🔧 Tech</button>
-<button data-act="theme" data-t="incendie">🔥 Feu</button>
+<button data-act="theme" data-t="technique">🔧 Technique</button>
+<button data-act="theme" data-t="incendie">🔥 Incendie</button>
 </div>
-<button class="btn gh sm hide" id="bQuit" data-act="quit">🚪</button>
+<button class="btn gh sm hide" id="bQuit" data-act="quit">🚪 Quitter</button>
 </header>
 
 <main>
 <section id="s-home" class="card mid">
 <div class="hero">🏎️</div><h2 style="justify-content:center">KEV TECH &amp; FIRE</h2>
-<p class="sm">Diagnostic technique · étude incendie · expertise juridique · photos de pannes · VIN · OBD</p>
+<p class="sm">Diagnostic technique par véhicule · étude incendie · expertise juridique · catalogue photos · VIN · OBD</p>
 <div class="modes">
-<button class="btn mode ad" data-act="modeAdmin"><span class="ic">🛡️</span><b>MODE ADMIN</b><small>Mot de passe requis</small></button>
-<button class="btn mode ti" data-act="modeTiers"><span class="ic">👤</span><b>MODE TIERS</b><small>Code fourni par l'admin</small></button>
+<button class="btn mode ad" data-act="modeAdmin"><span class="ic">🛡️</span><b>MODE ADMIN</b><small>Mot de passe à chaque ouverture</small></button>
+<button class="btn mode ti" data-act="modeTiers"><span class="ic">👤</span><b>MODE TIERS</b><small>Code d'accès fourni par l'admin</small></button>
 </div>
-<div class="trust"><span>🇫🇷 RappelConso</span><span>🇪🇺 Safety Gate</span><span>🇺🇸 NHTSA</span><span>📷 Photos</span><span>⚖️ Expertise</span></div>
+<div class="trust"><span>🇫🇷 <b>RappelConso</b></span><span>🇪🇺 <b>Safety Gate</b></span><span>🇺🇸 <b>NHTSA</b></span><span>📷 <b>Photos réelles</b></span><span>⚖️ <b>Expertise</b></span></div>
 </section>
 
 <section id="s-login" class="card mid hide">
-<div class="stic">🛡️</div><h2 style="justify-content:center">Connexion admin</h2>
-<input id="pwd" type="password" placeholder="Mot de passe" style="max-width:320px;margin:0 auto 10px;text-align:center">
+<div class="stic">🛡️</div><h2 style="justify-content:center">Connexion administrateur</h2>
+<input id="pwd" type="password" autocomplete="new-password" placeholder="Mot de passe" style="max-width:330px;margin:0 auto 12px;text-align:center">
 <div><button class="btn" data-act="login">🔑 Entrer</button><button class="btn gh" data-act="home">← Retour</button></div>
 </section>
 
 <section id="s-gate" class="card mid hide">
 <div id="gForm"><div class="stic">👤</div><h2 style="justify-content:center">Accès tiers</h2>
 <p class="sm">Prénom + code d'accès remis par l'administrateur.</p>
-<input id="gName" maxlength="40" placeholder="Ton prénom">
-<input id="gCode" placeholder="Code d'accès" style="font-family:monospace">
+<input id="gName" maxlength="40" placeholder="Ton prénom" autocomplete="given-name">
+<input id="gCode" placeholder="Code d'accès" autocomplete="off" style="font-family:ui-monospace,Menlo,monospace">
 <button class="btn" data-act="gate">🔓 Valider</button>
 <p class="sm"><button class="btn gh sm" data-act="askCode">📧 Demander un code</button></p>
-<details style="margin-top:12px"><summary class="sm" style="cursor:pointer;color:#00e676">📡 Canal de synchronisation</summary>
-<input id="gChan" placeholder="Code canal" style="margin-top:8px"><button class="btn gh sm" data-act="joinChan">Rejoindre</button></details></div>
-<div id="gOk" class="hide"><div class="stic">✅</div><h2 style="justify-content:center">Accès autorisé</h2><p>Bienvenue <b id="gHello"></b></p><button class="btn" data-act="enter">🚗 Entrer</button></div>
-<div id="gKo" class="hide"><div class="stic">🔒</div><h2 style="justify-content:center">Accès refusé</h2><p id="gWhy"></p><button class="btn" data-act="gateRetry">🔁 Réessayer</button></div>
+<details style="margin-top:14px"><summary class="sm" style="cursor:pointer;color:#00e676">📡 Canal de synchronisation</summary>
+<input id="gChan" placeholder="Code canal" style="margin-top:9px"><button class="btn gh sm" data-act="joinChan">Rejoindre</button></details></div>
+<div id="gOk" class="hide"><div class="stic">✅</div><h2 style="justify-content:center">Accès autorisé</h2><p>Bienvenue <b id="gHello"></b> !</p><button class="btn gr" data-act="enter">🚗 Entrer</button></div>
+<div id="gKo" class="hide"><div class="stic">🔒</div><h2 style="justify-content:center">Accès refusé</h2><p id="gWhy"></p><button class="btn am" data-act="gateRetry">🔁 Réessayer</button></div>
 <div class="hr"></div><button class="btn gh sm" data-act="home">← Changer de mode</button>
 </section>
 
 <section id="s-app" class="hide">
-<div class="card">
-<h2>🔎 Campagnes par VIN <span class="pill" id="vinState">prêt</span></h2>
-<div class="grid"><div class="fld"><label>VIN — 17 caractères</label><input id="vin" class="vinbox" maxlength="17" placeholder="VF3xxxxxxxxxxxxxx"></div>
+<div class="card" id="vinCard">
+<h2>🔎 Campagnes de rappel par VIN <span class="pill" id="vinState">prêt</span></h2>
+<div class="grid w"><div class="fld"><label>VIN — 17 caractères (case E)</label><input id="vin" class="vinbox" maxlength="17" placeholder="VF3xxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"></div>
 <div class="fld"><label>&nbsp;</label><div><button class="btn" data-act="vinRun">⚙️ Analyser</button><button class="btn gh" data-act="vinPaste">📋 Coller</button></div></div></div>
 <div id="vinOut"></div></div>
 
-<div class="card">
-<h2><span>🧠 Véhicule &amp; contexte</span><span class="pill" id="quota">🎟️ …</span></h2>
+<div class="card" id="idCard">
+<h2><span>🧠 Identification du véhicule</span><span class="pill" id="quota">🎟️ …</span></h2>
 <div class="grid">
-<div class="fld"><label>Marque</label><input id="vMake" data-sg="make" placeholder="Peugeot"></div>
-<div class="fld"><label>Modèle</label><input id="vModel" data-sg="model" placeholder="3008"></div>
-<div class="fld"><label>Motorisation</label><input id="vEngine" data-sg="engine" placeholder="Liste…"></div>
-<div class="fld"><label>Puissance ch</label><input id="vPower" data-sg="power" type="number" placeholder="130"></div>
-<div class="fld"><label>Année</label><input id="vYear" type="number" placeholder="2018"></div>
+<div class="fld"><label>Marque</label><input id="vMake" data-sg="make" placeholder="Peugeot" autocomplete="off"></div>
+<div class="fld"><label>Modèle</label><input id="vModel" data-sg="model" placeholder="3008" autocomplete="off"></div>
+<div class="fld"><label>Motorisation</label><input id="vEngine" data-sg="engine" placeholder="Choisis dans la liste…" autocomplete="off"></div>
+<div class="fld"><label>Puissance (ch)</label><input id="vPower" data-sg="power" type="number" min="0" max="2000" placeholder="130"></div>
+<div class="fld"><label>Année</label><input id="vYear" type="number" min="1980" max="2030" placeholder="2018"></div>
 <div class="fld"><label>Énergie</label><select id="vFuel"><option value="">—</option><option value="essence">Essence</option><option value="diesel">Diesel</option><option value="hybride">Hybride</option><option value="electrique">Électrique</option></select></div>
 </div>
-<div class="fld" style="margin-top:10px"><label>Motorisations du modèle <span class="pill" id="nEng">0</span></label><div class="chips" id="cEng"></div></div>
-<div class="fld" style="margin-top:8px"><label>Puissances <span class="pill" id="nPow">0</span></label><div class="chips" id="cPow"></div></div>
-<div id="attrib" class="sm"></div>
-<div class="fld" style="margin-top:12px"><label>Vendeur</label><select id="vSeller"><option value="inconnu">Inconnu</option><option value="professionnel">Professionnel</option><option value="particulier">Particulier</option></select></div>
-<div class="fld" style="margin-top:10px"><label>Contexte</label><textarea id="ctx" placeholder="Symptômes, achat, prix, vendeur, panne, incendie, litige…"></textarea></div>
+<div class="fld" style="margin-top:12px"><label>Motorisations réelles du modèle <span class="pill" id="nEng">0</span></label><div class="chips" id="cEng"></div></div>
+<div class="fld" style="margin-top:10px"><label>Puissances du moteur choisi <span class="pill" id="nPow">0</span></label><div class="chips" id="cPow"></div></div>
+<div id="attrib" class="sm" style="margin-top:10px"></div>
+
+<div class="idwrap" id="idFaultsWrap">
+<div class="idhead"><b>📌 Pannes connues &amp; campagnes de rappel</b><span class="sm" id="idFaultsMeta">Sélectionne un véhicule pour corréler la base.</span></div>
+<div class="idbody">
+<div class="idcols">
+<div class="idsec"><h4>🔧 Pannes connues répertoriées</h4><div id="idKnown"><p class="sm">En attente d'identification.</p></div></div>
+<div class="idsec rec"><h4>📣 Campagnes de rappel répertoriées</h4><div id="idRecalls"><p class="sm">En attente d'identification.</p></div></div>
+</div>
+<div class="updatebox">
+<h4>🔄 Mise à jour manuelle des bases d'appui technique</h4>
+<p class="sm">Récupère les mises à jour publiées sur <b>diagauto-pro</b> et <b>auto-diagnostic</b>, puis les fusionne dans la base locale sans doublon.</p>
+<div class="row"><button class="btn am" data-act="manualUpdate" id="bManualUpdate">🔄 Mettre à jour maintenant</button><button class="btn gh sm" data-act="checkSupport">🔎 Vérifier les 2 URL</button><span class="pill" id="updState">—</span></div>
+<div class="sm" id="updLog" style="margin-top:8px">Dernière mise à jour : jamais.</div>
+</div>
+</div>
+</div>
+
+<div class="fld" style="margin-top:14px"><label>Vendeur (volet juridique)</label><select id="vSeller"><option value="inconnu">Inconnu</option><option value="professionnel">Professionnel</option><option value="particulier">Particulier</option></select></div>
+<div class="fld" style="margin-top:12px"><label>Contexte libre</label><textarea id="ctx" maxlength="1600" placeholder="Symptômes, date d'achat, prix, vendeur, panne, incendie, litige, travaux effectués…"></textarea></div>
 <div class="chips" id="predCtx"></div><div id="live" class="sm"></div>
-<div class="noprint"><button class="btn" data-act="ctxRun">⚖️ Expertise</button><button class="btn gh" data-act="print">🖨️ PDF</button><button class="btn gh" data-act="ctxJson">📤 JSON</button></div>
+<div class="noprint"><button class="btn" data-act="ctxRun">⚖️ Compte rendu d'expertise</button><button class="btn gh" data-act="print">🖨️ PDF</button><button class="btn gh" data-act="ctxJson">📤 JSON</button></div>
 <div id="ctxOut"></div></div>
 
 <div class="tabs noprint" id="tabsApp">
@@ -232,154 +290,158 @@ td{padding:7px 6px;border-bottom:1px solid rgba(140,165,255,.09);vertical-align:
 <button class="btn" data-act="tabApp" data-v="msg">✉️ Message</button>
 <button class="btn hide" id="bToAdmin" data-act="toAdmin">🛡️ Admin</button></div>
 
-<div id="v-search" class="card"><h2>🔎 Recherche unifiée</h2>
-<div class="sgw"><input id="q" data-sg="query" placeholder="courroie, P0016, AdBlue, Elroq…"></div>
-<div class="grid" style="margin-top:10px">
+<div id="v-search" class="card"><h2>🔎 Recherche prédictive unifiée</h2>
+<div class="sgw"><input id="q" data-sg="query" placeholder="courroie, P0016, AdBlue, Elroq, N47, ICCU…"></div>
+<div class="grid" style="margin-top:12px">
 <div class="fld"><label>Marque</label><select id="fMake"><option value="">Toutes</option></select></div>
 <div class="fld"><label>Système</label><select id="fSys"><option value="">Tous</option></select></div>
 <div class="fld"><label>Gravité</label><select id="fGrav"><option value="">Toutes</option><option value="critique">Critique</option><option value="eleve">Élevée</option><option value="modere">Modérée</option></select></div>
 <div class="fld"><label>Tri</label><select id="fSort"><option value="score">Pertinence</option><option value="grav">Gravité</option><option value="az">A→Z</option></select></div></div>
-<div class="chips" id="views"></div><div id="results"><div class="empty">Chargement…</div></div></div>
+<div class="chips" id="views"></div>
+<div id="results"><div class="empty">Initialisation…</div></div></div>
 
-<div id="v-study" class="card hide"><h2>🧠 Étude de cas</h2>
+<div id="v-study" class="card hide"><h2>🧠 Étude de cas + 🔥 chaîne incendie</h2>
+<p class="sm">Véhicule = sélecteur ci-dessus. Coche les constatations relevées.</p>
 <div class="chips" id="qcm"></div>
-<div class="fld" style="margin-top:10px"><label style="text-transform:none"><input type="checkbox" id="dtcOn"> Codes DTC lus</label><input id="dtc" class="hide" placeholder="P0016, P0521…"></div>
-<div class="noprint" style="margin-top:10px"><button class="btn" data-act="studyRun">⚙️ Lancer</button><button class="btn gh" data-act="print">🖨️ PDF</button></div>
+<div class="fld" style="margin-top:12px"><label style="text-transform:none;font-size:.79rem"><input type="checkbox" id="dtcOn"> Codes défauts (DTC) lus sur le véhicule</label><input id="dtc" class="hide" placeholder="P0016, P0521, P0AA6…"></div>
+<div class="noprint" style="margin-top:12px"><button class="btn" data-act="studyRun">⚙️ Lancer l'étude</button><button class="btn gh" data-act="print">🖨️ PDF</button><button class="btn gh" data-act="studyJson">📤 JSON</button></div>
 <div id="studyOut"></div><div class="hr noprint"></div><h3 class="noprint">🕘 Historique</h3><div id="histo" class="noprint"></div></div>
 
-<div id="v-photos" class="card hide"><h2>📷 Catalogue photos</h2>
-<div class="fld"><label>Panne</label><input id="pq" placeholder="courroie, AdBlue, batterie HT…"></div>
-<button class="btn" data-act="photoSearch">📷 Chercher</button><div id="photoOut"></div></div>
+<div id="v-photos" class="card hide"><h2>📷 Catalogue photos par panne</h2>
+<p class="sm">Photos intégrées par l'admin en priorité, puis photothèque libre (Wikimedia Commons).</p>
+<div class="fld"><label>Panne recherchée</label><input id="pq" placeholder="courroie délaminée, AdBlue cristallisation, batterie HT…"></div>
+<button class="btn" data-act="photoSearch">📷 Rechercher</button><div id="photoOut"></div></div>
 
-<div id="v-obd" class="card hide"><h2>🔵 OBD BLE</h2>
-<p class="sm">ELM327 BLE · Chrome Android · contact mis</p>
-<button class="btn" data-act="obdConnect">🔗 Connecter</button><button class="btn gh" id="bObdRead" data-act="obdRead" disabled>📥 Lire</button>
+<div id="v-obd" class="card hide"><h2>🔵 OBD Bluetooth — ELM327 BLE</h2>
+<p class="sm">Adaptateurs BLE (Vgate iCar Pro BLE, OBDLink MX+…). Contact mis, moteur à l'arrêt. Nécessite Chrome Android.</p>
+<button class="btn" data-act="obdConnect">🔗 Connecter</button><button class="btn gh" id="bObdRead" data-act="obdRead" disabled>📥 Lire les défauts</button>
 <p id="obdState" class="sm">Non connecté.</p><div id="obdOut"></div></div>
 
-<div id="v-msg" class="card hide"><h2>✉️ Message admin</h2>
-<div class="fld"><label>Message</label><textarea id="msg"></textarea></div>
+<div id="v-msg" class="card hide"><h2>✉️ Message à l'administrateur</h2>
+<div class="fld"><label>Message</label><textarea id="msg" maxlength="2000" placeholder="Question, demande, retour d'expérience…"></textarea></div>
+<div class="chips" id="predMsg"></div>
 <button class="btn" data-act="msgSend">📧 Envoyer</button><button class="btn gh" data-act="msgCopy">📋 Copier</button>
-<h3>📤 Boîte d'envoi</h3><div id="outbox"></div></div>
+<h3>📤 Boîte d'envoi locale</h3><div id="outbox"></div></div>
 </section>
 
 <section id="s-admin" class="hide">
 <div class="tabs noprint" id="tabsAdm">
 <button class="btn on" data-act="tabAdm" data-a="access">🔑 Accès</button>
-<button class="btn" data-act="tabAdm" data-a="faults">🖼️ Pannes</button>
-<button class="btn" data-act="tabAdm" data-a="look">🎨 Fond</button>
+<button class="btn" data-act="tabAdm" data-a="faults">🖼️ Pannes &amp; photos</button>
+<button class="btn" data-act="tabAdm" data-a="look">🎨 Apparence</button>
 <button class="btn" data-act="tabAdm" data-a="sync">📡 Sync</button>
 <button class="btn" data-act="tabAdm" data-a="base">🗄️ Base</button>
-<button class="btn" data-act="toApp">🚗 App</button></div>
+<button class="btn" data-act="toApp">🚗 Application</button></div>
 
-<div id="a-access" class="card"><h2>🔑 Codes d'accès</h2>
-<div class="grid"><div class="fld"><label>Prénom</label><input id="acName"></div><div class="fld"><label>Jours</label><input id="acDays" type="number" value="365"></div></div>
-<button class="btn" data-act="genCode">🎟️ Générer</button>
+<div id="a-access" class="card"><h2>🔑 Codes d'accès tiers</h2>
+<div class="grid"><div class="fld"><label>Prénom</label><input id="acName" placeholder="Kevin"></div><div class="fld"><label>Validité (jours)</label><input id="acDays" type="number" value="365" min="1"></div></div>
+<button class="btn gr" data-act="genCode">🎟️ Générer le code</button>
 <div class="code hide" id="genOut"></div>
 <button class="btn gh sm" data-act="copyGen">📋 Copier</button><button class="btn gh sm" data-act="shareGen">📤 Partager</button>
 <div class="hr"></div><h3>Codes émis</h3><div id="codes"></div>
-<h3>🚫 Révocations</h3><div id="revs"></div><button class="btn rd" data-act="pubRevs">📡 Publier</button></div>
+<h3>🚫 Révocations</h3><div id="revs"></div><button class="btn rd" data-act="pubRevs">📡 Publier les révocations</button></div>
 
-<div id="a-faults" class="card hide"><h2>🖼️ Pannes &amp; photos</h2>
-<div id="drop" data-act="dropClick">📷 Colle · glisse · clique<input type="file" id="pFile" accept="image/*" multiple style="display:none"></div>
-<div class="grid" style="margin-top:10px"><div class="fld"><label>URL image</label><input id="pUrl"></div><div class="fld"><label>Légende</label><input id="pCap"></div></div>
-<button class="btn gh" data-act="urlAdd">➕ Ajouter URL</button>
-<div id="pending" class="chips"></div>
+<div id="a-faults" class="card hide"><h2>🖼️ Pannes &amp; photos réelles</h2>
+<div id="drop" data-act="dropClick">📷 <b>Colle (Ctrl+V) · glisse · clique</b><input type="file" id="pFile" accept="image/*" multiple style="display:none"></div>
+<div class="grid" style="margin-top:11px"><div class="fld"><label>Ou URL d'image</label><input id="pUrl" placeholder="https://…"></div><div class="fld"><label>Légende</label><input id="pCap" placeholder="courroie délaminée 1.2 PureTech"></div></div>
+<button class="btn gh" data-act="urlAdd">➕ Ajouter l'URL</button>
+<div id="pending" class="chips" style="margin-top:11px"></div>
 <div class="hr"></div>
-<div class="grid"><div class="fld"><label>Filtrer</label><input id="fFilter"></div><div class="fld"><label>Panne cible</label><select id="fTarget"></select></div></div>
-<div id="newForm" class="hide"><h3 id="nfTitle">Nouvelle panne</h3>
-<div class="grid">
-<div class="fld"><label>Titre</label><input id="nTitle"></div>
-<div class="fld"><label>Marque(s)</label><input id="nMake"></div>
-<div class="fld"><label>Modèle(s)</label><input id="nModel"></div>
-<div class="fld"><label>Motorisation</label><input id="nEngine"></div>
-<div class="fld"><label>Puissances</label><input id="nPower" placeholder="110,130"></div>
+<div class="grid w"><div class="fld"><label>Filtrer les pannes</label><input id="fFilter" placeholder="courroie, P0016…"></div><div class="fld"><label>Panne cible</label><select id="fTarget"></select></div></div>
+<div id="newForm" class="hide"><h3 id="nfTitle">Nouvelle panne — caractéristiques</h3>
+<div class="grid w">
+<div class="fld"><label>Défaut / titre</label><input id="nTitle"></div>
+<div class="fld"><label>Marque(s)</label><input id="nMake" placeholder="Peugeot / Citroën"></div>
+<div class="fld"><label>Modèle(s)</label><input id="nModel" placeholder="3008 / C4"></div>
+<div class="fld"><label>Motorisation</label><input id="nEngine" placeholder="1.2 PureTech"></div>
+<div class="fld"><label>Puissances (ch)</label><input id="nPower" placeholder="110,130"></div>
 <div class="fld"><label>Années</label><input id="nYears" placeholder="2013-2023"></div>
 <div class="fld"><label>Énergie</label><select id="nFuel"><option value="">—</option><option value="essence">Essence</option><option value="diesel">Diesel</option><option value="hybride">Hybride</option><option value="electrique">Électrique</option></select></div>
-<div class="fld"><label>Système</label><input id="nSys"></div>
-<div class="fld"><label>DTC</label><input id="nDtc"></div>
-<div class="fld"><label>Symptômes</label><input id="nSym"></div>
+<div class="fld"><label>Système</label><input id="nSys" placeholder="Distribution"></div>
+<div class="fld"><label>DTC</label><input id="nDtc" placeholder="P0016,P0521"></div>
+<div class="fld"><label>Symptômes</label><input id="nSym" placeholder="claquement, voyant huile"></div>
 <div class="fld"><label>Gravité</label><select id="nGrav"><option value="eleve">Élevée</option><option value="critique">Critique</option><option value="modere">Modérée</option></select></div>
-<div class="fld"><label>Source URL</label><input id="nSrc"></div></div>
-<div class="fld" style="margin-top:9px"><label>Mécanisme</label><textarea id="nMeca"></textarea></div>
-<div class="fld" style="margin-top:9px"><label>Conséquences (1/ligne)</label><textarea id="nCons"></textarea></div>
-<div class="fld" style="margin-top:9px"><label>Indices visuels</label><textarea id="nInd"></textarea></div>
-<label class="sm" style="display:flex;gap:7px;margin:9px 0"><input type="checkbox" id="nFire"> Risque incendie</label>
-<div class="fld"><label>Chaîne incendie</label><input id="nChain"></div>
-<button class="btn gh sm" data-act="cancelEdit">✕ Annuler</button></div>
-<div style="margin-top:11px"><button class="btn" data-act="attach">🔗 Enregistrer</button><button class="btn gh" data-act="pubFaults">📡 Publier</button><button class="btn gh" data-act="expFaults">📥 Exporter</button></div>
-<div class="hr"></div><div class="chips"><button data-act="selAll">☑️ Tout</button><button data-act="selNone">☐ Aucun</button><button data-act="bulkDel">🗑️ Supprimer sélection</button></div>
+<div class="fld"><label>Source (URL)</label><input id="nSrc"></div></div>
+<div class="fld" style="margin-top:11px"><label>Mécanisme / causes</label><textarea id="nMeca"></textarea></div>
+<div class="fld" style="margin-top:11px"><label>Conséquences (une par ligne)</label><textarea id="nCons"></textarea></div>
+<div class="fld" style="margin-top:11px"><label>Indices visuels (un par ligne)</label><textarea id="nInd"></textarea></div>
+<label class="sm" style="display:flex;gap:8px;margin:11px 0"><input type="checkbox" id="nFire"> Risque d'incendie associé</label>
+<div class="fld"><label>Chaîne incendie</label><input id="nChain" placeholder="Débris → crépine → fuite huile → feu"></div>
+<button class="btn gh sm" data-act="cancelEdit">✕ Annuler l'édition</button></div>
+<div style="margin-top:13px"><button class="btn gr" data-act="attach">🔗 Enregistrer &amp; rattacher</button><button class="btn" data-act="pubFaults">📡 Publier aux tiers</button><button class="btn gh" data-act="expFaults">📥 Exporter</button></div>
+<div class="hr"></div>
+<h3>Pannes admin — sélection multiple</h3>
+<div class="chips"><button data-act="selAll">☑️ Tout sélectionner</button><button data-act="selNone">☐ Désélectionner</button><button data-act="bulkDel">🗑️ Supprimer la sélection</button></div>
 <div id="faultList"></div></div>
 
-<div id="a-look" class="card hide"><h2>🎨 Fond &amp; contact</h2>
+<div id="a-look" class="card hide"><h2>🎨 Apparence &amp; contact</h2>
 <p class="sm">Le fond animé (aurores + route néon + voiture) tourne par défaut. Tu peux superposer ta propre image.</p>
 <div class="fld"><label>Fond d'écran</label><input type="file" id="bgFile" accept="image/*"></div>
-<div class="fld" style="margin-top:10px"><label>Opacité <b id="opVal">55%</b></label><input type="range" id="op" min="0" max="100" value="55"><button class="btn sm" data-act="opApply">💾 Appliquer</button></div>
-<div class="fld" style="margin-top:10px"><label>Voiture PNG</label><input type="file" id="carFile" accept="image/*"></div>
-<div class="fld" style="margin-top:10px"><label>Email admin</label><input id="mail" type="email"></div>
-<button class="btn" data-act="pubLook">📡 Publier</button><button class="btn rd sm" data-act="lookReset">🗑️ Reset</button></div>
+<div class="fld" style="margin-top:12px"><label>Opacité : <b id="opVal">55%</b></label><div class="rng"><input type="range" id="op" min="0" max="100" value="55"><button class="btn sm" data-act="opApply">💾 Appliquer</button></div></div>
+<div class="fld" style="margin-top:12px"><label>Véhicule animé (PNG détouré)</label><input type="file" id="carFile" accept="image/*"></div>
+<div class="fld" style="margin-top:12px"><label>Email de contact admin</label><input id="mail" type="email" placeholder="ton@email.fr"></div>
+<button class="btn gr" data-act="pubLook">📡 Publier aux tiers</button><button class="btn rd sm" data-act="lookReset">🗑️ Réinitialiser</button></div>
 
-<div id="a-sync" class="card hide"><h2>📡 Sync sans token</h2>
-<div class="grid"><div class="fld"><label>Service</label><select id="syBe"><option value="kvdb">kvdb.io</option><option value="restful">restful-api.dev</option><option value="jsonblob">jsonblob.com</option></select></div>
-<div class="fld"><label>Code canal</label><input id="syCh"></div></div>
-<div style="margin-top:10px"><button class="btn" data-act="syCreate">✨ Créer</button><button class="btn gh" data-act="syUse">💾 Utiliser</button><button class="btn gh" data-act="syShare">📤 Partager</button><button class="btn gh" data-act="syTest">🔎 Tester</button></div>
-<label class="sm" style="display:flex;gap:7px;margin:11px 0"><input type="checkbox" id="syAuto"> Publication auto</label>
-<button class="btn" data-act="syPub">📡 Publier</button><button class="btn gh" data-act="syPull">🔄 Recevoir</button><span class="pill" id="syState">—</span></div>
+<div id="a-sync" class="card hide"><h2>📡 Synchronisation temps réel — sans token</h2>
+<p class="sm">Un canal anonyme transporte pannes, photos, fond et révocations vers tous les tiers. Aucune clé, aucun compte.</p>
+<div class="grid w"><div class="fld"><label>Service</label><select id="syBe"><option value="kvdb">kvdb.io (recommandé)</option><option value="restful">restful-api.dev</option><option value="jsonblob">jsonblob.com</option></select></div><div class="fld"><label>Code canal</label><input id="syCh"></div></div>
+<div style="margin-top:11px"><button class="btn gr" data-act="syCreate">✨ Créer un canal</button><button class="btn" data-act="syUse">💾 Utiliser</button><button class="btn gh" data-act="syShare">📤 Partager</button><button class="btn gh" data-act="syTest">🔎 Tester</button></div>
+<label class="sm" style="display:flex;gap:8px;margin:13px 0"><input type="checkbox" id="syAuto"> Publication automatique</label>
+<button class="btn am" data-act="syPub">📡 Publier maintenant</button><button class="btn gh" data-act="syPull">🔄 Recevoir</button><span class="pill" id="syState">—</span></div>
 
-<div id="a-base" class="card hide"><h2>🗄️ Base &amp; diagnostic</h2>
+<div id="a-base" class="card hide"><h2>🗄️ Base technique &amp; autovérification</h2>
 <div id="stats" class="sm">…</div>
 <button class="btn" data-act="reload">🔄 Recharger</button>
-<button class="btn" data-act="importSites">🌐 Importer les 2 sites</button>
+<button class="btn am" data-act="manualUpdate">🔄 Mise à jour manuelle (2 URL)</button>
+<button class="btn gh" data-act="checkSupport">🔎 Vérifier les 2 URL</button>
 <button class="btn gh" data-act="harvest">🛰️ RappelConso</button>
 <button class="btn gh" data-act="diag">🩺 Diagnostic</button>
-<div id="importState" class="sm" style="margin-top:8px">Import automatique au premier lancement.</div>
 <div class="prog"><i id="prog"></i></div><div id="checks"></div>
-<div class="hr"></div><h3>📥 Import fichier</h3><input type="file" id="imp" accept=".json,.txt,.md,.csv" multiple>
-<button class="btn gh" data-act="expAll">📤 Exporter base</button><button class="btn rd" data-act="quit">🚪 Déconnexion</button></div>
+<div class="hr"></div><h3>📥 Import de fichiers</h3><input type="file" id="imp" accept=".json,.txt,.md,.csv" multiple>
+<button class="btn gh" data-act="expAll">📤 Exporter toute la base</button><button class="btn rd" data-act="quit">🚪 Déconnexion</button></div>
 </section>
 </main>
 
-<div class="modal" id="mDiag"><div class="mcard"><h2>🩺 Diagnostic</h2><div class="prog"><i id="dProg"></i></div><div id="dBox"></div>
-<div style="margin-top:12px"><button class="btn" data-act="reload">🔄 Relancer</button><button class="btn" data-act="importSites">🌐 Importer les 2 sites</button><button class="btn rd" data-act="hardReset">🧹 Vider cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
+<div class="modal" id="mDiag"><div class="mcard"><h2>🩺 Autovérification de l'application</h2><div class="prog"><i id="dProg"></i></div><div id="dBox"></div>
+<div style="margin-top:14px"><button class="btn" data-act="runSelfTest">🧪 Relancer l'autovérification</button><button class="btn am" data-act="manualUpdate">🔄 Mise à jour manuelle</button><button class="btn rd" data-act="hardReset">🧹 Vider le cache</button><button class="btn gh" data-act="diagClose">✕ Fermer</button></div></div></div>
 <div class="modal" id="mDetail"><div class="mcard"><div id="detailBody"></div><button class="btn gh" data-act="detailClose">✕ Fermer</button></div></div>
-<div class="modal" id="mLb"><div class="mcard" style="text-align:center"><img alt=""><p class="sm" id="lbCap"></p><button class="btn gh sm" data-act="lbClose">✕ Fermer</button></div></div>
+<div class="modal" id="mLb"><div class="mcard" style="text-align:center"><img alt=""><p class="sm" id="lbCap" style="margin-top:11px"></p><button class="btn gh sm" data-act="lbClose">✕ Fermer</button></div></div>
 <div id="toasts"></div>
 
 <script>
-window.__ERRS = [];
-window.onerror = function(msg, url, line, col, err){
-  var t = "ERREUR: " + msg + "\nLigne: " + line + ":" + col + (url ? "\nFichier: " + url : "");
-  if(err && err.stack) t += "\n" + err.stack;
-  window.__ERRS.push(t);
-  var b = document.getElementById("err"), m = document.getElementById("errMsg");
-  if(b && m){ b.className = ""; m.textContent = window.__ERRS.join("\n\n"); }
-  var boot = document.getElementById("boot"); if(boot) boot.className = "off";
-  return false;
+window.__ERRS=[];
+window.onerror=function(msg,url,line,col,err){
+ var t="ERREUR: "+msg+"\nLigne: "+line+":"+col+(url?"\nFichier: "+url:"");
+ if(err&&err.stack)t+="\n"+err.stack;
+ window.__ERRS.push(t);
+ var b=document.getElementById("err"),m=document.getElementById("errMsg");
+ if(b&&m){b.className="";m.textContent=window.__ERRS.join("\n\n");}
+ var boot=document.getElementById("boot");if(boot)boot.className="off";
+ return false;
 };
-window.addEventListener("unhandledrejection", function(e){
-  var r = e.reason, t = "PROMESSE: " + (r && r.message ? r.message : String(r));
-  window.__ERRS.push(t);
-  var b = document.getElementById("err"), m = document.getElementById("errMsg");
-  if(b && m){ b.className = ""; m.textContent = window.__ERRS.join("\n\n"); }
+window.addEventListener("unhandledrejection",function(e){
+ var r=e.reason,t="PROMESSE: "+(r&&r.message?r.message:String(r));
+ window.__ERRS.push(t);
+ var b=document.getElementById("err"),m=document.getElementById("errMsg");
+ if(b&&m){b.className="";m.textContent=window.__ERRS.join("\n\n");}
 });
 </script>
-
 <script src="db-core.js"></script>
 <script src="db-faults.js"></script>
 <script src="kdb.js"></script>
 <script src="app.js"></script>
-
 <script>
 setTimeout(function(){
-  var b=document.getElementById("boot"); if(b) b.className="off";
-  if(!window.__APP_OK){
-    var e=document.getElementById("err"),m=document.getElementById("errMsg");
-    if(e&&m&&!window.__ERRS.length){
-      e.className="";
-      m.textContent="db-core.js / db-faults.js / kdb.js / app.js ne s'est pas exécuté.\nVérifie que les 4 fichiers sont à la racine du dépôt 2026tech.";
-    }
-    var h=document.getElementById("s-home"); if(h) h.className="card mid";
+ var b=document.getElementById("boot");if(b)b.className="off";
+ if(!window.__APP_OK){
+  var e=document.getElementById("err"),m=document.getElementById("errMsg");
+  if(e&&m&&!window.__ERRS.length){
+   e.className="";
+   m.textContent="db-core.js / db-faults.js / kdb.js / app.js ne s'est pas exécuté.\nVérifie que les 4 fichiers sont à la racine du dépôt 2026tech.";
   }
-},2500);
+  var h=document.getElementById("s-home");if(h)h.className="card mid";
+ }
+},3000);
 </script>
 </body>
 </html>
